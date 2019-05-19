@@ -16,11 +16,14 @@ public class GesturePointForward : MonoBehaviour
     private Vector3 wristLeft;
     private Vector3 wristRight;
     private Vector3 wrist;
-    private Vector3 shoulder;
+    private Vector3 elbow;
+    private Vector3 spineShoulder;
+    private Vector3 spineBase;
 
-    public Vector3 forearm;
     public float wristShoulderDistance;
-    public float wristLevel;
+    public float armLength;
+    public float armTension;
+    public float angle;
 
     public float rate;
     public float minimumRate = 0.06f;
@@ -67,19 +70,27 @@ public class GesturePointForward : MonoBehaviour
             {
                 wristLeft = Functions.unityVector3(body.Joints[JointType.WristLeft].Position);
                 wristRight = Functions.unityVector3(body.Joints[JointType.WristRight].Position);
-                shoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
+                spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
+                spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
+
                 // which wrist is further from the body
-                wrist = wristLeft;
-                if ( Mathf.Abs(wristLeft.z - shoulder.z) < Mathf.Abs(wristRight.z - shoulder.z) )
+                if ( Mathf.Abs(wristLeft.z - spineShoulder.z) < Mathf.Abs(wristRight.z - spineShoulder.z) )
                 {
                     wrist = wristRight;
+                    elbow = Functions.unityVector3(body.Joints[JointType.ElbowRight].Position);
+                }
+                else
+                {
+                    wrist = wristLeft;
+                    elbow = Functions.unityVector3(body.Joints[JointType.ElbowLeft].Position);
                 }
 
-                wristShoulderDistance = (shoulder - wrist).sqrMagnitude;
-                wristLevel = Mathf.Abs(wrist.y);
+                // (wrist-shoulder distance) / (arm full length). spine shoulder instead of shoulder for simpler calcs.
+                armTension = (spineShoulder - wrist).magnitude / ( (spineShoulder - elbow).magnitude + (elbow - wrist).magnitude );
+                angle = Vector3.Angle(wrist - spineShoulder, spineBase - spineShoulder);
+                rate = angle * armTension;
 
-                rate = wristShoulderDistance * wristLevel;
-                if ( wrist.z < shoulder.z)
+                if ( wrist.z < spineShoulder.z)
                 {
                     rate = Functions.limitValue(minimumRate, maximumRate, rate);
                     gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope);
@@ -87,7 +98,7 @@ public class GesturePointForward : MonoBehaviour
                 else
                 {
                     rate = Functions.limitValue(minimumRateBack, maximumRateBack, rate);
-                    gestureRate = - Mathf.Pow((rate - minimumRateBack) / (maximumRateBack - minimumRateBack), slope);
+                    gestureRate = -Mathf.Pow((rate - minimumRateBack) / (maximumRateBack - minimumRateBack), slope);
                 }
 
                 break;

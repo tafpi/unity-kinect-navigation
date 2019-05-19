@@ -2055,12 +2055,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bodySourceManager: {fileID: 1952330046}
-  trackGesture: 0
+  trackGesture: 1
   gestureRate: 0
   slope: 1.2
+  currentAngle: 0
+  angle: 0
   minimumAngle: 154
   maximumAngle: 172
-  currentAngle: 0
+  minimumAngleBack: 165
+  maximumAngleBack: 170
 --- !u!114 &6438572463415901527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2119,14 +2122,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bodySourceManager: {fileID: 1952330046}
-  trackGesture: 1
+  trackGesture: 0
   gestureRate: 0
   slope: 1.2
-  forearm: {x: 0, y: 0, z: 0}
   wristShoulderDistance: 0
-  wristLevel: 0
+  armLength: 0
+  armTension: 0
+  angle: 0
   rate: 0
-  minimumRate: 0.06
-  maximumRate: 0.1
-  minimumRateBack: 0.06
-  maximumRateBack: 0.1
+  minimumRate: 45
+  maximumRate: 78
+  minimumRateBack: 27
+  maximumRateBack: 40
