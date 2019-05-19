@@ -30,7 +30,7 @@ public class GesturePointForward : MonoBehaviour
     public float maximumRate = 0.16f;
     public float minimumRateBack = 0.05f;
     public float maximumRateBack = 0.1f;
-
+    
     // Start is called before the first frame update
     void Start()
     {

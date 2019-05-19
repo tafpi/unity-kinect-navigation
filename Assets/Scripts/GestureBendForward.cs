@@ -100,7 +100,6 @@ public class GestureBendForward : MonoBehaviour
                     angle = Functions.limitValue(minimumAngleBack, maximumAngleBack, angle);
                     gestureRate = -Mathf.Pow((maximumAngleBack - angle) / (maximumAngleBack - minimumAngleBack), slope);
                 }
-
                 break;
             }
         }
