@@ -13,14 +13,27 @@ public class GestureHalfStepForward : MonoBehaviour
     public float gestureRate;
 
     public float slope = 1.2f;
-    public string footForward;
-    public Vector3 playerCenter = new Vector3(0,0,0);
-    public float freeMovementRange = 0.02f;
+    //public string footForward;
+    //public Vector3 playerCenter = new Vector3(0,0,0);
+    //public float freeMovementRange = 0.02f;
     public float playerCenterDiff;
 
-    public Vector3 leftAnkle;
-    public Vector3 rightAnkle;
+    private Vector3 ankleLeft;
+    private Vector3 ankleRight;
+    private Vector3 hipLeft;
+    private Vector3 hipRight;
+    private Vector3 kneeLeft;
+    private Vector3 kneeRight;
+    private Vector3 ankleLeftPrev;
+    private Vector3 ankleRightPrev;
+
+    private Vector3 ankleForward;
+    private Vector3 ankleMoving;
+    private Vector3 feetMiddle;
+    private float direction;
+    public bool feetApart;
     public float groundThreshold = 0.1f;
+    public float distanceThreshold = 0.1f;
     public bool feetDown;
     private float legLength;
     private float feetDistance;
@@ -77,41 +90,56 @@ public class GestureHalfStepForward : MonoBehaviour
                 //        Debug.Log("out of free movement range");
                 //    }
                 //}
-                //if (
-                //        body.Joints[JointType.AnkleLeft].Position.Z < body.Joints[JointType.AnkleRight].Position.Z
-                //    )
-                //{
-                //    footForward = "left";
-                //}
-                //else
-                //{
-                //    footForward = "right";
-                //}
-                
-                leftAnkle = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
-                rightAnkle = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
-                if (Mathf.Abs(leftAnkle.y - rightAnkle.y) < groundThreshold)
-                {
-                    // both feet on the ground: ankles height (y) distance is within threshold
-                    feetDown = true;
-                    if( Mathf.Abs(leftAnkle.z - rightAnkle.z) > Mathf.Abs(leftAnkle.x - rightAnkle.x))
-                    {
-                        // depth (z) feet distance greater than horizontal (x) feet distance
-                        legLength = (Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position) - Functions.unityVector3(body.Joints[JointType.KneeLeft].Position)).sqrMagnitude
-                                +   (Functions.unityVector3(body.Joints[JointType.HipLeft].Position) - Functions.unityVector3(body.Joints[JointType.KneeLeft].Position)).sqrMagnitude;
-                        feetDistance = (Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position) - Functions.unityVector3(body.Joints[JointType.AnkleRight].Position)).sqrMagnitude;
-                        ratio = feetDistance / legLength;
-                        ratio = Functions.limitValue(minimumRatio, maximumRatio, ratio);
 
-                        gestureRate = Mathf.Pow((ratio - minimumRatio) / (maximumRatio - minimumRatio), slope);
+                ankleLeftPrev = ankleLeft;
+                ankleRightPrev = ankleRight;
+
+                ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
+                ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
+                
+                if( Mathf.Abs(ankleLeft.z - ankleRight.z) > Mathf.Abs(ankleLeft.x - ankleRight.x))
+                {
+                    // depth (z) feet distance greater than horizontal (x) feet distance
+                    kneeLeft = Functions.unityVector3(body.Joints[JointType.KneeLeft].Position);
+                    kneeRight = Functions.unityVector3(body.Joints[JointType.KneeRight].Position);
+                    hipLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
+                    hipRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
+
+                    ankleForward = (ankleLeft.z < ankleRight.z) ? ankleLeft : ankleRight;
+                    legLength = (ankleLeft - kneeLeft).sqrMagnitude + (hipLeft - kneeLeft).sqrMagnitude;
+                    feetDistance = (ankleRight - ankleRight).sqrMagnitude;
+                    ratio = feetDistance / legLength;   // not actual ratio, sqrMagnitude is used for better performance
+                    if(ratio > minimumRatio)
+                    {
+                        // feet apart
+                        if (!feetApart)
+                        {
+                            // first frame feet apart
+                            ankleMoving = Mathf.Abs(ankleLeft.z - ankleLeftPrev.z) > Mathf.Abs(ankleRight.z - ankleRightPrev.z) ?  ankleLeft : ankleRight;
+                            direction = ankleMoving == ankleForward ? 1 : -1;
+                        }
+                        feetApart = true;
+                        if (Mathf.Abs(ankleLeft.y - ankleRight.y) < groundThreshold)
+                        {                        
+                            // both feet on the ground: ankles height (y) distance is within threshold
+                            ratio = Functions.limitValue(minimumRatio, maximumRatio, ratio);
+                            gestureRate = Mathf.Pow((ratio - minimumRatio) / (maximumRatio - minimumRatio), slope) * direction;
+                        }
+                        else
+                        {
+                            // a foot is off the ground. ankles height (y) distance is out of threshold
+                            gestureRate = 0;
+                        }
+                    }
+                    else
+                    {
+                        // feet close to eachother
+                        feetMiddle = Vector3.Lerp(ankleLeft, ankleRight, 0.5f);
+                        feetApart = false;
                     }
                 }
-                else
-                {
-                    // ankles height (y) distance is out of threshold
-                    feetDown = false;
-                    gestureRate = 0;
-                }
+                
+                
                 break;
             }
         }
