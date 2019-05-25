@@ -41,66 +41,69 @@ public class GestureBendForward : MonoBehaviour
     void Update()
     {
 
-        if (_bodySourceManager == null)
+        if (trackGesture)
         {
-            return;
-        }
-
-        _bodyManager = _bodySourceManager.GetComponent<BodySourceManager>();
-        if (_bodyManager == null)
-        {
-            return;
-        }
-
-        Body[] data = _bodyManager.GetData();
-        if (data == null)
-        {
-            return;
-        }
-
-        // get the first tracked body...
-        foreach (var body in data)
-        {
-            if (body == null)
+            if (_bodySourceManager == null)
             {
-                continue;
+                return;
             }
 
-            if (body.IsTracked)
+            _bodyManager = _bodySourceManager.GetComponent<BodySourceManager>();
+            if (_bodyManager == null)
             {
-                hipLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
-                hipRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
-                ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
-                ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
-                spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
-                spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
-                
-                spine = spineShoulder - spineBase;
-                // leg with most tension defines the angle
-                if ( (ankleLeft - hipLeft).sqrMagnitude < (ankleRight - hipRight).sqrMagnitude )
+                return;
+            }
+
+            Body[] data = _bodyManager.GetData();
+            if (data == null)
+            {
+                return;
+            }
+
+            // get the first tracked body...
+            foreach (var body in data)
+            {
+                if (body == null)
                 {
-                    leg = ankleRight - hipRight;
-                    ankle = ankleRight;
-                }
-                else
-                {
-                    leg = ankleLeft - hipLeft;
-                    ankle = ankleLeft;
+                    continue;
                 }
 
-                angle = Vector3.Angle(spine, leg);
+                if (body.IsTracked)
+                {
+                    hipLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
+                    hipRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
+                    ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
+                    ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
+                    spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
+                    spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
 
-                if (spineShoulder.z < spineBase.z)
-                {
-                    angle = Functions.limitValue(minimumAngle, maximumAngle, angle);
-                    gestureRate = Mathf.Pow((maximumAngle - angle) / (maximumAngle - minimumAngle), slope);
+                    spine = spineShoulder - spineBase;
+                    // leg with most tension defines the angle
+                    if ((ankleLeft - hipLeft).sqrMagnitude < (ankleRight - hipRight).sqrMagnitude)
+                    {
+                        leg = ankleRight - hipRight;
+                        ankle = ankleRight;
+                    }
+                    else
+                    {
+                        leg = ankleLeft - hipLeft;
+                        ankle = ankleLeft;
+                    }
+
+                    angle = Vector3.Angle(spine, leg);
+
+                    if (spineShoulder.z < spineBase.z)
+                    {
+                        angle = Functions.limitValue(minimumAngle, maximumAngle, angle);
+                        gestureRate = Mathf.Pow((maximumAngle - angle) / (maximumAngle - minimumAngle), slope);
+                    }
+                    else
+                    {
+                        angle = Functions.limitValue(minimumAngleBack, maximumAngleBack, angle);
+                        gestureRate = -Mathf.Pow((maximumAngleBack - angle) / (maximumAngleBack - minimumAngleBack), slope);
+                    }
+                    break;
                 }
-                else
-                {
-                    angle = Functions.limitValue(minimumAngleBack, maximumAngleBack, angle);
-                    gestureRate = -Mathf.Pow((maximumAngleBack - angle) / (maximumAngleBack - minimumAngleBack), slope);
-                }
-                break;
             }
         }
 

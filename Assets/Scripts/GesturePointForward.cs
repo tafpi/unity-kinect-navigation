@@ -41,69 +41,74 @@ public class GesturePointForward : MonoBehaviour
     void Update()
     {
 
-        if (_bodySourceManager == null)
+        if (trackGesture)
         {
-            return;
-        }
-
-        _bodyManager = _bodySourceManager.GetComponent<BodySourceManager>();
-        if (_bodyManager == null)
-        {
-            return;
-        }
-
-        Body[] data = _bodyManager.GetData();
-        if (data == null)
-        {
-            return;
-        }
-
-        // get the first tracked body...
-        foreach (var body in data)
-        {
-            if (body == null)
+            if (_bodySourceManager == null)
             {
-                continue;
+                return;
             }
 
-            if (body.IsTracked)
+            _bodyManager = _bodySourceManager.GetComponent<BodySourceManager>();
+            if (_bodyManager == null)
             {
-                wristLeft = Functions.unityVector3(body.Joints[JointType.WristLeft].Position);
-                wristRight = Functions.unityVector3(body.Joints[JointType.WristRight].Position);
-                spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
-                spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
-
-                // which wrist is further from the body
-                if ( Mathf.Abs(wristLeft.z - spineShoulder.z) < Mathf.Abs(wristRight.z - spineShoulder.z) )
-                {
-                    wrist = wristRight;
-                    elbow = Functions.unityVector3(body.Joints[JointType.ElbowRight].Position);
-                }
-                else
-                {
-                    wrist = wristLeft;
-                    elbow = Functions.unityVector3(body.Joints[JointType.ElbowLeft].Position);
-                }
-
-                // (wrist-shoulder distance) / (arm full length). spine shoulder instead of shoulder for simpler calcs.
-                armTension = (spineShoulder - wrist).magnitude / ( (spineShoulder - elbow).magnitude + (elbow - wrist).magnitude );
-                angle = Vector3.Angle(wrist - spineShoulder, spineBase - spineShoulder);
-                rate = angle * armTension;
-
-                if ( wrist.z < spineShoulder.z)
-                {
-                    rate = Functions.limitValue(minimumRate, maximumRate, rate);
-                    gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope);
-                }
-                else
-                {
-                    rate = Functions.limitValue(minimumRateBack, maximumRateBack, rate);
-                    gestureRate = -Mathf.Pow((rate - minimumRateBack) / (maximumRateBack - minimumRateBack), slope);
-                }
-
-                break;
+                return;
             }
+
+            Body[] data = _bodyManager.GetData();
+            if (data == null)
+            {
+                return;
+            }
+
+            // get the first tracked body...
+            foreach (var body in data)
+            {
+                if (body == null)
+                {
+                    continue;
+                }
+
+                if (body.IsTracked)
+                {
+                    wristLeft = Functions.unityVector3(body.Joints[JointType.WristLeft].Position);
+                    wristRight = Functions.unityVector3(body.Joints[JointType.WristRight].Position);
+                    spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
+                    spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
+
+                    // which wrist is further from the body
+                    if ( Mathf.Abs(wristLeft.z - spineShoulder.z) < Mathf.Abs(wristRight.z - spineShoulder.z) )
+                    {
+                        wrist = wristRight;
+                        elbow = Functions.unityVector3(body.Joints[JointType.ElbowRight].Position);
+                    }
+                    else
+                    {
+                        wrist = wristLeft;
+                        elbow = Functions.unityVector3(body.Joints[JointType.ElbowLeft].Position);
+                    }
+
+                    // (wrist-shoulder distance) / (arm full length). spine shoulder instead of shoulder for simpler calcs.
+                    armTension = (spineShoulder - wrist).magnitude / ( (spineShoulder - elbow).magnitude + (elbow - wrist).magnitude );
+                    angle = Vector3.Angle(wrist - spineShoulder, spineBase - spineShoulder);
+                    rate = angle * armTension;
+
+                    if ( wrist.z < spineShoulder.z)
+                    {
+                        rate = Functions.limitValue(minimumRate, maximumRate, rate);
+                        gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope);
+                    }
+                    else
+                    {
+                        rate = Functions.limitValue(minimumRateBack, maximumRateBack, rate);
+                        gestureRate = -Mathf.Pow((rate - minimumRateBack) / (maximumRateBack - minimumRateBack), slope);
+                    }
+
+                    break;
+                }
+            }
+
         }
+
 
     }
 
