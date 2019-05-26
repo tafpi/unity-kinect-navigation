@@ -8,7 +8,7 @@ public class GesturePointForward : MonoBehaviour
     //public Windows.Kinect.JointType _rightShoulderJoint;
     public GameObject _bodySourceManager;
     private BodySourceManager _bodyManager;
-    public bool trackGesture;
+    private bool trackGesture = false;
     
     public float gestureRate;
     public float slope = 1.2f;
@@ -26,15 +26,18 @@ public class GesturePointForward : MonoBehaviour
     public float angle;
 
     public float rate;
-    public float minimumRate = 0.06f;
-    public float maximumRate = 0.16f;
-    public float minimumRateBack = 0.05f;
-    public float maximumRateBack = 0.1f;
-    
+    public float minimumRate = 40;
+    public float maximumRate = 65;
+    public float minimumRateBack = 30;
+    public float maximumRateBack = 50;
+
+    private GestureState state;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        state = gameObject.GetComponent<GestureState>();
+        trackGesture = gameObject.GetComponent<GestureState>().gestureTracked;
     }
 
     // Update is called once per frame
@@ -43,6 +46,7 @@ public class GesturePointForward : MonoBehaviour
 
         if (trackGesture)
         {
+            Debug.Log("point forward tracked");
             if (_bodySourceManager == null)
             {
                 return;
@@ -102,6 +106,8 @@ public class GesturePointForward : MonoBehaviour
                         rate = Functions.limitValue(minimumRateBack, maximumRateBack, rate);
                         gestureRate = -Mathf.Pow((rate - minimumRateBack) / (maximumRateBack - minimumRateBack), slope);
                     }
+
+                    if (state != null) state.gestureRate = gestureRate;
 
                     break;
                 }

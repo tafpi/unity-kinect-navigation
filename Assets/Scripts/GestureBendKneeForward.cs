@@ -8,8 +8,8 @@ public class GestureBendKneeForward : MonoBehaviour
     //public Windows.Kinect.JointType _rightShoulderJoint;
     public GameObject _bodySourceManager;
     private BodySourceManager _bodyManager;
-    public bool trackGesture;
-    
+    private bool trackGesture = false;
+
     public float gestureRate;
 
     public float minimumAngle = 140f;
@@ -23,10 +23,13 @@ public class GestureBendKneeForward : MonoBehaviour
     private float angleRight;
     private float angle;
 
+    private GestureState state;
+
     // Start is called before the first frame update
     void Start()
     {
-        //Debug.Log("BendForward gesture can be recognised");
+        state = gameObject.GetComponent<GestureState>();
+        trackGesture = gameObject.GetComponent<GestureState>().gestureTracked;
     }
 
     // Update is called once per frame
@@ -35,6 +38,7 @@ public class GestureBendKneeForward : MonoBehaviour
 
         if (trackGesture)
         {
+            Debug.Log("bend knee forward tracked");
             if (_bodySourceManager == null)
             {
                 return;
@@ -88,6 +92,8 @@ public class GestureBendKneeForward : MonoBehaviour
                     }
 
                     gestureRate = Mathf.Pow((maximumAngle - angle) / (maximumAngle - minimumAngle), slope);
+
+                    if (state != null) state.gestureRate = gestureRate;
 
                     break;
                 }

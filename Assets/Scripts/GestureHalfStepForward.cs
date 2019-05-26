@@ -38,13 +38,16 @@ public class GestureHalfStepForward : MonoBehaviour
     private float legLength;
     private float feetDistance;
     public float ratio;
-    public float minimumRatio = 0.15f;
-    public float maximumRatio = 0.7f;
+    public float minimumRatio = 0.3f;
+    public float maximumRatio = 0.55f;
+
+    private GestureState state;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        state = gameObject.GetComponent<GestureState>();
+        trackGesture = gameObject.GetComponent<GestureState>().gestureTracked;
     }
 
     // Update is called once per frame
@@ -53,6 +56,7 @@ public class GestureHalfStepForward : MonoBehaviour
 
         if (trackGesture)
         {
+            Debug.Log("half step forward tracked");
             if (_bodySourceManager == null)
             {
                 return;
@@ -93,12 +97,11 @@ public class GestureHalfStepForward : MonoBehaviour
                     //    }
                     //}
 
+                    gestureRate = 0;
                     ankleLeftPrev = ankleLeft;
                     ankleRightPrev = ankleRight;
-
                     ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
                     ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
-
 
                     if (Mathf.Abs(ankleLeft.z - ankleRight.z) > Mathf.Abs(ankleLeft.x - ankleRight.x))
                     {
@@ -109,8 +112,8 @@ public class GestureHalfStepForward : MonoBehaviour
                         hipRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
 
                         ankleForward = (ankleLeft.z < ankleRight.z) ? ankleLeft : ankleRight;
-                        legLength = (ankleLeft - kneeLeft).sqrMagnitude + (hipLeft - kneeLeft).sqrMagnitude;
-                        feetDistance = (ankleRight - ankleLeft).sqrMagnitude;
+                        legLength = (ankleLeft - kneeLeft).magnitude + (hipLeft - kneeLeft).magnitude;
+                        feetDistance = (ankleRight - ankleLeft).magnitude;
                         ratio = feetDistance / legLength;   // not actual ratio, sqrMagnitude is used for better performance
                         if (ratio > minimumRatio)
                         {
@@ -131,7 +134,7 @@ public class GestureHalfStepForward : MonoBehaviour
                             else
                             {
                                 // a foot is off the ground. ankles height (y) distance is out of threshold
-                                gestureRate = 0;
+                                //gestureRate = 0;
                             }
                         }
                         else
@@ -139,10 +142,11 @@ public class GestureHalfStepForward : MonoBehaviour
                             // feet close to eachother
                             feetMiddle = Vector3.Lerp(ankleLeft, ankleRight, 0.5f);
                             feetApart = false;
-                            gestureRate = 0;
+                            //gestureRate = 0;
                         }
                     }
 
+                    if (state != null) state.gestureRate = gestureRate;
 
                     break;
                 }
@@ -150,14 +154,5 @@ public class GestureHalfStepForward : MonoBehaviour
         }
 
     }
-
-    //private Vector3 getPlayerCenter(Body body)
-    //{
-    //    return new Vector3(
-    //        body.Joints[JointType.SpineBase].Position.X,
-    //        Mathf.Abs(body.Joints[JointType.AnkleLeft].Position.Y - body.Joints[JointType.AnkleRight].Position.Y) / 2,
-    //        Mathf.Abs(body.Joints[JointType.AnkleLeft].Position.Z - body.Joints[JointType.AnkleRight].Position.Z) / 2
-    //    );
-    //}
 
 }
