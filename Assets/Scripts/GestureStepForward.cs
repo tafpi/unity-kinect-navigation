@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Windows.Kinect;
 
-public class GestureHalfStepForward : MonoBehaviour
+public class GestureStepForward : MonoBehaviour
 {
     //public Windows.Kinect.JointType _rightShoulderJoint;
     public GameObject _bodySourceManager;
@@ -29,6 +29,8 @@ public class GestureHalfStepForward : MonoBehaviour
 
     private Vector3 ankleForward;
     private Vector3 ankleMoving;
+    private JointType jointMovingClose;
+    private JointType jointMovingAway;
     private Vector3 feetMiddle;
     public float direction;
     public bool feetApart;
@@ -84,20 +86,8 @@ public class GestureHalfStepForward : MonoBehaviour
 
                 if (body.IsTracked)
                 {
-                    //if( playerCenter == new Vector3(0,0,0))
-                    //{
-                    //    playerCenter = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
-                    //}
-                    //else
-                    //{
-                    //    playerCenterDiff = (playerCenter - Functions.unityVector3(body.Joints[JointType.SpineBase].Position)).sqrMagnitude;
-                    //    if ( playerCenterDiff > freeMovementRange )
-                    //    {
-                    //        Debug.Log("out of free movement range");
-                    //    }
-                    //}
 
-                    gestureRate = 0;
+                    //gestureRate = 0;
                     ankleLeftPrev = ankleLeft;
                     ankleRightPrev = ankleRight;
                     ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
@@ -115,33 +105,60 @@ public class GestureHalfStepForward : MonoBehaviour
                         legLength = (ankleLeft - kneeLeft).magnitude + (hipLeft - kneeLeft).magnitude;
                         feetDistance = (ankleRight - ankleLeft).magnitude;
                         ratio = feetDistance / legLength;
+
                         if (ratio > minimumRatio)
                         {
                             // feet apart
                             if (!feetApart)
                             {
                                 // first frame feet apart
-                                ankleMoving = Mathf.Abs(ankleLeft.z - ankleLeftPrev.z) > Mathf.Abs(ankleRight.z - ankleRightPrev.z) ? ankleLeft : ankleRight;
-                                direction = ankleMoving == ankleForward ? 1 : -1;
+                                //Debug.Log("// first frame feet apart");
+                                // which foot traveled more since last frame?
+                                if (Mathf.Abs(ankleLeft.z - ankleLeftPrev.z) > Mathf.Abs(ankleRight.z - ankleRightPrev.z))
+                                {
+                                    jointMovingAway = JointType.AnkleLeft;
+                                    direction = Mathf.Sign(ankleLeftPrev.z - ankleLeft.z);
+                                }
+                                else
+                                {
+                                    jointMovingAway = JointType.AnkleRight;
+                                    direction = Mathf.Sign(ankleRightPrev.z - ankleRight.z);
+                                }
+                                //Debug.Log(jointMovingAway);
                             }
                             feetApart = true;
-                            if (Mathf.Abs(ankleLeft.y - ankleRight.y) < groundThreshold)
-                            {
-                                // both feet on the ground: ankles height (y) distance is within threshold
-                                ratio = Functions.limitValue(minimumRatio, maximumRatio, ratio);
-                                gestureRate = Mathf.Pow((ratio - minimumRatio) / (maximumRatio - minimumRatio), slope) * direction;
-                            }
-                            else
-                            {
-                                // a foot is off the ground. ankles height (y) distance is out of threshold
-                            }
+                            gestureRate = 0;
                         }
                         else
                         {
                             // feet close to eachother
+                            if (feetApart)
+                            {
+                                // first frame feet close again
+                                //Debug.Log("first frame feet close again");
+                                // which foot traveled more since last frame?
+                                if (Mathf.Abs(ankleLeft.z - ankleLeftPrev.z) > Mathf.Abs(ankleRight.z - ankleRightPrev.z))
+                                {
+                                    jointMovingClose = JointType.AnkleLeft;
+                                    direction = Mathf.Sign(ankleLeftPrev.z - ankleLeft.z);
+                                }
+                                else
+                                {
+                                    jointMovingClose = JointType.AnkleRight;
+                                    direction = Mathf.Sign(ankleRightPrev.z - ankleRight.z);
+                                }
+                            }
+                            Debug.Log(jointMovingClose+", "+jointMovingAway);
+                            if (jointMovingClose != jointMovingAway)
+                            {
+                                ratio = Functions.limitValue(minimumRatio, maximumRatio, ratio);
+                            }
+                            gestureRate = Mathf.Pow((ratio - minimumRatio) / (maximumRatio - minimumRatio), slope) * direction;
                             feetApart = false;
-
-                            feetMiddle = Vector3.Lerp(ankleLeft, ankleRight, 0.5f);
+                            if (Mathf.Abs(ankleLeft.y - ankleRight.y) < groundThreshold)
+                            {
+                                // both feet on the ground: ankles height (y) distance is within threshold
+                            }
                         }
                     }
 
