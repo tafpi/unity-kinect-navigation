@@ -809,10 +809,10 @@ MonoBehaviour:
   feetApart: 0
   groundThreshold: 0.1
   distanceThreshold: 0.1
-  feetDown: 0
   ratio: 0
-  minimumRatio: 0.3
-  maximumRatio: 0.55
+  ratioPeak: 0
+  minimumRatio: 0.35
+  maximumRatio: 0.6
 --- !u!114 &358107397
 MonoBehaviour:
   m_ObjectHideFlags: 0
