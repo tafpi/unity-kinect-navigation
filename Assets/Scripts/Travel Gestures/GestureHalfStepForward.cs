@@ -5,7 +5,6 @@ using Windows.Kinect;
 
 public class GestureHalfStepForward : MonoBehaviour
 {
-    //public Windows.Kinect.JointType _rightShoulderJoint;
     public GameObject _bodySourceManager;
     private BodySourceManager _bodyManager;
     public bool trackGesture;

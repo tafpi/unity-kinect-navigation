@@ -168,6 +168,8 @@ MonoBehaviour:
   trackGesture: 0
   gestureRate: 0
   slope: 1.2
+  minimumRatio: 0.3
+  maximumRatio: 0.55
   playerCenterDiff: 0
   direction: 0
   feetApart: 0
@@ -175,8 +177,6 @@ MonoBehaviour:
   distanceThreshold: 0.1
   feetDown: 0
   ratio: 0
-  minimumRatio: 0.3
-  maximumRatio: 0.55
 --- !u!114 &11659849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,15 +329,15 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 1952330046}
   gestureRate: 0
   slope: 1.2
+  minimumRate: 40
+  maximumRate: 65
+  minimumRateBack: 30
+  maximumRateBack: 50
   wristShoulderDistance: 0
   armLength: 0
   armTension: 0
   angle: 0
   rate: 0
-  minimumRate: 40
-  maximumRate: 65
-  minimumRateBack: 30
-  maximumRateBack: 50
 --- !u!114 &36693526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,13 +385,13 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 0}
   gestureRate: 0
   slope: 1.2
-  currentAngle: 0
-  distance: 0
-  rate: 0
   minimumRate: 0.22
   maximumRate: 0.4
   minimumRateBack: 0.09
   maximumRateBack: 0.14
+  currentAngle: 0
+  distance: 0
+  rate: 0
 --- !u!114 &39733459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,6 +511,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 90422037}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &92600433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 92600434}
+  m_Layer: 0
+  m_Name: RotateGestures
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &92600434
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92600433}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -16.229626, y: -5.109579, z: -30.048983}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1132267374}
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &210702158
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,9 +770,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bodySourceManager: {fileID: 1952330046}
   gestureRate: 0
+  slope: 1.2
   minimumAngle: 140
   maximumAngle: 165
-  slope: 1.2
 --- !u!114 &343235577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -803,11 +834,11 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 1952330046}
   trackGesture: 0
   gestureRate: 0
-  jointMovingClose: 0
-  jointMovingAway: 0
+  slope: 1.2
   minimumRatio: 0.29
   maximumRatio: 0.56
-  slope: 1.2
+  jointMovingClose: 0
+  jointMovingAway: 0
   ratio: 0
   ratioPeak: 0
   feetApart: 0
@@ -1636,6 +1667,74 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1117389974}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1132267373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1132267374}
+  - component: {fileID: 1132267376}
+  - component: {fileID: 1132267375}
+  m_Layer: 0
+  m_Name: PointSideways
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1132267374
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132267373}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 92600434}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1132267375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132267373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d333e31a2fc21945959e7f7f24437dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bodySourceManager: {fileID: 0}
+  gestureRate: 0
+  slope: 1.2
+  minimumRate: 0.22
+  maximumRate: 0.4
+  minimumRateBack: 0.09
+  maximumRateBack: 0.14
+  currentAngle: 0
+  distance: 0
+  rate: 0
+--- !u!114 &1132267376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132267373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f84b2bd92a88ddf4bb7b90bf29148321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gestureRate: 0
+  gestureTracked: 0
 --- !u!1 &1356067246
 GameObject:
   m_ObjectHideFlags: 0
@@ -2045,6 +2144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 928aee4f680d5a048bf021c50d262ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: 1
+  playerBody: {fileID: 0}
+  rotateGesture: {fileID: 0}
+  gestureRate: 0
 --- !u!81 &1628875446
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2052,7 +2155,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1628875443}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1628875447
 Camera:
   m_ObjectHideFlags: 0

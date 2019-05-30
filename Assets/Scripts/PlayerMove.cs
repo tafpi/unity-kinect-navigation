@@ -14,7 +14,6 @@ public class PlayerMove : MonoBehaviour
     private Vector3 forwardMovement;
     private float vertInput;
     public float gestureRate;
-    //public MonoBehaviour script;
 
     private void Awake()
     {

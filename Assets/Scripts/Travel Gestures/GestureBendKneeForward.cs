@@ -5,7 +5,6 @@ using Windows.Kinect;
 
 public class GestureBendKneeForward : MonoBehaviour
 {
-    //public Windows.Kinect.JointType _rightShoulderJoint;
     public GameObject _bodySourceManager;
     private BodySourceManager _bodyManager;
     private bool trackGesture = false;

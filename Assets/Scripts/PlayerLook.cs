@@ -4,53 +4,56 @@ using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {
-    //[SerializeField] private string mouseXInputName, mouseYInputName;
-    //[SerializeField] private float mouseSensitivity;
+    [SerializeField] private float rotationSpeed = 1;
 
-    //[SerializeField] private Transform playerBody;
+    private CharacterController characterController;
 
-    //private float xAxisClamp;
+    [SerializeField] private Transform playerBody;
 
-    //private void Awake()
-    //{
-    //    LockCursor();
-    //    xAxisClamp = 0.0f;
-    //}
+    [SerializeField] public GameObject rotateGesture;
+    private float rotation;
+    public float gestureRate;
+
+    private void Awake()
+    {
+        LockCursor();
+        //xAxisClamp = 0.0f;
+    }
 
 
-    //private void LockCursor()
-    //{
-    //    Cursor.lockState = CursorLockMode.Locked;
-    //}
+    private void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
-    //private void Update()
-    //{
-    //    CameraRotation();
-    //}
+    private void Update()
+    {
+        CameraRotation();
+    }
 
-    //private void CameraRotation()
-    //{
-    //    float mouseX = Input.GetAxis(mouseXInputName) * mouseSensitivity * Time.deltaTime;
-    //    float mouseY = Input.GetAxis(mouseYInputName) * mouseSensitivity * Time.deltaTime;
+    private void CameraRotation()
+    {
+        //float mouseX = Input.GetAxis(mouseXInputName) * mouseSensitivity * Time.deltaTime;
+        //float mouseY = Input.GetAxis(mouseYInputName) * mouseSensitivity * Time.deltaTime;
 
-    //    xAxisClamp += mouseY;
+        //xAxisClamp += mouseY;
 
-    //    if(xAxisClamp > 90.0f)
-    //    {
-    //        xAxisClamp = 90.0f;
-    //        mouseY = 0.0f;
-    //        ClampXAxisRotationToValue(270.0f);
-    //    }
-    //    else if (xAxisClamp < -90.0f)
-    //    {
-    //        xAxisClamp = -90.0f;
-    //        mouseY = 0.0f;
-    //        ClampXAxisRotationToValue(90.0f);
-    //    }
+        //if (xAxisClamp > 90.0f)
+        //{
+        //    xAxisClamp = 90.0f;
+        //    mouseY = 0.0f;
+        //    ClampXAxisRotationToValue(270.0f);
+        //}
+        //else if (xAxisClamp < -90.0f)
+        //{
+        //    xAxisClamp = -90.0f;
+        //    mouseY = 0.0f;
+        //    ClampXAxisRotationToValue(90.0f);
+        //}
 
-    //    transform.Rotate(Vector3.left * mouseY);
-    //    playerBody.Rotate(Vector3.up * mouseX);
-    //}
+        //transform.Rotate(Vector3.left * mouseY);
+        playerBody.Rotate(Vector3.up * gestureRate * rotationSpeed);
+    }
 
     //private void ClampXAxisRotationToValue(float value)
     //{
