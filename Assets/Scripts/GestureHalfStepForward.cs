@@ -13,10 +13,8 @@ public class GestureHalfStepForward : MonoBehaviour
     public float gestureRate;
 
     public float slope = 1.2f;
-    //public string footForward;
-    //public Vector3 playerCenter = new Vector3(0,0,0);
-    //public float freeMovementRange = 0.02f;
-    public float playerCenterDiff;
+    public float minimumRatio = 0.3f;
+    public float maximumRatio = 0.55f;
 
     private Vector3 ankleLeft;
     private Vector3 ankleRight;
@@ -30,6 +28,7 @@ public class GestureHalfStepForward : MonoBehaviour
     private Vector3 ankleForward;
     private Vector3 ankleMoving;
     private Vector3 feetMiddle;
+    public float playerCenterDiff;
     public float direction;
     public bool feetApart;
     public float groundThreshold = 0.1f;
@@ -38,8 +37,6 @@ public class GestureHalfStepForward : MonoBehaviour
     private float legLength;
     private float feetDistance;
     public float ratio;
-    public float minimumRatio = 0.3f;
-    public float maximumRatio = 0.55f;
 
     private GestureState state;
 

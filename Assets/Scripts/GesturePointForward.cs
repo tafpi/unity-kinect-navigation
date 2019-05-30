@@ -11,7 +11,12 @@ public class GesturePointForward : MonoBehaviour
     private bool trackGesture = false;
     
     public float gestureRate;
+
     public float slope = 1.2f;
+    public float minimumRate = 40;
+    public float maximumRate = 65;
+    public float minimumRateBack = 30;
+    public float maximumRateBack = 50;
 
     private Vector3 wristLeft;
     private Vector3 wristRight;
@@ -26,10 +31,6 @@ public class GesturePointForward : MonoBehaviour
     public float angle;
 
     public float rate;
-    public float minimumRate = 40;
-    public float maximumRate = 65;
-    public float minimumRateBack = 30;
-    public float maximumRateBack = 50;
 
     private GestureState state;
 

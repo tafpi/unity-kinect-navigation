@@ -803,16 +803,16 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 1952330046}
   trackGesture: 0
   gestureRate: 0
+  jointMovingClose: 0
+  jointMovingAway: 0
+  minimumRatio: 0.29
+  maximumRatio: 0.56
   slope: 1.2
-  playerCenterDiff: 0
-  direction: 0
-  feetApart: 0
-  groundThreshold: 0.1
-  distanceThreshold: 0.1
   ratio: 0
   ratioPeak: 0
-  minimumRatio: 0.35
-  maximumRatio: 0.6
+  feetApart: 0
+  direction: 0
+  groundThreshold: 0.1
 --- !u!114 &358107397
 MonoBehaviour:
   m_ObjectHideFlags: 0

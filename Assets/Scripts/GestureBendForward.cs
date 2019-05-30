@@ -13,7 +13,10 @@ public class GestureBendForward : MonoBehaviour
     public float gestureRate;
 
     public float slope = 1.2f;
-    public float currentAngle;
+    public float minimumRate = 0.22f;
+    public float maximumRate = 0.4f;
+    public float minimumRateBack = 0.09f;
+    public float maximumRateBack = 0.14f;
 
     private Vector3 hipLeft;
     private Vector3 hipRight;
@@ -24,18 +27,9 @@ public class GestureBendForward : MonoBehaviour
     private Vector3 spineShoulder;
 
     private Vector3 spine;
-    //private Vector3 leg;
-    //public float angle;
+    public float currentAngle;
     public float distance;
     public float rate;
-    //public float minimumAngle = 154f;
-    //public float maximumAngle = 172f;
-    //public float minimumAngleBack = 165f;
-    //public float maximumAngleBack = 170f;
-    public float minimumRate = 0.22f;
-    public float maximumRate = 0.4f;
-    public float minimumRateBack = 0.09f;
-    public float maximumRateBack = 0.14f;
 
     private GestureState state;
 

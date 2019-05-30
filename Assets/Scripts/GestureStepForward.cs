@@ -5,7 +5,9 @@ using Windows.Kinect;
 
 public class GestureStepForward : MonoBehaviour
 {
-    //public Windows.Kinect.JointType _rightShoulderJoint;
+    // NOTES: 
+    //          - add some slow down before stopping
+
     public GameObject _bodySourceManager;
     private BodySourceManager _bodyManager;
     public bool trackGesture;
@@ -13,10 +15,8 @@ public class GestureStepForward : MonoBehaviour
     public float gestureRate;
 
     public float slope = 1.2f;
-    //public string footForward;
-    //public Vector3 playerCenter = new Vector3(0,0,0);
-    //public float freeMovementRange = 0.02f;
-    public float playerCenterDiff;
+    public float minimumRatio = 0.29f;
+    public float maximumRatio = 0.56f;
 
     private Vector3 ankleLeft;
     private Vector3 ankleRight;
@@ -25,27 +25,19 @@ public class GestureStepForward : MonoBehaviour
     private Vector3 kneeLeft;
     private Vector3 kneeRight;
     private Vector3 ankleLeftPrev;
-    private Vector3 ankleRightPrev;
+    private Vector3 ankleRightPrev;    
+    public JointType jointMovingClose;
+    public JointType jointMovingAway;
 
-    private Vector3 ankleForward;
-    private Vector3 ankleMoving;
-    private JointType jointMovingClose;
-    private JointType jointMovingAway;
-    private Vector3 feetMiddle;
-    public float direction;
-    private float directionPrev;
-    public bool feetApart;
-    
-    public bool ? centered = null;
 
-    public float groundThreshold = 0.1f;
-    public float distanceThreshold = 0.1f;
     private float legLength;
     private float feetDistance;
     public float ratio;
     public float ratioPeak;
-    public float minimumRatio = 0.3f;
-    public float maximumRatio = 0.55f;
+    public bool feetApart;
+    public float direction;
+    private float directionPrev;
+    public float groundThreshold = 0.1f;
 
     private GestureState state;
 
@@ -103,8 +95,7 @@ public class GestureStepForward : MonoBehaviour
                     kneeRight = Functions.unityVector3(body.Joints[JointType.KneeRight].Position);
                     hipLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
                     hipRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
-
-                    ankleForward = (ankleLeft.z < ankleRight.z) ? ankleLeft : ankleRight;
+                    
                     legLength = (ankleLeft - kneeLeft).magnitude + (hipLeft - kneeLeft).magnitude;
                     feetDistance = (ankleRight - ankleLeft).magnitude;
                     ratio = feetDistance / legLength;
@@ -118,23 +109,17 @@ public class GestureStepForward : MonoBehaviour
                             if (!feetApart)
                             {
                                 // first frame feet apart
-                                Debug.Log("// first frame feet apart");
-
                                 ratioPeak = 0;
 
-                                //// which foot traveled more since last frame?
+                                // which foot traveled more since last frame?
                                 if (Mathf.Abs(ankleLeft.z - ankleLeftPrev.z) > Mathf.Abs(ankleRight.z - ankleRightPrev.z))
                                 {
                                     jointMovingAway = JointType.AnkleLeft;
-                                    //direction = Mathf.Sign(ankleLeftPrev.z - ankleLeft.z);
                                 }
                                 else
                                 {
                                     jointMovingAway = JointType.AnkleRight;
-                                    //direction = Mathf.Sign(ankleRightPrev.z - ankleRight.z);
                                 }
-
-                                //Debug.Log(jointMovingAway);
                             }
                             if(ratio > ratioPeak)
                             {
@@ -142,16 +127,10 @@ public class GestureStepForward : MonoBehaviour
                             }
                         }
                         feetApart = true;
-                        //direction = 0;
                         gestureRate = 0;
                     }
                     else
                     {
-                        //if (!centered.HasValue)
-                        //{
-                        //    centered = true;
-                        //    direction = 0;
-                        //}
 
                         // feet close to eachother
                         if (Mathf.Abs(ankleLeft.y - ankleRight.y) < groundThreshold)
@@ -159,9 +138,7 @@ public class GestureStepForward : MonoBehaviour
                             // both feet on the ground: ankles height (y) distance is within threshold
                             if (feetApart)
                             {
-                                // first frame feet close again
-                                Debug.Log("first frame feet close again");
-                                
+                                // first frame feet close again                                
 
                                 // which foot traveled more since last frame?
                                 if (Mathf.Abs(ankleLeft.z - ankleLeftPrev.z) > Mathf.Abs(ankleRight.z - ankleRightPrev.z))
@@ -175,9 +152,8 @@ public class GestureStepForward : MonoBehaviour
                                     direction = Mathf.Sign(ankleRightPrev.z - ankleRight.z);
                                 }
                                 
-                                if ( (directionPrev != 0) && (direction != directionPrev) )
+                                if ( ( (directionPrev != 0) && (direction != directionPrev) ) || ( jointMovingAway == jointMovingClose ) )
                                 {
-                                    centered = true;
                                     direction = 0;
                                 }
                                 ratioPeak = Functions.limitValue(minimumRatio, maximumRatio, ratioPeak);

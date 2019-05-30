@@ -12,9 +12,10 @@ public class GestureBendKneeForward : MonoBehaviour
 
     public float gestureRate;
 
+    public float slope = 1.2f;
     public float minimumAngle = 140f;
     public float maximumAngle = 165f;
-    public float slope = 1.2f;
+
     private Vector3 shinLeft;
     private Vector3 shinRight;
     private Vector3 thighLeft;
