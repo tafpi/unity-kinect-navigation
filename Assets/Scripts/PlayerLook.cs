@@ -16,10 +16,12 @@ public class PlayerLook : MonoBehaviour
 
     private void Awake()
     {
-        LockCursor();
-        //xAxisClamp = 0.0f;
+        //LockCursor();
+        if(rotateGesture != null)
+        {
+            rotateGesture.GetComponent<GestureState>().gestureTracked = true;
+        }
     }
-
 
     private void LockCursor()
     {
@@ -28,37 +30,17 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
+        if (rotateGesture == null)
+        {
+            return;
+        }
+        gestureRate = rotateGesture.GetComponent<GestureState>().gestureRate;
         CameraRotation();
     }
 
     private void CameraRotation()
     {
-        //float mouseX = Input.GetAxis(mouseXInputName) * mouseSensitivity * Time.deltaTime;
-        //float mouseY = Input.GetAxis(mouseYInputName) * mouseSensitivity * Time.deltaTime;
-
-        //xAxisClamp += mouseY;
-
-        //if (xAxisClamp > 90.0f)
-        //{
-        //    xAxisClamp = 90.0f;
-        //    mouseY = 0.0f;
-        //    ClampXAxisRotationToValue(270.0f);
-        //}
-        //else if (xAxisClamp < -90.0f)
-        //{
-        //    xAxisClamp = -90.0f;
-        //    mouseY = 0.0f;
-        //    ClampXAxisRotationToValue(90.0f);
-        //}
-
         //transform.Rotate(Vector3.left * mouseY);
         playerBody.Rotate(Vector3.up * gestureRate * rotationSpeed);
     }
-
-    //private void ClampXAxisRotationToValue(float value)
-    //{
-    //    Vector3 eulerRotation = transform.eulerAngles;
-    //    eulerRotation.x = value;
-    //    transform.eulerAngles = eulerRotation;
-    //}
 }
