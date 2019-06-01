@@ -17,6 +17,11 @@ public class Functions
         return new Vector3(point.X, point.Y, point.Z); //swap the parameters around as you see fit
     }
 
+    public static Vector3 joint(Body body, Windows.Kinect.JointType type)
+    {
+        return Functions.unityVector3(body.Joints[type].Position);
+    }
+
     public static float gestureMultiplier(float min, float max, float rate, float slope)
     {
         if ( (rate >= 0) && (rate <= 1) )
@@ -61,5 +66,6 @@ public class Functions
         // Assuming insignificant mid-spine angle (spine is 3 joints: base, mid and shoulder)
         return Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position) - Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
     }
+
 
 }
