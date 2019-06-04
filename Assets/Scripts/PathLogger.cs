@@ -8,6 +8,8 @@ using System.IO;
 public class PathLogger : MonoBehaviour
 {
     public GameObject player;
+    public GameObject groundPlane;
+    private int multiplier = 10;
 
     string fileName = "positionFile";
     int time = 0;
@@ -28,9 +30,24 @@ public class PathLogger : MonoBehaviour
             fileCount++;
         }
         while (File.Exists(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "")+ ".svg"));
+
+        float groundWidth = groundPlane.transform.localScale.x;
+        float groundHeight = groundPlane.transform.localScale.z;
+        Debug.Log(groundWidth+", "+groundHeight);
+
+        string groundPath =
+            "<rect x='0' y='0' width='"+groundWidth+"' height='"+groundHeight+"' fill='#BBC42A' />";
+
+        string objectPaths =
+            "";
         
         sw = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".svg");
-        sw.WriteLine("<!DOCTYPE svg PUBLIC ' -//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg version = '1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xml:space='preserve' width='1000' height='1000'><polyline points='");
+        sw.WriteLine("" +
+            "<!DOCTYPE svg PUBLIC ' -//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>" +
+            "<svg version = '1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xml:space='preserve' width='"+groundWidth+"' height='"+groundHeight+"'>" +
+             groundPath + objectPaths +
+            "<polyline points='" +
+            "");
     }
 
     void OnDestroy()
@@ -44,8 +61,8 @@ public class PathLogger : MonoBehaviour
     {
         if (time > interval)
         {
-            x = -player.transform.position.x * 10 + 400;
-            z = player.transform.position.z * 10 + 400;
+            x = player.transform.position.x * multiplier;
+            z = 1000 - player.transform.position.z * multiplier;
             //sw.Write("" + x + ", " + z + " ");
             polylineCoordinates += "" + x + ", " + z + " ";
             //Debug.Log("write to file");
