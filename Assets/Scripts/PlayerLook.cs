@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {
-    [SerializeField] private float rotationSpeed = 1;
-
+    private float defaultRotationSpeed = 1;
+    private float rotationSpeed = 1;
     private CharacterController characterController;
 
-    [SerializeField] private Transform playerBody;
+    public GameObject playerBody;
 
-    [SerializeField] public GameObject rotateGesture;
+    public GameObject rotateGesture;
     private float rotation;
     public float gestureRate;
 
     private void Awake()
     {
         //LockCursor();
-        if(rotateGesture != null)
+        if (rotateGesture != null)
         {
             rotateGesture.GetComponent<GestureState>().gestureTracked = true;
+            if (rotateGesture.GetComponent<GestureState>().rotationSpeed != 0)
+            {
+                rotationSpeed = rotateGesture.GetComponent<GestureState>().rotationSpeed;
+            }
+            else
+            {
+                rotationSpeed = defaultRotationSpeed;
+            }
         }
     }
 
@@ -41,6 +49,7 @@ public class PlayerLook : MonoBehaviour
     private void CameraRotation()
     {
         //transform.Rotate(Vector3.left * mouseY);
-        playerBody.Rotate(Vector3.up * gestureRate * rotationSpeed);
+        playerBody.transform.Rotate(Vector3.up * gestureRate * rotationSpeed);
+        //playerBody.Rotate(Vector3.up * gestureRate * rotationSpeed);
     }
 }

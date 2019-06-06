@@ -190,6 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
+  rotationSpeed: 0
   gestureTracked: 0
 --- !u!1 &25607309
 GameObject:
@@ -351,6 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
+  rotationSpeed: 0
   gestureTracked: 0
 --- !u!1 &39733457
 GameObject:
@@ -405,6 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
+  rotationSpeed: 0
   gestureTracked: 0
 --- !u!4 &39733460
 Transform:
@@ -788,6 +791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
+  rotationSpeed: 0
   gestureTracked: 0
 --- !u!1 &358107394
 GameObject:
@@ -859,6 +863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
+  rotationSpeed: 0
   gestureTracked: 0
 --- !u!1 &436350842
 GameObject:
@@ -1738,6 +1743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
+  rotationSpeed: 0
   gestureTracked: 0
 --- !u!1 &1341643921
 GameObject:
@@ -1785,7 +1791,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bodySourceManager: {fileID: 1952330046}
   gestureRate: 0
-  slope: 1.2
+  slope: 2.5
   minimumRate: 0.1
   maximumRate: 0.2
   rate: 0
@@ -1802,6 +1808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
+  rotationSpeed: 0.7
   gestureTracked: 0
 --- !u!1 &1356067246
 GameObject:
@@ -2139,6 +2146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
+  rotationSpeed: 0
   gestureTracked: 0
 --- !u!1 &1603834809
 GameObject:
@@ -2276,8 +2284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 928aee4f680d5a048bf021c50d262ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 2
-  playerBody: {fileID: 1846327344}
+  playerBody: {fileID: 1846327341}
   rotateGesture: {fileID: 1341643921}
   gestureRate: 0
 --- !u!81 &1628875446
@@ -2409,7 +2416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 10
-  travelGesture: {fileID: 39733457}
+  travelGesture: {fileID: 11659846}
   gestureRate: 0
 --- !u!143 &1846327343
 CharacterController:
