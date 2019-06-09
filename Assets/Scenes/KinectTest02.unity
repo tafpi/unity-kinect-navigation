@@ -544,6 +544,7 @@ Transform:
   - {fileID: 1132267374}
   - {fileID: 1590891163}
   - {fileID: 1341643922}
+  - {fileID: 1038454187}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1492,6 +1493,72 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1033296127}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1038454186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1038454187}
+  - component: {fileID: 1038454189}
+  - component: {fileID: 1038454188}
+  m_Layer: 0
+  m_Name: Lean
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1038454187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038454186}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 92600434}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1038454188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038454186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d66563b0f0988f544bc4a06aa425141b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bodySourceManager: {fileID: 1952330046}
+  gestureRate: 0
+  slope: 3
+  minimumRate: 0.25
+  maximumRate: 0.5
+  direction: 0
+  rate: 0
+--- !u!114 &1038454189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038454186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f84b2bd92a88ddf4bb7b90bf29148321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gestureRate: 0
+  rotationSpeed: 1
+  gestureTracked: 0
 --- !u!1 &1077167151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1757,7 +1824,7 @@ GameObject:
   - component: {fileID: 1341643924}
   - component: {fileID: 1341643923}
   m_Layer: 0
-  m_Name: RotateShoulders
+  m_Name: TwistUpperBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2286,7 +2353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 1846327341}
-  rotateGesture: {fileID: 1341643921}
+  rotateGesture: {fileID: 1038454186}
   gestureRate: 0
 --- !u!81 &1628875446
 AudioListener:

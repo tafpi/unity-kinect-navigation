@@ -96,6 +96,11 @@ public class GestureBendForward : MonoBehaviour
                     if (state != null) state.gestureRate = gestureRate;
                     break;
 
+
+
+
+
+
                     //hipLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
                     //hipRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
                     //ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);

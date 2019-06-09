@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Windows.Kinect;
 
-public class GestureTwistUpperBody : MonoBehaviour
+public class GestureRotateShoulders : MonoBehaviour
 {
     public GameObject _bodySourceManager;
     private BodySourceManager _bodyManager;
