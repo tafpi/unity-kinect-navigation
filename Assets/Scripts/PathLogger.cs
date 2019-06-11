@@ -52,8 +52,11 @@ public class PathLogger : MonoBehaviour
 
     void OnDestroy()
     {
-        sw.WriteLine(polylineCoordinates+"' fill='white' stroke='#000000' stroke-width='3' /></svg>");
-        sw.Close();
+        if(sw != null)
+        {
+            sw.WriteLine(polylineCoordinates+"' fill='white' stroke='#000000' stroke-width='3' /></svg>");
+            sw.Close();
+        }
     }
 
     // Update is called once per frame
