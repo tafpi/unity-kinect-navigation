@@ -1607,8 +1607,8 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 1952330046}
   gestureRate: 0
   slope: 3
-  minimumRate: 0.2
-  maximumRate: 0.5
+  minimumRate: 0.09
+  maximumRate: 0.15
   direction: 0
   rate: 0
 --- !u!114 &1050231905
@@ -2420,7 +2420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 1846327341}
-  rotateGesture: {fileID: 1038454186}
+  rotateGesture: {fileID: 1050231902}
   gestureRate: 0
 --- !u!81 &1628875446
 AudioListener:

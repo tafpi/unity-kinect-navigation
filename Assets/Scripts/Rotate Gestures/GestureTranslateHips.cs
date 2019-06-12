@@ -12,18 +12,16 @@ public class GestureTranslateHips : MonoBehaviour
     public float gestureRate;
 
     public float slope = 3;
-    public float minimumRate = 0.2f;
-    public float maximumRate = 0.5f;
+    public float minimumRate = 0.1f;
+    public float maximumRate = 0.17f;
 
     private Vector3 ankleLeft;
     private Vector3 ankleRight;
     private Vector3 spineBase;
-    private Vector3 head;
-
+    private Vector3 waist;
+    private Vector3 waistReference;
     private Vector3 anklesMiddle;
-    private Vector3 spineVertical;
-    private Vector3 neck;
-    private Vector3 neckVertical;
+
     public float direction;
     public float rate;
 
@@ -76,28 +74,27 @@ public class GestureTranslateHips : MonoBehaviour
                     spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
 
                     anklesMiddle = (ankleRight + ankleLeft) / 2;
+                    //if(ankleLeft.z > ankleRight.z)
+                    //{
+                    //    anklesMiddle = Vector3.Lerp(ankleLeft, ankleRight, 0.35f);
+                    //} else
+                    //{
+                    //    anklesMiddle = Vector3.Lerp(ankleRight, ankleLeft, 0.35f);
+                    //}
+                    waist = spineBase - anklesMiddle;
+                    waist = new Vector3(waist.x, waist.y, waist.z);
+                    waistReference = new Vector3(0, waist.y, waist.z);
 
+                    rate = Mathf.Sin(Vector3.Angle(waist, waistReference) * Mathf.Deg2Rad);
 
+                    direction = Mathf.Sign((waist - waistReference).x);
 
-                    //spine = spineShoulder - spineBase;
-                    //spine = new Vector3(spine.x, spine.y, 0);
-                    //spineVertical = new Vector3(0, spine.magnitude, 0);
+                    rate = Functions.limitValue(minimumRate, maximumRate, rate);
+                    gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope) * direction;
 
-                    //neck = head - spineShoulder;
-                    //neck = new Vector3(neck.x, neck.y, 0);
-                    //neckVertical = new Vector3(0, neck.magnitude, 0);
+                    if (state != null) state.gestureRate = gestureRate;
 
-                    //rate = Mathf.Sin(Vector3.Angle(spine, spineVertical) * Mathf.Deg2Rad) +
-                    //    Mathf.Sin(Vector3.Angle(neck, neckVertical) * Mathf.Deg2Rad);
-
-                    //direction = Mathf.Sign((spine - spineVertical).x);
-
-                    //rate = Functions.limitValue(minimumRate, maximumRate, rate);
-                    //gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope) * direction;
-
-                    //if (state != null) state.gestureRate = gestureRate;
-
-                    //break;
+                    break;
 
                 }
             }
