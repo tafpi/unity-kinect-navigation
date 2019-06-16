@@ -12,8 +12,8 @@ public class GestureBendKneeOutwards : MonoBehaviour
     public float gestureRate;
 
     public float slope = 3;
-    public float minimumRate = 0.1f;
-    public float maximumRate = 0.17f;
+    public float minimumRate = 0.2f;
+    public float maximumRate = 0.3f;
 
     private Vector3 footLeft;
     private Vector3 footRight;
@@ -77,17 +77,21 @@ public class GestureBendKneeOutwards : MonoBehaviour
                 if (body.IsTracked)
                 {
 
-                    footLeft = Functions.unityVector3(body.Joints[JointType.FootLeft].Position);
-                    footRight = Functions.unityVector3(body.Joints[JointType.FootRight].Position);
+                    footLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
+                    footRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
                     kneeLeft = Functions.unityVector3(body.Joints[JointType.KneeLeft].Position);
                     kneeRight = Functions.unityVector3(body.Joints[JointType.KneeRight].Position);
                     hipLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
                     hipRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
 
                     thighLeft = kneeLeft - hipLeft;
+                    thighLeft = new Vector3(thighLeft.x, thighLeft.y, 0);
                     legLeft = footLeft - hipLeft;
+                    legLeft = new Vector3(legLeft.x, legLeft.y, 0);
                     thighRight = kneeRight - hipRight;
+                    thighRight = new Vector3(thighRight.x, thighRight.y, 0);
                     legRight = footRight - hipRight;
+                    legRight = new Vector3(legRight.x, legRight.y, 0);
 
                     rateLeft = Mathf.Sin(Vector3.Angle(thighLeft, legLeft) * Mathf.Deg2Rad);
                     rateRight = Mathf.Sin(Vector3.Angle(thighRight, legRight) * Mathf.Deg2Rad);
@@ -103,14 +107,12 @@ public class GestureBendKneeOutwards : MonoBehaviour
                         direction = 1;
                     }
 
-                    //direction = Mathf.Sign((waist - waistReference).x);
+                    rate = Functions.limitValue(minimumRate, maximumRate, rate);
+                    gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope) * direction;
 
-                    //rate = Functions.limitValue(minimumRate, maximumRate, rate);
-                    //gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope) * direction;
+                    if (state != null) state.gestureRate = gestureRate;
 
-                    //if (state != null) state.gestureRate = gestureRate;
-
-                    //break;
+                    break;
 
                 }
             }

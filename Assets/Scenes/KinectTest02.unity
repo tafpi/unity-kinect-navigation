@@ -2175,8 +2175,8 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 1952330046}
   gestureRate: 0
   slope: 3
-  minimumRate: 0.1
-  maximumRate: 0.17
+  minimumRate: 0.17
+  maximumRate: 0.28
   direction: 0
   rate: 0
 --- !u!114 &1570777466
