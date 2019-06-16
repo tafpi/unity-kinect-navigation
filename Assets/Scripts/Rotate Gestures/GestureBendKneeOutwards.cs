@@ -15,8 +15,8 @@ public class GestureBendKneeOutwards : MonoBehaviour
     public float minimumRate = 0.2f;
     public float maximumRate = 0.3f;
 
-    private Vector3 footLeft;
-    private Vector3 footRight;
+    private Vector3 ankleLeft;
+    private Vector3 ankleRight;
     private Vector3 kneeLeft;
     private Vector3 kneeRight;
     private Vector3 hipLeft;
@@ -77,8 +77,8 @@ public class GestureBendKneeOutwards : MonoBehaviour
                 if (body.IsTracked)
                 {
 
-                    footLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
-                    footRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
+                    ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
+                    ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
                     kneeLeft = Functions.unityVector3(body.Joints[JointType.KneeLeft].Position);
                     kneeRight = Functions.unityVector3(body.Joints[JointType.KneeRight].Position);
                     hipLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
@@ -86,11 +86,11 @@ public class GestureBendKneeOutwards : MonoBehaviour
 
                     thighLeft = kneeLeft - hipLeft;
                     thighLeft = new Vector3(thighLeft.x, thighLeft.y, 0);
-                    legLeft = footLeft - hipLeft;
+                    legLeft = ankleLeft - hipLeft;
                     legLeft = new Vector3(legLeft.x, legLeft.y, 0);
                     thighRight = kneeRight - hipRight;
                     thighRight = new Vector3(thighRight.x, thighRight.y, 0);
-                    legRight = footRight - hipRight;
+                    legRight = ankleRight - hipRight;
                     legRight = new Vector3(legRight.x, legRight.y, 0);
 
                     rateLeft = Mathf.Sin(Vector3.Angle(thighLeft, legLeft) * Mathf.Deg2Rad);
