@@ -313,7 +313,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1001576650}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &36693525
 MonoBehaviour:
@@ -826,7 +826,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1001576650}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &358107396
 MonoBehaviour:
@@ -1171,7 +1171,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1001576650}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &681141483
 MonoBehaviour:
@@ -1188,18 +1188,16 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 1952330046}
   trackGesture: 0
   gestureRate: 0
-  slope: 1.2
-  minimumRate: 0.3
-  maximumRate: 0.55
+  slope: 2.5
+  minimumRate: 0.28
+  maximumRate: 0.5
   ankleLeftTravel: 0
   ankleRightTravel: 0
   rate: 0
-  playerCenterDiff: 0
   direction: 0
   feetApart: 0
   groundThreshold: 0.1
   distanceThreshold: 0.1
-  feetDown: 0
 --- !u!114 &681141484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1473,9 +1471,9 @@ Transform:
   - {fileID: 39733460}
   - {fileID: 343235575}
   - {fileID: 11659847}
+  - {fileID: 681141482}
   - {fileID: 36693524}
   - {fileID: 358107395}
-  - {fileID: 681141482}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
