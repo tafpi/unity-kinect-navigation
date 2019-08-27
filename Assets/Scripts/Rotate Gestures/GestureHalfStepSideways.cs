@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Windows.Kinect;
 
-public class GestureStepSideways : MonoBehaviour
+public class GestureHalfStepSideways : MonoBehaviour
 {
     // NOTES: 
 
@@ -47,8 +47,6 @@ public class GestureStepSideways : MonoBehaviour
     {
         feetApart = false;
         direction = 0;
-        ankleMovingAway = 0;
-        ankleMovingClose = 0;
         state = gameObject.GetComponent<GestureState>();
         trackGesture = gameObject.GetComponent<GestureState>().gestureTracked;
 
@@ -103,8 +101,8 @@ public class GestureStepSideways : MonoBehaviour
                     ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
                     spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
 
-                    ankleLeftTravel += ankleLeft.x - ankleLeftPrev.x;
-                    ankleRightTravel += ankleRight.x - ankleRightPrev.x;
+                    ankleLeftTravel += ankleLeft.z - ankleLeftPrev.z;
+                    ankleRightTravel += ankleRight.z - ankleRightPrev.z;
 
                     legLeft = ankleLeft - spineBase;
                     legLeft = new Vector3(legLeft.x, legLeft.y, 0);
@@ -112,7 +110,6 @@ public class GestureStepSideways : MonoBehaviour
                     legRight = new Vector3(legRight.x, legRight.y, 0);
 
                     rate = Mathf.Sin(Vector3.Angle(legLeft, legRight) * Mathf.Deg2Rad);
-                    ratePeak = rate > ratePeak ? rate : ratePeak;
 
                     if (rate > minimumRate)
                     {
@@ -122,41 +119,20 @@ public class GestureStepSideways : MonoBehaviour
                             // feet first frame apart
                             feetApart = true;
 
-                            ankleMovingAway = Mathf.Abs(ankleLeftTravel) > Mathf.Abs(ankleRightTravel) ?
-                                -1 : 1;
+                            direction = Mathf.Abs(ankleLeftTravel) > Mathf.Abs(ankleRightTravel) ?
+                                Mathf.Sign(ankleLeftTravel) : Mathf.Sign(ankleRightTravel);
                         }
                         //gestureRate = 0;
                     }
                     else
                     {
-                        // feet close
-                        if (feetApart)
-                        {
-                            // feet first frame close
-                            feetApart = false;
-
-                            directionPrev = direction;
-
-                            ankleMovingClose = Mathf.Abs(ankleLeftTravel) > Mathf.Abs(ankleRightTravel) ?
-                                -1 : 1;
-                            
-                            if (ankleMovingClose != ankleMovingAway)
-                            {
-                                direction = Mathf.Abs(ankleLeftTravel) > Mathf.Abs(ankleRightTravel) ?
-                                    Mathf.Sign(ankleLeftTravel) : Mathf.Sign(ankleRightTravel);
-
-                                if ( (directionPrev != 0) && (direction == -directionPrev) )
-                                {
-                                    direction = 0;
-                                }
-
-                                rate = Functions.limitValue(minimumRate, maximumRate, ratePeak);
-                                gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope) * direction;
-                            }
-
-                        }
+                        // feet close to eachother
+                        feetApart = false;
+                        direction = 0;
                     }
 
+                    rate = Functions.limitValue(minimumRate, maximumRate, rate);
+                    gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope) * direction;
 
                     if (state != null) state.gestureRate = gestureRate;
 
