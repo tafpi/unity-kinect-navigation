@@ -103,8 +103,8 @@ public class GestureStepSideways : MonoBehaviour
                     ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
                     spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
 
-                    ankleLeftTravel += ankleLeft.z - ankleLeftPrev.z;
-                    ankleRightTravel += ankleRight.z - ankleRightPrev.z;
+                    ankleLeftTravel += (ankleLeft.x - ankleLeftPrev.x);
+                    ankleRightTravel += (ankleRight.x - ankleRightPrev.x);
 
                     legLeft = ankleLeft - spineBase;
                     legLeft = new Vector3(legLeft.x, legLeft.y, 0);
@@ -143,7 +143,7 @@ public class GestureStepSideways : MonoBehaviour
                             if (ankleMovingClose != ankleMovingAway)
                             {
                                 direction = Mathf.Abs(ankleLeftTravel) > Mathf.Abs(ankleRightTravel) ?
-                                    -Mathf.Sign(ankleLeftTravel) : -Mathf.Sign(ankleRightTravel);
+                                    Mathf.Sign(ankleLeftTravel) : Mathf.Sign(ankleRightTravel);
 
                                 if ( (directionPrev != 0) && (direction == -directionPrev) )
                                 {
