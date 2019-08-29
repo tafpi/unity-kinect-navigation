@@ -50,7 +50,7 @@ public class GestureHalfStepSideways : MonoBehaviour
         state = gameObject.GetComponent<GestureState>();
         trackGesture = gameObject.GetComponent<GestureState>().gestureTracked;
 
-        InvokeRepeating("ResetAnkleTravel", 0, 0.5f);
+        InvokeRepeating("ResetAnkleTravel", 0, .5f);
     }
 
     void ResetAnkleTravel()
@@ -101,8 +101,8 @@ public class GestureHalfStepSideways : MonoBehaviour
                     ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
                     spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
 
-                    ankleLeftTravel += ankleLeft.z - ankleLeftPrev.z;
-                    ankleRightTravel += ankleRight.z - ankleRightPrev.z;
+                    ankleLeftTravel += ankleLeft.x - ankleLeftPrev.x;
+                    ankleRightTravel += ankleRight.x - ankleRightPrev.x;
 
                     legLeft = ankleLeft - spineBase;
                     legLeft = new Vector3(legLeft.x, legLeft.y, 0);
@@ -128,6 +128,7 @@ public class GestureHalfStepSideways : MonoBehaviour
                     {
                         // feet close to eachother
                         feetApart = false;
+                        ResetAnkleTravel();
                         direction = 0;
                     }
 
