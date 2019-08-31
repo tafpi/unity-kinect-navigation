@@ -598,7 +598,7 @@ GameObject:
   m_Component:
   - component: {fileID: 92600434}
   m_Layer: 0
-  m_Name: RotateGestures
+  m_Name: CoronalGestures
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1601,7 +1601,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1001576650}
   m_Layer: 0
-  m_Name: TravelGestures
+  m_Name: SagittalGestures
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2676,7 +2676,7 @@ GameObject:
   - component: {fileID: 1628875444}
   - component: {fileID: 1628875447}
   - component: {fileID: 1628875446}
-  - component: {fileID: 1628875445}
+  - component: {fileID: 1628875448}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -2698,21 +2698,6 @@ Transform:
   m_Father: {fileID: 1846327344}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1628875445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1628875443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 928aee4f680d5a048bf021c50d262ac7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerBody: {fileID: 1846327341}
-  rotateGesture: {fileID: 828029774}
-  gestureRate: 0
 --- !u!81 &1628875446
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2764,6 +2749,21 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1628875448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628875443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de05576553f2f3340bbaee65e97cbd60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerBody: {fileID: 1846327341}
+  rotateGesture: {fileID: 39733457}
+  gestureRate: 0
 --- !u!1 &1689252211
 GameObject:
   m_ObjectHideFlags: 0
@@ -2895,6 +2895,7 @@ GameObject:
   - component: {fileID: 1846327344}
   - component: {fileID: 1846327343}
   - component: {fileID: 1846327342}
+  - component: {fileID: 1846327346}
   - component: {fileID: 1846327345}
   m_Layer: 0
   m_Name: Player
@@ -3055,6 +3056,21 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &1846327346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846327341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928aee4f680d5a048bf021c50d262ac7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerBody: {fileID: 1846327341}
+  rotateGesture: {fileID: 828029774}
+  gestureRate: 0
 --- !u!1 &1944546367
 GameObject:
   m_ObjectHideFlags: 0

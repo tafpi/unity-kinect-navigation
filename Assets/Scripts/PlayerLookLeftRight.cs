@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerLook : MonoBehaviour
+public class PlayerLookLeftRight : MonoBehaviour
 {
     private float defaultRotationSpeed = 1;
     private float rotationSpeed = 1;

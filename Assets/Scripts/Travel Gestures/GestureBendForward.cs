@@ -96,51 +96,6 @@ public class GestureBendForward : MonoBehaviour
                     if (state != null) state.gestureRate = gestureRate;
                     break;
 
-
-
-
-
-
-                    //hipLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
-                    //hipRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
-                    //ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
-                    //ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
-                    //spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
-                    //spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
-                    //spine = spineShoulder - spineBase;
-                    //// leg with most tension defines the angle
-                    //if ((ankleLeft - hipLeft).sqrMagnitude < (ankleRight - hipRight).sqrMagnitude)
-                    //{
-                    //    leg = ankleRight - hipRight;
-                    //    ankle = ankleRight;
-                    //}
-                    //else
-                    //{
-                    //    leg = ankleLeft - hipLeft;
-                    //    ankle = ankleLeft;
-                    //}
-
-                    //angle = Vector3.Angle(spine, leg);
-                    //gestureRate = 0;
-                    ////if ( (spineShoulder.z < spineBase.z) && (angle < minimumAngle) )
-                    //if (spineShoulder.z < spineBase.z)
-                    //{
-                    //    Debug.Log(1);
-                    //    angle = Functions.limitValue(maximumAngle, minimumAngle, angle);
-                    //    gestureRate = 1 - Mathf.Pow((angle - maximumAngle) / (minimumAngle - maximumAngle), slope);
-                    //}
-                    ////if ( (spineShoulder.z > spineBase.z) && () )
-                    //else
-                    //{
-                    //    Debug.Log(-1);
-                    //    angle = Functions.limitValue(minimumAngleBack, maximumAngleBack, angle);
-                    //    gestureRate = -Mathf.Pow((maximumAngleBack - angle) / (maximumAngleBack - minimumAngleBack), slope);
-                    //}
-
-                    //if (state != null) state.gestureRate = gestureRate;
-
-                    //break;
-
                 }
             }
         }
