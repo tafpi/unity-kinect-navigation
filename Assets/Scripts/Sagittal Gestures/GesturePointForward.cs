@@ -23,6 +23,7 @@ public class GesturePointForward : MonoBehaviour
     private Vector3 elbow;
     private Vector3 spineShoulder;
     private Vector3 spineBase;
+    private Vector3 arm;
 
     public float wristShoulderDistance;
     public float armLength;
@@ -93,7 +94,12 @@ public class GesturePointForward : MonoBehaviour
 
                     // (wrist-shoulder distance) / (arm full length). spine shoulder instead of shoulder for simpler calcs.
                     armTension = (spineShoulder - wrist).magnitude / ( (spineShoulder - elbow).magnitude + (elbow - wrist).magnitude );
-                    angle = Vector3.Angle(wrist - spineShoulder, spineBase - spineShoulder);
+                    
+                    arm = wrist - spineShoulder;
+                    arm.x = 0;
+
+                    angle = Vector3.Angle(arm, Vector3.down);
+
                     rate = angle * armTension;
 
                     if ( wrist.z < spineShoulder.z)
