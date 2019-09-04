@@ -69,7 +69,25 @@ public class PlayerLookUpDown : MonoBehaviour
             ClampXAxisRotationToValue(90.0f);
         }
 
-        transform.Rotate(Vector3.right * gestureRate * rotationSpeed);
+        transform.Rotate(Vector3.right * gestureRate * Time.deltaTime);
+
+        //float tr = transform.rotation.x;
+        //transform.Rotate(tr += gestureRate*rotationSpeed, transform.rotation.y, transform.rotation.z);
+
+        //Debug.Log(gestureRate);
+
+        //transform.Rotate(Vector3.left * ( gestureRate * rotationSpeed * Time.deltaTime ) );
+
+        //Vector3 eulerRotation = transform.eulerAngles;
+        //eulerRotation.y += gestureRate*rotationSpeed;
+        //transform.eulerAngles = eulerRotation;
+
+        //float trx = transform.rotation.x;
+        //Vector3 endPosition = new Vector3(trx+=gestureRate*rotationSpeed, transform.rotation.y, transform.rotation.z);
+        //Vector3 startPosition = new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z);
+        //Vector3 rot = Vector3.Lerp(startPosition, endPosition, 1);
+        //transform.localEulerAngles = rot;
+
     }
 
     private void ClampXAxisRotationToValue(float value)
