@@ -2401,12 +2401,13 @@ MonoBehaviour:
   player: {fileID: 1846327341}
   gestureRate: 0
   slope: 1.2
-  minimumAngle: 9.4
-  maximumAngle: 36.03
+  minimumAngle: 12
+  maximumAngle: 29.7
   wristShoulderDistance: 0
   armLength: 0
   armTension: 0
   angle: 0
+  zeroAngleDiff: 0
   controlling: 0
   rate: 0
 --- !u!114 &1416603086
@@ -2833,6 +2834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de05576553f2f3340bbaee65e97cbd60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultRotationSpeed: 100
   playerBody: {fileID: 1846327341}
   rotateGesture: {fileID: 1416603083}
   gestureRate: 0

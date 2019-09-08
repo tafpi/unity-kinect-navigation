@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerLookUpDown : MonoBehaviour
 {
-    private float defaultRotationSpeed = 1;
-    private float rotationSpeed = 1;
+    public float defaultRotationSpeed = 10;
+    private float rotationSpeed;
     private CharacterController characterController;
 
     public GameObject playerBody;
@@ -58,48 +58,40 @@ public class PlayerLookUpDown : MonoBehaviour
 
     private void CameraRotation()
     {
-        if (xAxisClamp > 90.0f)
+        Debug.Log(transform.eulerAngles.x);
+
+        if ((transform.eulerAngles.x < 90.0f) || (transform.eulerAngles.x > 270.0f))
         {
-            xAxisClamp = 90.0f;
-            ClampXAxisRotationToValue(270.0f);
+            transform.Rotate(Vector3.right * gestureRate * rotationSpeed * Time.deltaTime);
         }
-        else if (xAxisClamp < -90.0f)
+        else
         {
-            xAxisClamp = -90.0f;
-            ClampXAxisRotationToValue(90.0f);
+            if (transform.eulerAngles.x < 180.0f)
+            {
+                transform.Rotate(Vector3.left, 90);
+            }
+            if (transform.eulerAngles.x > 180.0f)
+            {
+                transform.Rotate(Vector3.left, 270);
+            }
         }
 
-        transform.Rotate(Vector3.right * gestureRate * Time.deltaTime);
-
-        //float tr = transform.rotation.x;
-        //transform.Rotate(tr += gestureRate*rotationSpeed, transform.rotation.y, transform.rotation.z);
-
-        //Debug.Log(gestureRate);
-
-        //transform.Rotate(Vector3.left * ( gestureRate * rotationSpeed * Time.deltaTime ) );
-
-        //Vector3 eulerRotation = transform.eulerAngles;
-        //eulerRotation.y += gestureRate*rotationSpeed;
-        //transform.eulerAngles = eulerRotation;
-
-        //float trx = transform.rotation.x;
-        //Vector3 endPosition = new Vector3(trx+=gestureRate*rotationSpeed, transform.rotation.y, transform.rotation.z);
-        //Vector3 startPosition = new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z);
-        //Vector3 rot = Vector3.Lerp(startPosition, endPosition, 1);
-        //transform.localEulerAngles = rot;
 
     }
 
     private void ClampXAxisRotationToValue(float value)
     {
-        Vector3 eulerRotation = transform.eulerAngles;
-        eulerRotation.x = value;
-        transform.eulerAngles = eulerRotation;
+        //Vector3 eulerRotation = transform.eulerAngles;
+        //eulerRotation.x = value;
+        //transform.eulerAngles = eulerRotation;
+
+        //transform.Rotate(Vector3.right * gestureRate * rotationSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.right, value);
     }
 
     private void ResetCamera()
     {
         float step = rotationSpeed * Time.deltaTime;        
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, playerBody.transform.rotation, step*100);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, playerBody.transform.rotation, step);
     }
 }

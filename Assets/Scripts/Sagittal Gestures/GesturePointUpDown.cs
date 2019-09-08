@@ -22,13 +22,13 @@ public class GesturePointUpDown : MonoBehaviour
     private Vector3 wrist;
     private Vector3 elbow;
     private Vector3 spineShoulder;
-    private Vector3 spineBase;
     private Vector3 arm;
 
     public float wristShoulderDistance;
     public float armLength;
     public float armTension;
     public float angle;
+    public float zeroAngleDiff = 10;
     public bool controlling; // is controlling the view
 
     public float rate;
@@ -80,45 +80,49 @@ public class GesturePointUpDown : MonoBehaviour
                     wristLeft = Functions.unityVector3(body.Joints[JointType.WristLeft].Position);
                     wristRight = Functions.unityVector3(body.Joints[JointType.WristRight].Position);
                     spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
-                    spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
 
-                    // which wrist is further from the body
-                    if ( Mathf.Abs(wristLeft.z - spineShoulder.z) < Mathf.Abs(wristRight.z - spineShoulder.z) )
-                    {
-                        wrist = wristRight;
-                        elbow = Functions.unityVector3(body.Joints[JointType.ElbowRight].Position);
-                    }
-                    else
-                    {
-                        wrist = wristLeft;
-                        elbow = Functions.unityVector3(body.Joints[JointType.ElbowLeft].Position);
-                    }
-                    
-                    armTension = (spineShoulder - wrist).magnitude / ( (spineShoulder - elbow).magnitude + (elbow - wrist).magnitude );
-                    arm = wrist - spineShoulder;
-                    arm.x = 0;
-                    angle = Vector3.Angle(arm, Vector3.down) - 90;
+                    angle = ArmAngle(body);
 
                     if(angle < -maximumAngle)
                     {
-                        rate = 0;
+                        gestureRate = 0;
                     } else
                     {
                         rate = angle * armTension;
                         rate = Mathf.Sign(angle) * Functions.limitValue(minimumAngle, maximumAngle, Mathf.Abs(rate));
+                        gestureRate = -Mathf.Sign(angle) * Mathf.Pow((Mathf.Abs(rate) - minimumAngle) / (maximumAngle - minimumAngle), slope);
                     }
-
-                    gestureRate = -Mathf.Sign(angle) * Mathf.Pow((Mathf.Abs(rate) - minimumAngle) / (maximumAngle - minimumAngle), slope);
 
                     if (state != null) state.gestureRate = gestureRate;
 
                     break;
                 }
+
             }
 
         }
 
+    }
 
+    private float ArmAngle(Body body)
+    {
+        // which wrist is further from the body
+        if (Mathf.Abs(wristLeft.z - spineShoulder.z) < Mathf.Abs(wristRight.z - spineShoulder.z))
+        {
+            wrist = wristRight;
+            elbow = Functions.unityVector3(body.Joints[JointType.ElbowRight].Position);
+        }
+        else
+        {
+            wrist = wristLeft;
+            elbow = Functions.unityVector3(body.Joints[JointType.ElbowLeft].Position);
+        }
+
+        armTension = (spineShoulder - wrist).magnitude / ((spineShoulder - elbow).magnitude + (elbow - wrist).magnitude);
+        arm = wrist - spineShoulder;
+        arm.x = 0;
+
+        return Vector3.Angle(arm, Vector3.down) - 90 + zeroAngleDiff;
     }
 
 }
