@@ -11,10 +11,13 @@ public class PlayerLookUpDown : MonoBehaviour
     public GameObject playerBody;
 
     public GameObject rotateGesture;
-    //private float rotation;
+    public float rotate;
     public float gestureRate;
 
     private float xAxisClamp;
+
+    public float euler;
+    public bool outOfRange;
 
     private void Awake()
     {
@@ -58,35 +61,28 @@ public class PlayerLookUpDown : MonoBehaviour
 
     private void CameraRotation()
     {
-        Debug.Log(transform.eulerAngles.x);
-
-        if ((transform.eulerAngles.x < 90.0f) || (transform.eulerAngles.x > 270.0f))
+        rotate = -gestureRate * rotationSpeed * Time.deltaTime;
+        xAxisClamp += rotate;
+        if (xAxisClamp > 90.0f)
         {
-            transform.Rotate(Vector3.right * gestureRate * rotationSpeed * Time.deltaTime);
+            xAxisClamp = 90.0f;
+            rotate = 0.0f;
+            ClampXAxisRotationToValue(270.0f);
         }
-        else
+        else if (xAxisClamp < -90.0f)
         {
-            if (transform.eulerAngles.x < 180.0f)
-            {
-                transform.Rotate(Vector3.left, 90);
-            }
-            if (transform.eulerAngles.x > 180.0f)
-            {
-                transform.Rotate(Vector3.left, 270);
-            }
+            xAxisClamp = -90.0f;
+            rotate = 0.0f;
+            ClampXAxisRotationToValue(90.0f);
         }
-
-
+        transform.Rotate(Vector3.left*rotate);
     }
 
     private void ClampXAxisRotationToValue(float value)
     {
-        //Vector3 eulerRotation = transform.eulerAngles;
-        //eulerRotation.x = value;
-        //transform.eulerAngles = eulerRotation;
-
-        //transform.Rotate(Vector3.right * gestureRate * rotationSpeed * Time.deltaTime);
-        transform.Rotate(Vector3.right, value);
+        Vector3 eulerRotation = transform.eulerAngles;
+        eulerRotation.x = value;
+        transform.eulerAngles = eulerRotation;
     }
 
     private void ResetCamera()
