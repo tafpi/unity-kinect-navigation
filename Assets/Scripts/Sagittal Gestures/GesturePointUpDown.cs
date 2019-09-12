@@ -83,14 +83,20 @@ public class GesturePointUpDown : MonoBehaviour
 
                     angle = ArmAngle(body);
 
-                    if(angle < -maximumAngle)
+                    if ((angle > -minimumAngle) && (!controlling)) controlling = true;
+
+
+                    if (angle < -maximumAngle)
                     {
                         gestureRate = 0;
+                        if (controlling) controlling = false;
                     } else
                     {
-                        rate = angle * armTension;
-                        rate = Mathf.Sign(angle) * Functions.limitValue(minimumAngle, maximumAngle, Mathf.Abs(rate));
-                        gestureRate = -Mathf.Sign(angle) * Mathf.Pow((Mathf.Abs(rate) - minimumAngle) / (maximumAngle - minimumAngle), slope);
+                        if(controlling){
+                            rate = angle * armTension;
+                            rate = Mathf.Sign(angle) * Functions.limitValue(minimumAngle, maximumAngle, Mathf.Abs(rate));
+                            gestureRate = -Mathf.Sign(angle) * Mathf.Pow((Mathf.Abs(rate) - minimumAngle) / (maximumAngle - minimumAngle), slope);
+                        }
                     }
 
                     if (state != null) state.gestureRate = gestureRate;
