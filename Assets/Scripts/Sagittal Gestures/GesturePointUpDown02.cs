@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Windows.Kinect;
 
+// Track (right) hand state to cluth view control
+
 public class GesturePointUpDownFist : MonoBehaviour
 {
     public GameObject _bodySourceManager;
@@ -25,12 +27,12 @@ public class GesturePointUpDownFist : MonoBehaviour
     private Vector3 arm;
     //public HandState handState;
 
-    public float wristShoulderDistance;
-    public float armLength;
-    public float armTension;
+    private float wristShoulderDistance;
+    private float armLength;
+    private float armTension;
     public float angle;
-    public float zeroAngleDiff = 10;
-    public bool controlling; // is controlling the view
+    public float zeroAngleDiff = 10;    // angle diff to align perceived and actual horizontal arm position (perceived is lower)
+    public bool controlling;            // is controlling the view
 
     public float rate;
 
@@ -83,7 +85,14 @@ public class GesturePointUpDownFist : MonoBehaviour
                     Vector3 wrist = hand.WristPoint;
                     Vector3 elbow = hand.ElbowPoint;
 
-                    if(body.HandRightConfidence == TrackingConfidence.High)
+                        
+                        
+                        
+                    // hand state closed unreliable
+
+
+
+                    if(body.HandRightConfidence != TrackingConfidence.Low)
                     {
                         controlling = hand.Fist == HandState.Closed ? true : false;
                     }

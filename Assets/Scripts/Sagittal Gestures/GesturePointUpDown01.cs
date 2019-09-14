@@ -28,8 +28,8 @@ public class GesturePointUpDown : MonoBehaviour
     public float armLength;
     public float armTension;
     public float angle;
-    public float zeroAngleDiff = 10;
-    public bool controlling; // is controlling the view
+    public float zeroAngleDiff = 10;    // angle diff to align perceived and actual horizontal arm position (perceived is lower)
+    public bool controlling;            // is controlling the view
 
     public float rate;
 

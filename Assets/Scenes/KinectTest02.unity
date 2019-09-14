@@ -150,7 +150,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1001576650}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &10703441
 MonoBehaviour:
@@ -626,6 +626,77 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &107430982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 107430983}
+  - component: {fileID: 107430985}
+  - component: {fileID: 107430984}
+  m_Layer: 0
+  m_Name: PointUpDown03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &107430983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107430982}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1001576650}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &107430984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107430982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14a6cbf68896ce4c82bdd4788e85a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bodySourceManager: {fileID: 1952330046}
+  player: {fileID: 1846327341}
+  gestureRate: 0
+  slope: 1.2
+  minimumAngle: 12
+  maximumAngle: 50
+  angle: 0
+  zeroAngleDiff: 10
+  armSpeed: 0
+  armSpeedMax: 0.02
+  previousHandPosition: {x: 0, y: 0, z: 0}
+  rate: 0
+--- !u!114 &107430985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107430982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f84b2bd92a88ddf4bb7b90bf29148321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gestureRate: 0
+  rotationSpeed: 0
+  gestureTracked: 0
 --- !u!1 &210702158
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,7 +973,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1001576650}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &358107396
 MonoBehaviour:
@@ -1625,6 +1696,7 @@ Transform:
   - {fileID: 36693524}
   - {fileID: 1416603084}
   - {fileID: 1509639400}
+  - {fileID: 107430983}
   - {fileID: 358107395}
   - {fileID: 10703440}
   m_Father: {fileID: 0}
@@ -2366,7 +2438,7 @@ GameObject:
   - component: {fileID: 1416603086}
   - component: {fileID: 1416603085}
   m_Layer: 0
-  m_Name: PointUpDown
+  m_Name: PointUpDown01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2399,11 +2471,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bodySourceManager: {fileID: 1952330046}
+  _bodyManager: {fileID: 0}
+  trackGesture: 0
   player: {fileID: 1846327341}
   gestureRate: 0
   slope: 1.2
   minimumAngle: 12
   maximumAngle: 50
+  wristLeft: {x: 0, y: 0, z: 0}
+  wristRight: {x: 0, y: 0, z: 0}
+  wrist: {x: 0, y: 0, z: 0}
+  elbow: {x: 0, y: 0, z: 0}
+  spineShoulder: {x: 0, y: 0, z: 0}
+  arm: {x: 0, y: 0, z: 0}
   wristShoulderDistance: 0
   armLength: 0
   armTension: 0
@@ -2411,6 +2491,7 @@ MonoBehaviour:
   zeroAngleDiff: 10
   controlling: 0
   rate: 0
+  state: {fileID: 0}
 --- !u!114 &1416603086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2438,7 +2519,7 @@ GameObject:
   - component: {fileID: 1509639402}
   - component: {fileID: 1509639401}
   m_Layer: 0
-  m_Name: PointUpDownFist
+  m_Name: PointUpDown02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2471,11 +2552,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bodySourceManager: {fileID: 1952330046}
+  _bodyManager: {fileID: 0}
+  trackGesture: 0
   player: {fileID: 1846327341}
   gestureRate: 0
   slope: 1.2
   minimumAngle: 12
   maximumAngle: 50
+  wristLeft: {x: 0, y: 0, z: 0}
+  wristRight: {x: 0, y: 0, z: 0}
+  arm: {x: 0, y: 0, z: 0}
   wristShoulderDistance: 0
   armLength: 0
   armTension: 0
@@ -2483,6 +2569,7 @@ MonoBehaviour:
   zeroAngleDiff: 10
   controlling: 0
   rate: 0
+  state: {fileID: 0}
 --- !u!114 &1509639402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2909,7 +2996,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultRotationSpeed: 100
   playerBody: {fileID: 1846327341}
-  rotateGesture: {fileID: 1509639399}
+  rotateGesture: {fileID: 107430982}
   rotate: 0
   gestureRate: 0
   euler: 0
