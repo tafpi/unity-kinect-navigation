@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1713558513056967811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1713558513056967814}
+  - component: {fileID: 1713558513056967809}
+  - component: {fileID: 1713558513056967808}
+  m_Layer: 0
+  m_Name: BendForward
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1713558513056967814
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713558513056967811}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1713558513056967809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713558513056967811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f84b2bd92a88ddf4bb7b90bf29148321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gestureRate: 0
+  rotationSpeed: 0
+  gestureTracked: 0
+--- !u!114 &1713558513056967808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713558513056967811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d333e31a2fc21945959e7f7f24437dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bodySourceManager: {fileID: 4775682875977993686, guid: cc6ef7a6713f4fa42bc92e94e17f4b5f,
+    type: 3}
+  gestureRate: 0
+  slope: 1.2
+  minimumRate: 0.22
+  maximumRate: 0.4
+  minimumRateBack: 0.09
+  maximumRateBack: 0.14
+  currentAngle: 0
+  distance: 0
+  rate: 0
