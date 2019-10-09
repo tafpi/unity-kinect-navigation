@@ -9,11 +9,9 @@ public class LimitWallTrigger : MonoBehaviour
     public float collisionEnterTime;
     public GameObject player;
     private LogCollisions collisionLogger;
-    //private LimitWall limitWall;
     
     void Start()
     {
-        //limitWall = gameObject.GetComponentInParent<LimitWall>();
         ResetWall();
     }
 
@@ -21,6 +19,7 @@ public class LimitWallTrigger : MonoBehaviour
     {
         if (ReferenceEquals(collider.gameObject, player))
         {
+            Debug.Log("entered trigger");
             collisionLogger.CollisionBegin(this);
         }
     }

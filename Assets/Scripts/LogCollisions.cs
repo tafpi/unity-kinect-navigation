@@ -15,6 +15,7 @@ public class LogCollisions : MonoBehaviour
     public int fileCount;
 
     public GameObject[] walls;
+    public float triggerPadding = 10;
 
     private int collisionIndex = 0;
 
@@ -37,10 +38,17 @@ public class LogCollisions : MonoBehaviour
             logFile.WriteLine(headers);
         }
 
-        // assign each limit wall the player property
         foreach (var wall in walls)
         {
-            wall.GetComponentInChildren<LimitWallTrigger>().AssignPlayer(gameObject);
+            LimitWallTrigger trigger = wall.GetComponentInChildren<LimitWallTrigger>();
+
+            // assign each limit wall the player property
+            trigger.AssignPlayer(gameObject);
+
+            // set trigger size by padding
+            Vector3 wallScale = wall.transform.localScale;
+            trigger.gameObject.transform.localScale = new Vector3(1 + triggerPadding / wallScale.x, 1 + triggerPadding / wallScale.y, 1 + triggerPadding / wallScale.z);
+
         }
     }
 
@@ -88,6 +96,14 @@ public class LogCollisions : MonoBehaviour
         // takes in seconds, returns formatted timestamp
         System.TimeSpan time = System.TimeSpan.FromSeconds(seconds);
         return time.ToString("hh':'mm':'ss':'fff");
+    }
+
+    private void SetWallTriggerScale()
+    {
+        foreach (var wall in walls)
+        {
+            
+        }
     }
 
 }
