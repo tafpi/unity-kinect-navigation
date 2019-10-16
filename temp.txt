@@ -1,0 +1,125 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+
+public class LogCollisions : MonoBehaviour
+{
+    // attach as component to player
+
+    public bool keepTrack;
+    private string fileName = "collisionsFile";
+    private StreamWriter logFile;
+    private string fmt = "0000.##";
+    private string delimiter = ", ";
+    private int fileCount;
+
+    public GameObject[] walls;
+    public float triggerPadding = 1;
+
+    private int collisionIndex = 0;
+    private ObstacleTrigger lastObstacleTrigger;
+    private Transform lastObstacleTransform;
+    private Obstacle lastObstacle;
+
+    //Travel Gesture, Rotate Y Gesture, Rotate X Gesture
+    //TravelGesture_RotateYGesture_RotateXGesture
+
+    void Start()
+    {
+        // create a file incrementing the filename's indexing
+        fileCount = 0;
+        do
+        {
+            fileCount++;
+        } while (File.Exists(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv"));
+        if (keepTrack)
+        {
+            logFile = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv");
+            string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
+            logFile.WriteLine(headers);
+        }
+        
+        foreach (var wall in walls)
+        {
+            if (wall)
+            {
+                ObstacleTrigger trigger = wall.GetComponentInChildren<ObstacleTrigger>();
+
+                // assign each limit wall the player property
+                trigger.AssignPlayer(gameObject);
+
+                // set trigger size by padding
+                Vector3 wallScale = wall.transform.localScale;
+                trigger.gameObject.transform.localScale = new Vector3(1 + triggerPadding / wallScale.x, 1 + triggerPadding / wallScale.y, 1 + triggerPadding / wallScale.z);
+
+                // do not render the wall
+                wall.GetComponent<MeshRenderer>().enabled = false;
+            }
+
+        }
+    }
+
+    void OnDestroy()
+    {
+        CollisionEndHandler(lastObstacleTrigger, lastObstacleTransform, lastObstacle);
+        // close the file if there is one
+        if (logFile != null)
+        {
+            logFile.Close();
+        }
+    }
+    
+    public void CollisionBegin(ObstacleTrigger trigger)
+    {
+        //Debug.Log("collision begin");
+        lastObstacleTrigger = trigger;
+        lastObstacleTransform = trigger.gameObject.transform.parent;
+        lastObstacle = lastObstacleTransform.GetComponent<Obstacle>();
+        trigger.collisionEnterTime = Time.realtimeSinceStartup;
+    }
+
+    public void CollisionUpdate(ObstacleTrigger trigger)
+    {
+        //Debug.Log("collision update");
+        trigger.collisionDuration = Time.realtimeSinceStartup - trigger.collisionEnterTime;
+    }
+
+    public void CollisionEnd(ObstacleTrigger trigger)
+    {
+        //Debug.Log("collision end");
+        CollisionEndHandler(trigger, trigger.gameObject.transform.parent, trigger.gameObject.transform.parent.GetComponent<Obstacle>());
+    }
+
+    private void CollisionEndHandler(ObstacleTrigger trigger, Transform obstacleTransform, Obstacle obstacle)
+    {
+        //Transform obstacleTransform = trigger.gameObject.transform.parent;
+        //Obstacle obstacle = obstacleTransform.GetComponent<Obstacle>();
+        string collisionLine = "";
+        collisionLine += collisionIndex;
+        collisionLine += delimiter;
+        collisionLine += obstacle.obstacleType;
+        collisionLine += delimiter;
+        collisionLine += obstacleTransform.name;
+        collisionLine += delimiter;
+        collisionLine += obstacle.location;
+        collisionLine += delimiter;
+        collisionLine += TimeFormat(trigger.collisionEnterTime);
+        collisionLine += delimiter;
+        collisionLine += TimeFormat(trigger.collisionDuration);
+        if (logFile != null)
+        {
+            logFile.WriteLine(collisionLine);
+        }
+        collisionIndex++;
+        trigger.ResetWall();
+    }
+
+    private string TimeFormat(float seconds)
+    {
+        // accepts seconds, returns formatted timestamp
+        System.TimeSpan time = System.TimeSpan.FromSeconds(seconds);
+        return time.ToString("hh':'mm':'ss':'fff");
+    }
+    
+}

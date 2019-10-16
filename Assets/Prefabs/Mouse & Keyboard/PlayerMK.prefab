@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7316256403337591658}
   - component: {fileID: 7316256403337591659}
   - component: {fileID: 7316256403337591657}
+  - component: {fileID: 2645138862005940727}
+  - component: {fileID: 4570438428501499049}
   m_Layer: 0
   m_Name: PlayerMK
   m_TagString: Untagged
@@ -68,6 +70,36 @@ MonoBehaviour:
   movementSpeed: 10
   jumpMultiplier: 5
   jumpKey: 32
+--- !u!114 &2645138862005940727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316256403337591660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608dbfae4177c7b4ab883fdbd1c6f9ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keepTrack: 1
+  walls:
+  - {fileID: 0}
+  triggerPadding: 1
+--- !u!114 &4570438428501499049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316256403337591660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e373ed2a159de0347843238cf723c9a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundPlane: {fileID: 0}
+  fileCount: 0
 --- !u!1001 &4079354443226622232
 PrefabInstance:
   m_ObjectHideFlags: 0

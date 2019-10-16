@@ -5,19 +5,21 @@ using UnityEngine;
 
 public class LogCollisions : MonoBehaviour
 {
-    // attach as component to player
+    // Attach as component to player.
 
     public bool keepTrack;
     private string fileName = "collisionsFile";
     private StreamWriter logFile;
     private string fmt = "0000.##";
     private string delimiter = ", ";
-    public int fileCount;
+    private int fileCount;
 
     public GameObject[] walls;
-    public float triggerPadding = 10;
+    public float triggerPadding = 1;
 
     private int collisionIndex = 0;
+
+    private ObstacleTrigger lastTrigger;
 
     //Travel Gesture, Rotate Y Gesture, Rotate X Gesture
     //TravelGesture_RotateYGesture_RotateXGesture
@@ -30,80 +32,97 @@ public class LogCollisions : MonoBehaviour
         {
             fileCount++;
         } while (File.Exists(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv"));
-
         if (keepTrack)
         {
             logFile = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv");
-            string headers = "Index, Wall Name, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
+            string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
             logFile.WriteLine(headers);
         }
-
+        
         foreach (var wall in walls)
         {
-            LimitWallTrigger trigger = wall.GetComponentInChildren<LimitWallTrigger>();
+            if (wall)
+            {
+                ObstacleTrigger trigger = wall.GetComponentInChildren<ObstacleTrigger>();
 
-            // assign each limit wall the player property
-            trigger.AssignPlayer(gameObject);
+                // assign each limit wall the player property
+                trigger.AssignPlayer(gameObject);
 
-            // set trigger size by padding
-            Vector3 wallScale = wall.transform.localScale;
-            trigger.gameObject.transform.localScale = new Vector3(1 + triggerPadding / wallScale.x, 1 + triggerPadding / wallScale.y, 1 + triggerPadding / wallScale.z);
+                // set trigger size by padding
+                Vector3 wallScale = wall.transform.localScale;
+                trigger.gameObject.transform.localScale = new Vector3(1 + triggerPadding / wallScale.x, 1 + triggerPadding / wallScale.y, 1 + triggerPadding / wallScale.z);
+
+                // do not render the wall
+                wall.GetComponent<MeshRenderer>().enabled = false;
+            }
 
         }
     }
 
     void OnDestroy()
     {
+        // close the file if there is one
         if (logFile != null)
         {
             logFile.Close();
         }
     }
     
-    public void CollisionBegin(LimitWallTrigger wallTrigger)
+    public void CollisionBegin(ObstacleTrigger obstacleTrigger)
     {
         //Debug.Log("collision begin");
-        wallTrigger.collisionEnterTime = Time.realtimeSinceStartup;
+        obstacleTrigger.collisionEnterTime = Time.realtimeSinceStartup;
     }
 
-    public void CollisionUpdate(LimitWallTrigger wallTrigger)
+    public void CollisionUpdate(ObstacleTrigger obstacleTrigger)
     {
         //Debug.Log("collision update");
-        wallTrigger.collisionDuration = Time.realtimeSinceStartup - wallTrigger.collisionEnterTime;
+        obstacleTrigger.collisionDuration = Time.realtimeSinceStartup - obstacleTrigger.collisionEnterTime;
+        lastTrigger = obstacleTrigger;
     }
 
-    public void CollisionEnd(LimitWallTrigger wallTrigger)
+    public void CollisionEnd(ObstacleTrigger obstacleTrigger)
     {
         //Debug.Log("collision end");
-        string collisionLine = "";
-        collisionLine += collisionIndex;
-        collisionLine += delimiter;
-        collisionLine += wallTrigger.gameObject.transform.parent.name;
-        collisionLine += delimiter;
-        collisionLine += TimeFormat(wallTrigger.collisionEnterTime);
-        collisionLine += delimiter;
-        collisionLine += TimeFormat(wallTrigger.collisionDuration);
-        if (logFile != null)
+        CollisionEndHandler(obstacleTrigger);
+    }
+
+    public void OnApplicationQuit()
+    {
+        CollisionEndHandler(lastTrigger);
+    }
+
+    public void CollisionEndHandler(ObstacleTrigger obstacleTrigger)
+    {
+        if (obstacleTrigger)
         {
-            logFile.WriteLine(collisionLine);
+            Obstacle obstacle = obstacleTrigger.GetComponentInParent<Obstacle>();
+            string collisionLine = "";
+            collisionLine += collisionIndex;
+            collisionLine += delimiter;
+            collisionLine += obstacle.obstacleType;
+            collisionLine += delimiter;
+            collisionLine += obstacle.name;
+            collisionLine += delimiter;
+            collisionLine += obstacle.location;
+            collisionLine += delimiter;
+            collisionLine += TimeFormat(obstacleTrigger.collisionEnterTime);
+            collisionLine += delimiter;
+            collisionLine += TimeFormat(obstacleTrigger.collisionDuration);
+            if (logFile != null)
+            {
+                logFile.WriteLine(collisionLine);
+            }
+            collisionIndex++;
+            obstacleTrigger.ResetWall();
         }
-        collisionIndex++;
-        wallTrigger.ResetWall();
     }
 
     private string TimeFormat(float seconds)
     {
-        // takes in seconds, returns formatted timestamp
+        // accepts seconds, returns formatted timestamp
         System.TimeSpan time = System.TimeSpan.FromSeconds(seconds);
         return time.ToString("hh':'mm':'ss':'fff");
     }
-
-    private void SetWallTriggerScale()
-    {
-        foreach (var wall in walls)
-        {
-            
-        }
-    }
-
+    
 }

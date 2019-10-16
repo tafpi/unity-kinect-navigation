@@ -7,9 +7,9 @@ using System.IO;
 
 public class LogPath : MonoBehaviour
 {
-    public GameObject player;
+    //public GameObject player;
     public GameObject groundPlane;
-    private int multiplier = 10;
+    private int multiplier = 1;
 
     string fileName = "positionFile";
     int time = 0;
@@ -21,6 +21,11 @@ public class LogPath : MonoBehaviour
     public int fileCount;
     string fmt = "0000.##";
 
+    private float groundWidth;
+    private float groundHeight;
+    private float groundScaleX;
+    private float groundScaleZ;
+
     // Use this for initialization
     void Start()
     {        
@@ -31,12 +36,15 @@ public class LogPath : MonoBehaviour
         }
         while (File.Exists(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "")+ ".svg"));
 
-        float groundWidth = groundPlane.transform.localScale.x;
-        float groundHeight = groundPlane.transform.localScale.z;
+
+        groundWidth = groundPlane.GetComponent<Renderer>().bounds.size.x;
+        groundHeight = groundPlane.GetComponent<Renderer>().bounds.size.z;
+        groundScaleX = groundPlane.transform.localScale.x;
+        groundScaleZ = groundPlane.transform.localScale.z;
         Debug.Log(groundWidth+", "+groundHeight);
 
         string groundPath =
-            "<rect x='0' y='0' width='"+groundWidth+"' height='"+groundHeight+"' fill='#BBC42A' />";
+            "<rect x='0' y='0' width='"+groundWidth+"' height='"+groundHeight+"' fill='none' />";
 
         string objectPaths =
             "";
@@ -54,7 +62,7 @@ public class LogPath : MonoBehaviour
     {
         if(sw != null)
         {
-            sw.WriteLine(polylineCoordinates+"' fill='white' stroke='#000000' stroke-width='3' /></svg>");
+            sw.WriteLine(polylineCoordinates+"' fill='none' stroke='#000000' stroke-width='3' /></svg>");
             sw.Close();
         }
     }
@@ -64,8 +72,8 @@ public class LogPath : MonoBehaviour
     {
         if (time > interval)
         {
-            x = player.transform.position.x * multiplier;
-            z = 1000 - player.transform.position.z * multiplier;
+            x = groundWidth / 2 + gameObject.transform.position.x * groundScaleX;
+            z = groundHeight / 2  - gameObject.transform.position.z * groundScaleZ;
             //sw.Write("" + x + ", " + z + " ");
             polylineCoordinates += "" + x + ", " + z + " ";
             //Debug.Log("write to file");

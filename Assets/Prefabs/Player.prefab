@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8762014662185553102}
   - component: {fileID: 8762014662185553106}
   - component: {fileID: 8762014662185553105}
+  - component: {fileID: 184348173334030295}
+  - component: {fileID: 6538294693730501099}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -187,6 +189,36 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &184348173334030295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762014662185553101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608dbfae4177c7b4ab883fdbd1c6f9ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keepTrack: 1
+  walls:
+  - {fileID: 0}
+  triggerPadding: 1
+--- !u!114 &6538294693730501099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762014662185553101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e373ed2a159de0347843238cf723c9a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundPlane: {fileID: 0}
+  fileCount: 0
 --- !u!1001 &7688514363798891771
 PrefabInstance:
   m_ObjectHideFlags: 0
