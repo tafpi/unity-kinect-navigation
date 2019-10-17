@@ -17,7 +17,7 @@ public class LogPath : MonoBehaviour
     float x;
     float z;
     string polylineCoordinates = "";
-    StreamWriter sw;
+    StreamWriter logFile;
     public int fileCount;
     string fmt = "0000.##";
 
@@ -49,8 +49,8 @@ public class LogPath : MonoBehaviour
         string objectPaths =
             "";
         
-        sw = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".svg");
-        sw.WriteLine("" +
+        logFile = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".svg");
+        logFile.WriteLine("" +
             "<!DOCTYPE svg PUBLIC ' -//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>" +
             "<svg version = '1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xml:space='preserve' width='"+groundWidth+"' height='"+groundHeight+"'>" +
              groundPath + objectPaths +
@@ -60,11 +60,7 @@ public class LogPath : MonoBehaviour
 
     void OnDestroy()
     {
-        if(sw != null)
-        {
-            sw.WriteLine(polylineCoordinates+"' fill='none' stroke='#000000' stroke-width='3' /></svg>");
-            sw.Close();
-        }
+        CloseFile();
     }
 
     // Update is called once per frame
@@ -74,7 +70,7 @@ public class LogPath : MonoBehaviour
         {
             x = groundWidth / 2 + gameObject.transform.position.x * groundScaleX;
             z = groundHeight / 2  - gameObject.transform.position.z * groundScaleZ;
-            //sw.Write("" + x + ", " + z + " ");
+            //logFile.Write("" + x + ", " + z + " ");
             polylineCoordinates += "" + x + ", " + z + " ";
             //Debug.Log("write to file");
             time = 0;
@@ -82,6 +78,19 @@ public class LogPath : MonoBehaviour
         else
         {
             time++;
+        }
+    }
+
+    public void CloseFile()
+    {
+        // close the file if there is one
+        if (logFile != null)
+        {
+            if (logFile.BaseStream != null)
+            {
+                logFile.WriteLine(polylineCoordinates + "' fill='none' stroke='#000000' stroke-width='3' /></svg>");
+                logFile.Close();
+            }
         }
     }
 }

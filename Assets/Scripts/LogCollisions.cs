@@ -6,8 +6,7 @@ using UnityEngine;
 public class LogCollisions : MonoBehaviour
 {
     // Attach as component to player.
-
-    public bool keepTrack;
+    
     private string fileName = "collisionsFile";
     private StreamWriter logFile;
     private string fmt = "0000.##";
@@ -32,12 +31,10 @@ public class LogCollisions : MonoBehaviour
         {
             fileCount++;
         } while (File.Exists(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv"));
-        if (keepTrack)
-        {
-            logFile = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv");
-            string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
-            logFile.WriteLine(headers);
-        }
+
+        logFile = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv");
+        string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
+        logFile.WriteLine(headers);
         
         foreach (var wall in walls)
         {
@@ -61,11 +58,7 @@ public class LogCollisions : MonoBehaviour
 
     void OnDestroy()
     {
-        // close the file if there is one
-        if (logFile != null)
-        {
-            logFile.Close();
-        }
+        CloseFile();
     }
     
     public void CollisionBegin(ObstacleTrigger obstacleTrigger)
@@ -90,6 +83,18 @@ public class LogCollisions : MonoBehaviour
     public void OnApplicationQuit()
     {
         CollisionEndHandler(lastTrigger);
+    }
+
+    public void CloseFile()
+    {
+        // close the file if there is one
+        if (logFile != null)
+        {
+            if (logFile.BaseStream != null)
+            {
+                logFile.Close();
+            }
+        }
     }
 
     public void CollisionEndHandler(ObstacleTrigger obstacleTrigger)

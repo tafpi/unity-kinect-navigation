@@ -6,18 +6,12 @@ using UnityEngine;
 
 public class PlayerMoveByKeyboard : MonoBehaviour
 {
-    [SerializeField] private string horizontalInputName = null;
-    [SerializeField] private string verticalInputName = null;
-    [SerializeField] private float movementSpeed = 10;
+    public string horizontalInputName = null;
+    public string verticalInputName = null;
+    public float movementSpeed = 10;
+    public bool canMove = true;
 
     private CharacterController charController;
-
-    //[SerializeField] private AnimationCurve jumpFallOff;
-    [SerializeField] private float jumpMultiplier;
-    [SerializeField] private KeyCode jumpKey;
-
-
-    private bool isJumping;
 
     private void Awake()
     {
@@ -31,42 +25,22 @@ public class PlayerMoveByKeyboard : MonoBehaviour
 
     private void PlayerMovement()
     {
-        float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
-        float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
+        if (canMove)
+        {
+            float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
+            float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
 
-        Vector3 forwardMovement = transform.forward * vertInput;
-        Vector3 rightMovement = transform.right * horizInput;
+            Vector3 forwardMovement = transform.forward * vertInput;
+            Vector3 rightMovement = transform.right * horizInput;
 
-        charController.SimpleMove(forwardMovement + rightMovement);
-
-        //JumpInput();
-
+            charController.SimpleMove(forwardMovement + rightMovement);
+        }
     }
 
-    //private void JumpInput()
-    //{
-    //    if (Input.GetKeyDown(jumpKey) && !isJumping)
-    //    {
-    //        isJumping = true;
-    //        StartCoroutine(JumpEvent());
-    //    }
-    //}
-
-    //private IEnumerator JumpEvent()
-    //{
-    //    charController.slopeLimit = 90.0f;
-    //    float timeInAir = 0.0f;
-
-    //    do
-    //    {
-    //        float jumpForce = jumpFallOff.Evaluate(timeInAir);
-    //        charController.Move(Vector3.up * jumpForce * jumpMultiplier * Time.deltaTime);
-    //        timeInAir += Time.deltaTime;
-    //        yield return null;
-    //    } while (!charController.isGrounded && charController.collisionFlags != CollisionFlags.Above);
-
-    //    charController.slopeLimit = 45.0f;
-    //    isJumping = false;
-    //}
+    public void SetToCannotMove()
+    {
+        Debug.Log("cannot");
+        canMove = false;
+    }
 
 }
