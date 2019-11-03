@@ -6,7 +6,8 @@ using UnityEngine;
 public class LogCollisions : MonoBehaviour
 {
     // Attach as component to player.
-    
+
+    private string directoryName = "UserTesting";
     private string fileName = "collisionsFile";
     private StreamWriter logFile;
     private string fmt = "0000.##";
@@ -25,14 +26,17 @@ public class LogCollisions : MonoBehaviour
     
     void Start()
     {
+        // if directory doesn't exit, create it
+        if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName);
+
         // create a file incrementing the filename's indexing
         fileCount = 0;
         do
         {
             fileCount++;
-        } while (File.Exists(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv"));
+        } while (File.Exists(directoryName + "/" + fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv"));
 
-        logFile = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv");
+        logFile = File.AppendText(directoryName + "/" + fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv");
         string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
         logFile.WriteLine(headers);
         

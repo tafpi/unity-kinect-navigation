@@ -11,11 +11,11 @@ public class GestureBendForward : MonoBehaviour
     
     public float gestureRate;
 
-    public float slope = 1.2f;
-    public float minimumRate = 0.22f;
-    public float maximumRate = 0.4f;
-    public float minimumRateBack = 0.09f;
-    public float maximumRateBack = 0.14f;
+    [Range(1f, 2f)] public float slope = 1.2f;
+    [Range(0f, 1f)] public float minimumRate = 0.25f;
+    [Range(0f, 1f)] public float maximumRate = 0.4f;
+    [Range(0f, 1f)] public float minimumRateBack = 0.01f;
+    [Range(0f, 1f)] public float maximumRateBack = 0.05f;
 
     private Vector3 hipLeft;
     private Vector3 hipRight;
@@ -80,7 +80,7 @@ public class GestureBendForward : MonoBehaviour
                     spine = spineShoulder - spineBase;
                     rate = distance / spine.magnitude;
                     gestureRate = 0;
-                    if(rate > minimumRate)
+                    if (rate > minimumRate)
                     {
                         //bending forwards
                         Debug.Log("bending forwards");
@@ -93,6 +93,7 @@ public class GestureBendForward : MonoBehaviour
                         rate = Functions.limitValue(minimumRateBack, maximumRateBack, Mathf.Abs(rate));
                         gestureRate = -Mathf.Pow((rate - minimumRateBack) / (maximumRateBack - minimumRateBack), slope);
                     }
+
                     if (state != null) state.gestureRate = gestureRate;
                     break;
 
@@ -100,6 +101,12 @@ public class GestureBendForward : MonoBehaviour
             }
         }
 
+    }
+
+    private void OnValidate()
+    {
+        if (minimumRate > maximumRate) maximumRate = minimumRate;
+        if (minimumRateBack > maximumRateBack) maximumRateBack = minimumRateBack;
     }
 
 }

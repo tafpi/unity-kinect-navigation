@@ -11,9 +11,9 @@ public class GestureLean : MonoBehaviour
 
     public float gestureRate;
 
-    public float slope = 3;
-    public float minimumRate = 0.2f;
-    public float maximumRate = 0.5f;
+    [Range(1f, 2f)] public float slope = 1.2f;
+    [Range(0f, 1f)] public float minimumRate = 0.2f;
+    [Range(0f, 1f)] public float maximumRate = 0.5f;
 
     private Vector3 spineBase;
     private Vector3 spineShoulder;
@@ -97,5 +97,10 @@ public class GestureLean : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnValidate()
+    {
+        if (minimumRate > maximumRate) maximumRate = minimumRate;
     }
 }

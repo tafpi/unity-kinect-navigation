@@ -9,17 +9,18 @@ public class LogPath : MonoBehaviour
 {
     //public GameObject player;
     public GameObject groundPlane;
-    private int multiplier = 1;
+    //private int multiplier = 1;
 
-    string fileName = "positionFile";
-    int time = 0;
-    int interval = 20;
-    float x;
-    float z;
-    string polylineCoordinates = "";
-    StreamWriter logFile;
-    public int fileCount;
-    string fmt = "0000.##";
+    private string directoryName = "UserTesting";
+    private string fileName = "positionFile";
+    private int time = 0;
+    private int interval = 20;
+    private float x;
+    private float z;
+    private string polylineCoordinates = "";
+    private StreamWriter logFile;
+    private int fileCount;
+    private string fmt = "0000.##";
 
     private float groundWidth;
     private float groundHeight;
@@ -28,13 +29,16 @@ public class LogPath : MonoBehaviour
 
     // Use this for initialization
     void Start()
-    {        
+    {
+        // if directory doesn't exit, create it
+        if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName);
+
         fileCount = 0;
         do
         {
             fileCount++;
         }
-        while (File.Exists(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "")+ ".svg"));
+        while (File.Exists(directoryName + "/" + fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "")+ ".svg"));
 
 
         groundWidth = groundPlane.GetComponent<Renderer>().bounds.size.x;
@@ -49,7 +53,7 @@ public class LogPath : MonoBehaviour
         string objectPaths =
             "";
         
-        logFile = File.AppendText(fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".svg");
+        logFile = File.AppendText(directoryName + "/" + fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".svg");
         logFile.WriteLine("" +
             "<!DOCTYPE svg PUBLIC ' -//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>" +
             "<svg version = '1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xml:space='preserve' width='"+groundWidth+"' height='"+groundHeight+"'>" +

@@ -59,11 +59,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6e9387655f61a4478da35692c3bce7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bodySourceManager: {fileID: 4775682875977993686, guid: cc6ef7a6713f4fa42bc92e94e17f4b5f,
-    type: 3}
+  _bodySourceManager: {fileID: 0}
   gestureRate: 0
-  slope: 4
-  minimumRate: 0.1
-  maximumRate: 0.4
-  direction: 0
+  slope: 1.2
+  minimumRate: 0.5
+  maximumRate: 0.7
   rate: 0

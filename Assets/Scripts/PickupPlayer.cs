@@ -1,0 +1,44 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+
+public class PickupPlayer : MonoBehaviour
+{
+    public Transform[] pickups;
+    public int interactionTimeNeeded = 2;
+    [Range(0f, 1f)] public float viewportFactor;
+    public GameObject player;
+    public Camera cam;
+
+    void Start()
+    {
+        cam = GetComponentInParent<Camera>();
+        player = transform.parent.parent.gameObject;
+
+        foreach (var pickup in pickups)
+        {
+            if (pickup)
+            {
+                PickupObject pickupObject = pickup.GetComponent<PickupObject>();
+                pickupObject.pickupPlayer = this;
+            }
+        }
+    }
+
+    public bool PickupInTarget(Vector3 pickupPos)
+    {
+        // check if pickup object's position relative to camera viewport is in bounds of camera's target
+        Vector3 viewPos = cam.WorldToViewportPoint(pickupPos);
+        return (viewPos.x > (1 - viewportFactor) / 2 && viewPos.x < (1 + viewportFactor) / 2 && viewPos.y > (1 - viewportFactor) / 2 && viewPos.y < (1 + viewportFactor) / 2);
+    }
+
+    private void OnDrawGizmos()
+    {
+        // draw a target: part of the viewport with same aspect ratio and dimensions defined by factoring. ie: factor 1 means same dimensions as viewport
+        Camera c = GetComponentInParent<Camera>();
+        Gizmos.color = Color.red;
+        Gizmos.matrix = Matrix4x4.TRS(c.transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawFrustum(Vector3.zero, c.fieldOfView * viewportFactor, 10f, 10.5f, c.aspect);
+    }
+}

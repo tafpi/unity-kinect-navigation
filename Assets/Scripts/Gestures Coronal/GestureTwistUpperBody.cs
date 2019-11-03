@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Windows.Kinect;
 
-public class GestureRotateShoulders : MonoBehaviour
+public class GestureTwistUpperBody : MonoBehaviour
 {
     public GameObject _bodySourceManager;
     private BodySourceManager _bodyManager;
@@ -11,9 +11,9 @@ public class GestureRotateShoulders : MonoBehaviour
 
     public float gestureRate;
 
-    public float slope = 4;
-    public float minimumRate = 0.1f;
-    public float maximumRate = 0.4f;
+    [Range(1f, 2f)] public float slope;
+    [Range(0f, 1f)] public float minimumRate;
+    [Range(0f, 1f)] public float maximumRate;
 
     private Vector3 shoulderLeft;
     private Vector3 shoulderRight;
@@ -22,7 +22,7 @@ public class GestureRotateShoulders : MonoBehaviour
 
     private Vector3 horizontalShoulders;
     private Vector3 horizontalAnkles;
-    public float direction;
+    private float direction;
     public float rate;
     
     private GestureState state;
@@ -65,8 +65,8 @@ public class GestureRotateShoulders : MonoBehaviour
                 {
                     shoulderLeft = Functions.unityVector3(body.Joints[JointType.ShoulderLeft].Position);
                     shoulderRight = Functions.unityVector3(body.Joints[JointType.ShoulderRight].Position);
-                    ankleLeft = Functions.unityVector3(body.Joints[JointType.AnkleLeft].Position);
-                    ankleRight = Functions.unityVector3(body.Joints[JointType.AnkleRight].Position);
+                    ankleLeft = Functions.unityVector3(body.Joints[JointType.HipLeft].Position);
+                    ankleRight = Functions.unityVector3(body.Joints[JointType.HipRight].Position);
 
                     horizontalShoulders = shoulderLeft - shoulderRight;
                     horizontalShoulders = new Vector3(horizontalShoulders.x, 0, horizontalShoulders.z);
@@ -87,6 +87,12 @@ public class GestureRotateShoulders : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnValidate()
+    {
+        if (minimumRate > maximumRate) maximumRate = minimumRate;
+        //slope = Mathf.Floor(slope * 100) / 100;
     }
 
 }
