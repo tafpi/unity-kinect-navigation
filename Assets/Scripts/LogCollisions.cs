@@ -6,63 +6,70 @@ using UnityEngine;
 public class LogCollisions : MonoBehaviour
 {
     // Attach as component to player.
-
-    private string directoryName = "UserTesting";
-    private string fileName = "collisionsFile";
-    private StreamWriter logFile;
-    private string fmt = "0000.##";
-    private string delimiter = ", ";
-    private int fileCount;
-
-    public GameObject[] walls;
+    
+    // input
+    public string filenamePrefix = "CollisionsFile";
+    public GameObject[] wallGroups;
     public float triggerPadding = 1;
 
+    private StreamWriter logFile;
+    private string delimiter = ", ";
+    private int fileCount;
     private int collisionIndex = 0;
 
     private ObstacleTrigger lastTrigger;
 
-    //Travel Gesture, Rotate Y Gesture, Rotate X Gesture
-    //TravelGesture_RotateYGesture_RotateXGesture
-    
-    void Start()
+    private void Start()
     {
-        // if directory doesn't exit, create it
-        if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName);
-
-        // create a file incrementing the filename's indexing
-        fileCount = 0;
-        do
-        {
-            fileCount++;
-        } while (File.Exists(directoryName + "/" + fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv"));
-
-        logFile = File.AppendText(directoryName + "/" + fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".csv");
-        string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
-        logFile.WriteLine(headers);
         
-        foreach (var wall in walls)
-        {
-            if (wall)
-            {
-                ObstacleTrigger trigger = wall.GetComponentInChildren<ObstacleTrigger>();
-
-                // assign each limit wall the player property
-                trigger.AssignPlayer(gameObject);
-
-                // set trigger size by padding
-                Vector3 wallScale = wall.transform.localScale;
-                trigger.gameObject.transform.localScale = new Vector3(1 + triggerPadding / wallScale.x, 1 + triggerPadding / wallScale.y, 1 + triggerPadding / wallScale.z);
-
-                // do not render the wall
-                wall.GetComponent<MeshRenderer>().enabled = false;
-            }
-
-        }
     }
 
     void OnDestroy()
     {
         CloseFile();
+    }
+
+    public void SetWalls(GameObject player)
+    {
+        foreach (var wallGroup in wallGroups)
+        {
+            if (wallGroup)
+            {
+                foreach (Transform wall in wallGroup.transform)
+                {
+                    ObstacleTrigger trigger = wall.gameObject.GetComponentInChildren<ObstacleTrigger>();
+
+                    // assign each limit wall the player property
+                    trigger.AssignPlayer(player, this);
+
+                    // set trigger size by padding
+                    Vector3 wallScale = wall.localScale;
+                    trigger.gameObject.transform.localScale = new Vector3(1 + triggerPadding / wallScale.x, 1 + triggerPadding / wallScale.y, 1 + triggerPadding / wallScale.z);
+
+                    // do not render the wall
+                    wall.gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+                }
+            }
+
+        }
+    }
+
+    public void CreateFile(string path, string suffixFormat)
+    {
+        // create a file incrementing the filename's indexing
+        string filename;
+        fileCount = 0;
+        do
+        {
+            fileCount++;
+            filename = path + "/" + filenamePrefix + (fileCount > 0 ? "_" + fileCount.ToString(suffixFormat) : "") + ".csv";
+        } while (File.Exists(filename));
+
+        logFile = File.AppendText(filename);
+        string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
+        logFile.WriteLine(headers);
+
     }
     
     public void CollisionBegin(ObstacleTrigger obstacleTrigger)

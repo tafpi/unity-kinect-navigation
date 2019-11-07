@@ -7,12 +7,10 @@ using System.IO;
 
 public class LogPath : MonoBehaviour
 {
-    //public GameObject player;
+    // input
     public GameObject groundPlane;
-    //private int multiplier = 1;
-
-    private string directoryName = "UserTesting";
-    private string fileName = "positionFile";
+    public string filenamePrefix = "PathFile";
+    
     private int time = 0;
     private int interval = 20;
     private float x;
@@ -20,8 +18,8 @@ public class LogPath : MonoBehaviour
     private string polylineCoordinates = "";
     private StreamWriter logFile;
     private int fileCount;
-    private string fmt = "0000.##";
 
+    // init vars
     private float groundWidth;
     private float groundHeight;
     private float groundScaleX;
@@ -30,53 +28,19 @@ public class LogPath : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        // if directory doesn't exit, create it
-        if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName);
-
-        fileCount = 0;
-        do
-        {
-            fileCount++;
-        }
-        while (File.Exists(directoryName + "/" + fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "")+ ".svg"));
-
-
         groundWidth = groundPlane.GetComponent<Renderer>().bounds.size.x;
         groundHeight = groundPlane.GetComponent<Renderer>().bounds.size.z;
         groundScaleX = groundPlane.transform.localScale.x;
         groundScaleZ = groundPlane.transform.localScale.z;
-        Debug.Log(groundWidth+", "+groundHeight);
-
-        string groundPath =
-            "<rect x='0' y='0' width='"+groundWidth+"' height='"+groundHeight+"' fill='none' />";
-
-        string objectPaths =
-            "";
-        
-        logFile = File.AppendText(directoryName + "/" + fileName + (fileCount > 0 ? "_" + fileCount.ToString(fmt) : "") + ".svg");
-        logFile.WriteLine("" +
-            "<!DOCTYPE svg PUBLIC ' -//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>" +
-            "<svg version = '1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xml:space='preserve' width='"+groundWidth+"' height='"+groundHeight+"'>" +
-             groundPath + objectPaths +
-            "<polyline points='" +
-            "");
     }
-
-    void OnDestroy()
-    {
-        CloseFile();
-    }
-
-    // Update is called once per frame
-    void Update()
+    
+    public void OnUpdate(GameObject player)
     {
         if (time > interval)
         {
-            x = groundWidth / 2 + gameObject.transform.position.x * groundScaleX;
-            z = groundHeight / 2  - gameObject.transform.position.z * groundScaleZ;
-            //logFile.Write("" + x + ", " + z + " ");
+            x = groundWidth / 2 + player.transform.position.x * groundScaleX;
+            z = groundHeight / 2  - player.transform.position.z * groundScaleZ;
             polylineCoordinates += "" + x + ", " + z + " ";
-            //Debug.Log("write to file");
             time = 0;
         }
         else
@@ -96,5 +60,27 @@ public class LogPath : MonoBehaviour
                 logFile.Close();
             }
         }
+    }
+
+    public void CreateFile(string path, string suffixFormat)
+    {
+        string filename;
+        fileCount = 0;
+        do
+        {
+            fileCount++;
+            filename = path + "/" + filenamePrefix + (fileCount > 0 ? "_" + fileCount.ToString(suffixFormat) : "") + ".svg";
+        } while (File.Exists(filename));
+
+        string groundPath = "<rect x='0' y='0' width='" + groundWidth + "' height='" + groundHeight + "' fill='none' />";
+        string objectPaths = "";
+
+        logFile = File.AppendText(filename);
+        logFile.WriteLine("" +
+            "<!DOCTYPE svg PUBLIC ' -//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>" +
+            "<svg version = '1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xml:space='preserve' width='" + groundWidth + "' height='" + groundHeight + "'>" +
+             groundPath + objectPaths +
+            "<polyline points='" +
+            "");
     }
 }

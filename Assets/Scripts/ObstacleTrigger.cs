@@ -39,10 +39,10 @@ public class ObstacleTrigger : MonoBehaviour
         }
     }
 
-    public void AssignPlayer(GameObject playerObject)
+    public void AssignPlayer(GameObject playerObject, LogCollisions collisionLoggerComponent)
     {
         player = playerObject;
-        collisionLogger = player.GetComponent<LogCollisions>();
+        collisionLogger = collisionLoggerComponent;
     }
 
     public void ResetWall()
