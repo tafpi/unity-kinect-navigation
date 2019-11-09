@@ -30,17 +30,26 @@ public class LogSystem : MonoBehaviour
         pathLogger = GetComponent<LogPath>();
         runLogger = GetComponent<LogRun>();
 
-        if (pathLogger)
-        {
-            pathLogger.CreateFile(directory, filenameSuffixFormat);
-        }
 
-        if (collisionsLogger)
+        if (runLogger)
         {
-            collisionsLogger.CreateFile(directory, filenameSuffixFormat);
-            collisionsLogger.SetWalls(player);
+            runLogger.CreateFile(directory);
+            //runLogger.TestStream(directory + "/" + runLogger.filename);
+            Debug.Log(runLogger.canLog);
         }
-        
+        if (runLogger.canLog)
+        {
+            if (pathLogger)
+            {
+                pathLogger.CreateFile(directory, filenameSuffixFormat);
+            }
+
+            if (collisionsLogger)
+            {
+                collisionsLogger.CreateFile(directory, filenameSuffixFormat);
+                collisionsLogger.SetWalls(player);
+            }
+        }
     }
     
     void Update()
@@ -63,6 +72,11 @@ public class LogSystem : MonoBehaviour
         {
             collisionsLogger.CloseFile();
 
+        }
+
+        if (runLogger)
+        {
+            runLogger.CloseFile();
         }
     }
 }

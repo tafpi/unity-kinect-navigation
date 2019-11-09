@@ -91,7 +91,7 @@ public class LogCollisions : MonoBehaviour
         CollisionEndHandler(obstacleTrigger);
     }
 
-    public void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
         CollisionEndHandler(lastTrigger);
     }
