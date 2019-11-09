@@ -23,7 +23,7 @@ public class PickupTrigger : MonoBehaviour
     {
         if (ReferenceEquals(pickupObject.pickupPlayer.player, other.gameObject))
         {
-            pickupObject.playerInTrigger = false;
+            pickupObject.playerInTrigger = false;;
         }
     }
 

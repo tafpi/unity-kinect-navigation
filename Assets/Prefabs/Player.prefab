@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8762014662185553104}
   - component: {fileID: 8762014662185553103}
+  - component: {fileID: 8474222050743391403}
   - component: {fileID: 8762014662185553102}
   - component: {fileID: 8762014662185553106}
   - component: {fileID: 8762014662185553105}
@@ -55,6 +56,23 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8474222050743391403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762014662185553101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b85c3c77a91dec4cbce41d7bf4e37e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canMove: 1
+  travelling: 0
+  rotatingY: 0
+  rotatingX: 0
+  rotatingWhileTravelling: 0
 --- !u!114 &8762014662185553102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,9 +85,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43f33f525475474098bbc0b77827090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
+  playerManager: {fileID: 8474222050743391403}
   travelGesture: {fileID: 0}
   gestureRate: 0
+  movementSpeed: 10
+  interval: 20
 --- !u!114 &8762014662185553106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,10 +221,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608dbfae4177c7b4ab883fdbd1c6f9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepTrack: 1
-  walls:
-  - {fileID: 0}
+  filenamePrefix: CollisionsFile
+  wallGroups: []
   triggerPadding: 1
+  logSystem: {fileID: 0}
 --- !u!114 &6538294693730501099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundPlane: {fileID: 0}
-  fileCount: 0
+  filenamePrefix: PathFile
 --- !u!1001 &7688514363798891771
 PrefabInstance:
   m_ObjectHideFlags: 0

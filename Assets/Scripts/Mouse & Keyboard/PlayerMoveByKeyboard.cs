@@ -6,12 +6,14 @@ using UnityEngine;
 
 public class PlayerMoveByKeyboard : MonoBehaviour
 {
+    public PlayerManager playerManager;
     public string horizontalInputName = null;
     public string verticalInputName = null;
     public float movementSpeed = 10;
-    public bool canMove = true;
-
+    
     private CharacterController charController;
+    private Vector3 forwardMovement;
+    private Vector3 rightMovement;
 
     private void Awake()
     {
@@ -20,27 +22,26 @@ public class PlayerMoveByKeyboard : MonoBehaviour
 
     private void Update()
     {
-        PlayerMovement();
-    }
-
-    private void PlayerMovement()
-    {
-        if (canMove)
+        if (playerManager.canMove)
         {
             float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
             float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
 
-            Vector3 forwardMovement = transform.forward * vertInput;
-            Vector3 rightMovement = transform.right * horizInput;
-
+            if (horizInput == 0 && vertInput == 0)
+            {
+                playerManager.travelling = false;
+                return;
+            }
+            playerManager.travelling = true;
+            forwardMovement = transform.forward * vertInput;
+            rightMovement = transform.right * horizInput;
             charController.SimpleMove(forwardMovement + rightMovement);
         }
     }
 
     public void SetToCannotMove()
     {
-        Debug.Log("cannot");
-        canMove = false;
+        playerManager.canMove = false;
     }
 
 }

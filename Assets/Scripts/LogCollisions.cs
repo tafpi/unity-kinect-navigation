@@ -18,18 +18,9 @@ public class LogCollisions : MonoBehaviour
     private int collisionIndex = 0;
 
     private ObstacleTrigger lastTrigger;
+    public LogSystem logSystem;
 
     private void Start()
-    {
-        
-    }
-
-    void OnDestroy()
-    {
-        CloseFile();
-    }
-
-    public void SetWalls(GameObject player)
     {
         foreach (var wallGroup in wallGroups)
         {
@@ -40,7 +31,7 @@ public class LogCollisions : MonoBehaviour
                     ObstacleTrigger trigger = wall.gameObject.GetComponentInChildren<ObstacleTrigger>();
 
                     // assign each limit wall the player property
-                    trigger.AssignPlayer(player, this);
+                    trigger.AssignPlayer(logSystem.player, this);
 
                     // set trigger size by padding
                     Vector3 wallScale = wall.localScale;
@@ -55,7 +46,7 @@ public class LogCollisions : MonoBehaviour
         }
     }
 
-    public void CreateFile(string path, string suffixFormat)
+    public void StartLogging(string path, string suffixFormat)
     {
         // create a file incrementing the filename's indexing
         string filename;
@@ -71,7 +62,19 @@ public class LogCollisions : MonoBehaviour
         logFile.WriteLine(headers);
 
     }
-    
+
+    public void StopLogging()
+    {
+        // close the file if there is one
+        if (logFile != null)
+        {
+            if (logFile.BaseStream != null)
+            {
+                logFile.Close();
+            }
+        }
+    }
+
     public void CollisionBegin(ObstacleTrigger obstacleTrigger)
     {
         //Debug.Log("collision begin");
@@ -94,18 +97,6 @@ public class LogCollisions : MonoBehaviour
     private void OnApplicationQuit()
     {
         CollisionEndHandler(lastTrigger);
-    }
-
-    public void CloseFile()
-    {
-        // close the file if there is one
-        if (logFile != null)
-        {
-            if (logFile.BaseStream != null)
-            {
-                logFile.Close();
-            }
-        }
     }
 
     public void CollisionEndHandler(ObstacleTrigger obstacleTrigger)

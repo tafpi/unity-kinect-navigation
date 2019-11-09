@@ -10,6 +10,8 @@ public class PickupPlayer : MonoBehaviour
     [Range(0f, 1f)] public float viewportFactor;
     public GameObject player;
     public Camera cam;
+    [HideInInspector] public int picked;
+    [HideInInspector] public float totalTimeSearching;
 
     void Start()
     {

@@ -6,14 +6,15 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] private float movementSpeed = 10;
+    public PlayerManager playerManager;
+    public GameObject travelGesture;
+    public float gestureRate;
+    public float movementSpeed = 10;
+    [Range(10, 30)] public int interval = 20;
 
     private CharacterController characterController;
-
-    [SerializeField] public GameObject travelGesture;
-    private Vector3 forwardMovement;
     private float vertInput;
-    public float gestureRate;
+    private Vector3 forwardMovement;
 
     private void Awake()
     {
@@ -28,16 +29,23 @@ public class PlayerMove : MonoBehaviour
     {
         if (travelGesture == null)
         {
+            playerManager.travelling = false;
             return;
         }
+        playerManager.travelling = true;
         gestureRate = travelGesture.GetComponent<GestureState>().gestureRate;
-        PlayerMovement();
-    }
-
-    private void PlayerMovement()
-    {
         forwardMovement = transform.forward * gestureRate * movementSpeed;
         characterController.SimpleMove(forwardMovement);
+        //PlayerMovement();
+    }
+
+    //private void PlayerMovement()
+    //{
+    //}
+
+    public void SetToCannotMove()
+    {
+        playerManager.canMove = false;
     }
 
 }

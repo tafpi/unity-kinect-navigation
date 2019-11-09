@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class LogRun : MonoBehaviour
 {
-    // Attach as component to player
+    // Attach as component to finish object
 
     // input
     public bool isFirstRun;
@@ -16,7 +16,7 @@ public class LogRun : MonoBehaviour
     public GameObject gestureTravel;
     public GameObject gestureRotateY;
     public GameObject gestureRotateX;
-    public System.DateTime start;
+    public System.DateTime startTime;
     public int totalPickups;
 
     // computed on update
@@ -24,7 +24,8 @@ public class LogRun : MonoBehaviour
     public float travelDuration;
     public float rotateYDuration;
     public float rotateXDuration;
-    public bool endReached;
+    public float rotateWhileTravelDuration;
+    public bool finishReached;
     public float idleControllerDuration;
     public float idleUserDuration;
     public int timesStopped;
@@ -38,7 +39,7 @@ public class LogRun : MonoBehaviour
     public float pickupSearch;
 
     // computed on end
-    public System.DateTime finish;
+    public System.DateTime closeTime;
 
     // file management
     public bool canLog;
@@ -55,14 +56,15 @@ public class LogRun : MonoBehaviour
         "gesture travel, " +
         "gesture rotate y, " +
         "gesture rotate x, " +
-        "start, " +
-        "finish, " +
-        "end reached, " +
+        "start time, " +
+        "close time, " +
+        "finish reached, " +
         "total duration, " +
         "travel duration, " +
         "rotate y duration, " +
         "rotate x duration, " +
-        "idle controller duration, " +
+        "rotate while travel duration, " +  // controller rotating (Y or X) while travelling
+        "idle controller duration, " +      // controller not travelling and not rotating
         "idle user duration, " +
         "times stopped, " +
         "distance traveled, " +
@@ -74,45 +76,53 @@ public class LogRun : MonoBehaviour
         "pickups, " +
         "total pickups, " +
         "pickup search";
-    
+
+    // logging
+    private int interval = 0;
+    [Range(10, 30)] public int intervalDelay = 20;
+
+    // other
+    private LogSystem logSystem;
+    private PickupPlayer pickupPlayer;
+
+
     private void Start()
-    {
-        start = System.DateTime.Now;
+    {        
+        
     }
 
     private void Update()
     {
         totalDuration = Time.realtimeSinceStartup;
-    }
 
-    // methods used externally
-
-    public void CreateFile(string directory)
-    {
-        path = directory + "/" + filename;
-
-        if (!File.Exists(path))
+        if (interval > intervalDelay)
         {
-            using (StreamWriter writer = WriteStream(path))
+            if (pickupPlayer)
             {
-                if (writer is null)
-                    return;
-                canLog = true;
-                writer.WriteLine(header);
+                pickups = pickupPlayer.picked;
+                pickupSearch = pickupPlayer.totalTimeSearching;
             }
-        }
 
-        using (StreamReader reader = ReadStream(path))
+            if (logSystem)
+            {
+                //if (logSystem.player.)
+                //{
+
+                //}
+                //travelDuration += 
+
+            }
+
+            interval = 0;
+        }
+        else
         {
-            if (reader is null)
-                return;
-            canLog = true;                
-            runId = RunId(reader);
+            interval++;
         }
 
     }
 
-    public int RunId(StreamReader r)
+    private int RunId(StreamReader r)
     {
         string lastLine = "";
         int linesCount = 0;
@@ -144,14 +154,67 @@ public class LogRun : MonoBehaviour
         }
     }
 
-    public void CloseFile()
+
+    // methods used externally
+
+    public void UpdateDistanceTraveled(float step)
+    {
+        distanceTraveled += step;        
+    }
+
+    public void StartLogging(string directory)
+    {
+        logSystem = GetComponent<LogSystem>();
+        path = directory + "/" + filename;
+
+        if (!File.Exists(path))
+        {
+            using (StreamWriter writer = WriteStream(path))
+            {
+                if (writer is null)
+                    return;
+                canLog = true;
+                writer.WriteLine(header);
+            }
+        }
+
+        using (StreamReader reader = ReadStream(path))
+        {
+            if (reader is null)
+                return;
+            canLog = true;
+
+            // logs on start
+            runId = RunId(reader);
+
+            PlayerMove playerMove = logSystem.player.GetComponent<PlayerMove>();
+            if (playerMove)
+                gestureTravel = playerMove.travelGesture;
+            PlayerLookLeftRight playerLookY = logSystem.GetComponent<PlayerLookLeftRight>();
+            if (playerLookY)
+                gestureRotateY = playerLookY.rotateGesture;
+            PlayerLookUpDown playerLookX = logSystem.GetComponentInChildren<PlayerLookUpDown>();
+            if (playerLookX)
+                gestureRotateX = playerLookX.rotateGesture;
+
+            startTime = System.DateTime.Now;
+
+            pickupPlayer = logSystem.player.GetComponentInChildren<PickupPlayer>();
+            if (pickupPlayer)
+                totalPickups = pickupPlayer.pickups.Length;
+
+        }
+
+    }
+
+    public void StopLogging()
     {
         using (StreamWriter writer = WriteStream(path))
         {
             if (writer is null)
                 return;
             
-            finish = System.DateTime.Now;
+            closeTime = System.DateTime.Now;
 
             line =
                 runId + delimiter +
@@ -159,13 +222,14 @@ public class LogRun : MonoBehaviour
                 gestureTravel + delimiter +
                 gestureRotateY + delimiter +
                 gestureRotateX + delimiter +
-                start + delimiter +
-                finish + delimiter +
-                endReached + delimiter +
+                startTime + delimiter +
+                closeTime + delimiter +
+                finishReached + delimiter +
                 totalDuration + delimiter +
                 travelDuration + delimiter +
                 rotateYDuration + delimiter +
                 rotateXDuration + delimiter +
+                rotateWhileTravelDuration + delimiter +
                 idleControllerDuration + delimiter +
                 idleUserDuration + delimiter +
                 timesStopped + delimiter +
@@ -233,6 +297,11 @@ public class LogRun : MonoBehaviour
         {
             //canLog = false;
             Debug.Log("There is a sharing violation.");
+            if (UnityEditor.EditorApplication.isPlaying)
+            {
+                Debug.Log("SETUP ERROR: RunsFile.csv is open. Close file and rerun.");
+                UnityEditor.EditorApplication.isPlaying = false;
+            }
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 80)
         {

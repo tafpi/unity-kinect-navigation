@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7316256403337591658}
   - component: {fileID: 7316256403337591659}
+  - component: {fileID: 2804756463880484063}
   - component: {fileID: 7316256403337591657}
-  - component: {fileID: 2645138862005940727}
-  - component: {fileID: 4570438428501499049}
   - component: {fileID: 1010757182248415040}
   m_Layer: 0
   m_Name: PlayerMK
@@ -54,6 +53,23 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2804756463880484063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316256403337591660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b85c3c77a91dec4cbce41d7bf4e37e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canMove: 1
+  travelling: 0
+  rotatingY: 0
+  rotatingX: 0
+  rotatingWhileTravelling: 0
 --- !u!114 &7316256403337591657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,38 +82,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a33d4e54924cc74aad5a0c90dcddcfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerManager: {fileID: 2804756463880484063}
   horizontalInputName: Horizontal
   verticalInputName: Vertical
   movementSpeed: 10
-  canMove: 1
---- !u!114 &2645138862005940727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7316256403337591660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 608dbfae4177c7b4ab883fdbd1c6f9ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walls:
-  - {fileID: 0}
-  triggerPadding: 1
---- !u!114 &4570438428501499049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7316256403337591660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e373ed2a159de0347843238cf723c9a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groundPlane: {fileID: 0}
 --- !u!114 &1010757182248415040
 MonoBehaviour:
   m_ObjectHideFlags: 0

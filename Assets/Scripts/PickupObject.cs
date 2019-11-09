@@ -12,6 +12,8 @@ public class PickupObject : MonoBehaviour
     public GameObject pickupTarget;
     public bool playerInTrigger = false;
     private bool picked = false;
+    [HideInInspector] public float searchDuration;
+    [HideInInspector] public float timeInTrigger;
 
     private void Start()
     {
@@ -22,12 +24,15 @@ public class PickupObject : MonoBehaviour
     {
         if (playerInTrigger && !picked)
         {
+            if (searchDuration == 0)
+                timeInTrigger = Time.realtimeSinceStartup;
+            searchDuration = Time.realtimeSinceStartup - timeInTrigger;
+            
             Vector3 viewPos = pickupPlayer.cam.WorldToViewportPoint(transform.position);
             if (pickupPlayer.PickupInTarget(pickupTarget.transform.position))
             {
                 if (interactionInitTime == 0)
                     interactionInitTime = Time.realtimeSinceStartup;
-
                 interactingDuration = Time.realtimeSinceStartup - interactionInitTime;
 
                 if (interactingDuration > pickupPlayer.interactionTimeNeeded)
@@ -39,6 +44,7 @@ public class PickupObject : MonoBehaviour
             {
                 interactionInitTime = 0;
             }
+
         }
     }
 
@@ -49,6 +55,11 @@ public class PickupObject : MonoBehaviour
         foreach (var renderer in renderers)
         {
             renderer.material = successMaterial;
+        }
+        if (pickupPlayer)
+        {
+            pickupPlayer.picked++;
+            pickupPlayer.totalTimeSearching += searchDuration;
         }
     }
 

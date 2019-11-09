@@ -11,13 +11,18 @@ public class LogPath : MonoBehaviour
     public GameObject groundPlane;
     public string filenamePrefix = "PathFile";
     
-    private int time = 0;
-    private int interval = 20;
+    private int interval = 0;
+    private int intervalDelay = 20;
     private float x;
     private float z;
     private string polylineCoordinates = "";
     private StreamWriter logFile;
     private int fileCount;
+
+    // step distance
+    private Vector3 posPrev;
+    private Vector3 pos;
+    private LogRun runLogger;
 
     // init vars
     private float groundWidth;
@@ -28,6 +33,7 @@ public class LogPath : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        pos = Vector3.zero;
         groundWidth = groundPlane.GetComponent<Renderer>().bounds.size.x;
         groundHeight = groundPlane.GetComponent<Renderer>().bounds.size.z;
         groundScaleX = groundPlane.transform.localScale.x;
@@ -36,34 +42,26 @@ public class LogPath : MonoBehaviour
     
     public void OnUpdate(GameObject player)
     {
-        if (time > interval)
+        if (interval > intervalDelay)
         {
+            posPrev = pos;
+            pos = player.transform.position;
+            runLogger.UpdateDistanceTraveled(Vector3.Distance(pos, posPrev));
+
             x = groundWidth / 2 + player.transform.position.x * groundScaleX;
             z = groundHeight / 2  - player.transform.position.z * groundScaleZ;
             polylineCoordinates += "" + x + ", " + z + " ";
-            time = 0;
+            interval = 0;
         }
         else
         {
-            time++;
+            interval++;
         }
     }
 
-    public void CloseFile()
+    public void StartLogging(string path, string suffixFormat)
     {
-        // close the file if there is one
-        if (logFile != null)
-        {
-            if (logFile.BaseStream != null)
-            {
-                logFile.WriteLine(polylineCoordinates + "' fill='none' stroke='#000000' stroke-width='3' /></svg>");
-                logFile.Close();
-            }
-        }
-    }
-
-    public void CreateFile(string path, string suffixFormat)
-    {
+        runLogger = GetComponent<LogRun>();
         string filename;
         fileCount = 0;
         do
@@ -82,5 +80,18 @@ public class LogPath : MonoBehaviour
              groundPath + objectPaths +
             "<polyline points='" +
             "");
+    }
+
+    public void StopLogging()
+    {
+        // close the file if there is one
+        if (logFile != null)
+        {
+            if (logFile.BaseStream != null)
+            {
+                logFile.WriteLine(polylineCoordinates + "' fill='none' stroke='#000000' stroke-width='3' /></svg>");
+                logFile.Close();
+            }
+        }
     }
 }

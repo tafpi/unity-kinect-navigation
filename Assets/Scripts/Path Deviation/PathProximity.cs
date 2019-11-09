@@ -79,7 +79,8 @@ namespace BezierSolution
             for (int i = 0; i <= pathCheckpoints; i++)
             {
                 Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(path.GetPoint((float)i / pathCheckpoints), .5f);
+                if (path)
+                    Gizmos.DrawWireSphere(path.GetPoint((float)i / pathCheckpoints), .5f);
             }            
         }
     }

@@ -9,6 +9,10 @@ public class LogSystem : MonoBehaviour
     public int userId;
     public GameObject player;
 
+    // player management
+    private PlayerMoveByKeyboard playerMoveByKeyboard;
+    private PlayerMove playerMove;
+
     // file management
     private LogCollisions collisionsLogger;
     private LogPath pathLogger;
@@ -23,60 +27,60 @@ public class LogSystem : MonoBehaviour
 
     void Start()
     {
-        // if directory doesn't exit, create it
-        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-
+        playerMoveByKeyboard = player.GetComponent<PlayerMoveByKeyboard>();
+        playerMove = player.GetComponent<PlayerMove>();
         collisionsLogger = GetComponent<LogCollisions>();
         pathLogger = GetComponent<LogPath>();
         runLogger = GetComponent<LogRun>();
 
-
-        if (runLogger)
-        {
-            runLogger.CreateFile(directory);
-            //runLogger.TestStream(directory + "/" + runLogger.filename);
-            Debug.Log(runLogger.canLog);
-        }
-        if (runLogger.canLog)
-        {
-            if (pathLogger)
-            {
-                pathLogger.CreateFile(directory, filenameSuffixFormat);
-            }
-
-            if (collisionsLogger)
-            {
-                collisionsLogger.CreateFile(directory, filenameSuffixFormat);
-                collisionsLogger.SetWalls(player);
-            }
-        }
+        StartLogging();        
     }
     
     void Update()
     {
         if (pathLogger)
-        {
             pathLogger.OnUpdate(player);
-        }
-        
     }
 
     void OnDestroy()
     {
-        if (pathLogger)
-        {
-            pathLogger.CloseFile();
-        }
+        StopLogging();
+    }
 
+    void OnTriggerEnter(Collider collider)
+    {
+        if (ReferenceEquals(collider.gameObject, player))
+        {
+            // player reached finish
+            runLogger.finishReached = true;
+            StopLogging();
+            player.GetComponent<PlayerManager>().canMove = false;
+            //if (playerMoveByKeyboard)
+            //    playerMoveByKeyboard.canMove = false;
+            //if (playerMove)
+            //    playerMove.canMove = false;
+        }
+    }
+
+    private void StartLogging()
+    {
+        if (!Directory.Exists(directory))
+            Directory.CreateDirectory(directory);
         if (collisionsLogger)
-        {
-            collisionsLogger.CloseFile();
-
-        }
-
+            collisionsLogger.StartLogging(directory, filenameSuffixFormat);
+        if (pathLogger)
+            pathLogger.StartLogging(directory, filenameSuffixFormat);
         if (runLogger)
-        {
-            runLogger.CloseFile();
-        }
+            runLogger.StartLogging(directory);
+    }
+
+    private void StopLogging()
+    {
+        if (collisionsLogger)
+            collisionsLogger.StopLogging();
+        if (pathLogger)
+            pathLogger.StopLogging();
+        if (runLogger)
+            runLogger.StopLogging();
     }
 }
