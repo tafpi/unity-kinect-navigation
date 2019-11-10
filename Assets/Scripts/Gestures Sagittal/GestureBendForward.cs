@@ -45,7 +45,7 @@ public class GestureBendForward : MonoBehaviour
 
         if (trackGesture)
         {
-            Debug.Log("bend forward tracked");
+            //Debug.Log("bend forward tracked");
             if (_bodySourceManager == null)
             {
                 return;
@@ -83,7 +83,6 @@ public class GestureBendForward : MonoBehaviour
                     if (rate > minimumRate)
                     {
                         //bending forwards
-                        Debug.Log("bending forwards");
                         rate = Functions.limitValue(minimumRate, maximumRate, rate);
                         gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope);
                     }

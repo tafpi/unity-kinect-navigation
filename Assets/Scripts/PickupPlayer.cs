@@ -5,27 +5,31 @@ using UnityEditor;
 
 public class PickupPlayer : MonoBehaviour
 {
-    public Transform[] pickups;
+    public GameObject[] pickupGroups;
     public int interactionTimeNeeded = 2;
-    [Range(0f, 1f)] public float viewportFactor;
+    [Range(0f, 1f)] public float viewportFactor = 0.35f;
     public GameObject player;
     public Camera cam;
     [HideInInspector] public int picked;
     [HideInInspector] public float totalTimeSearching;
 
-    void Start()
+    private void Awake()
     {
         cam = GetComponentInParent<Camera>();
-        player = transform.parent.parent.gameObject;
-
-        foreach (var pickup in pickups)
+        player = cam.transform.parent.gameObject;        
+        foreach (var pickupGroup in pickupGroups)
         {
-            if (pickup)
+            foreach (Transform pickup in pickupGroup.transform)
             {
                 PickupObject pickupObject = pickup.GetComponent<PickupObject>();
                 pickupObject.pickupPlayer = this;
             }
         }
+    }
+
+    void Start()
+    {
+
     }
 
     public bool PickupInTarget(Vector3 pickupPos)

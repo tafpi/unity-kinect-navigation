@@ -8,28 +8,37 @@ public class PlayerLookUpDown : MonoBehaviour
     private float rotationSpeed;
     private CharacterController characterController;
 
-    public GameObject playerBody;
 
     public GameObject rotateGesture;
     public float rotate;
     public float gestureRate;
 
     private float xAxisClamp;
+    private Vector3 eulerRotation;
 
     public float euler;
     public bool outOfRange;
+
+    private GameObject player;
+    private PlayerManager playerManager;
+    private GestureState gestureState;
+
 
     private void Awake()
     {
         //LockCursor();
         xAxisClamp = 0.0f;
+        eulerRotation = Vector3.zero;
+        player = transform.parent.gameObject;
+        playerManager = GetComponentInParent<PlayerManager>();
 
         if (rotateGesture != null)
         {
-            rotateGesture.GetComponent<GestureState>().gestureTracked = true;
-            if (rotateGesture.GetComponent<GestureState>().rotationSpeed != 0)
+            gestureState = rotateGesture.GetComponent<GestureState>();
+            gestureState.gestureTracked = true;
+            if (gestureState.rotationSpeed != 0)
             {
-                rotationSpeed = rotateGesture.GetComponent<GestureState>().rotationSpeed;
+                rotationSpeed = gestureState.rotationSpeed;
             }
             else
             {
@@ -49,9 +58,9 @@ public class PlayerLookUpDown : MonoBehaviour
         {
             return;
         }
-        if(playerBody.GetComponent<PlayerMove>().gestureRate == 0)
+        if(!playerManager.travelling)
         {
-            gestureRate = rotateGesture.GetComponent<GestureState>().gestureRate;
+            gestureRate = gestureState.gestureRate;
             CameraRotation();
         } else
         {
@@ -61,26 +70,34 @@ public class PlayerLookUpDown : MonoBehaviour
 
     private void CameraRotation()
     {
-        rotate = -gestureRate * rotationSpeed * Time.deltaTime;
-        xAxisClamp += rotate;
-        if (xAxisClamp > 90.0f)
+        if (gestureRate != 0)
         {
-            xAxisClamp = 90.0f;
-            rotate = 0.0f;
-            ClampXAxisRotationToValue(270.0f);
+            rotate = -gestureRate * rotationSpeed * Time.deltaTime;
+            xAxisClamp += rotate;
+            if (xAxisClamp > 90.0f)
+            {
+                xAxisClamp = 90.0f;
+                rotate = 0.0f;
+                ClampXAxisRotationToValue(270.0f);
+            }
+            else if (xAxisClamp < -90.0f)
+            {
+                xAxisClamp = -90.0f;
+                rotate = 0.0f;
+                ClampXAxisRotationToValue(90.0f);
+            }
+            transform.Rotate(Vector3.left * rotate);
+            playerManager.rotatingX = true;
         }
-        else if (xAxisClamp < -90.0f)
+        else
         {
-            xAxisClamp = -90.0f;
-            rotate = 0.0f;
-            ClampXAxisRotationToValue(90.0f);
+            playerManager.rotatingX = false;
         }
-        transform.Rotate(Vector3.left*rotate);
     }
 
     private void ClampXAxisRotationToValue(float value)
     {
-        Vector3 eulerRotation = transform.eulerAngles;
+        eulerRotation = transform.eulerAngles;
         eulerRotation.x = value;
         transform.eulerAngles = eulerRotation;
     }
@@ -88,6 +105,6 @@ public class PlayerLookUpDown : MonoBehaviour
     private void ResetCamera()
     {
         float step = rotationSpeed * Time.deltaTime;        
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, playerBody.transform.rotation, step);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, player.transform.rotation, step);
     }
 }

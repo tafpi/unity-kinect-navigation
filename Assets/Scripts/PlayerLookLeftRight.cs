@@ -6,16 +6,18 @@ public class PlayerLookLeftRight : MonoBehaviour
 {
     private float defaultRotationSpeed = 1;
     private float rotationSpeed = 1;
-    private CharacterController characterController;
-
-    public GameObject playerBody;
+    //public GameObject playerBody;
 
     public GameObject rotateGesture;
     private float rotation;
     public float gestureRate;
 
+    private CharacterController characterController;
+    private PlayerManager playerManager;
+
     private void Awake()
     {
+        playerManager = GetComponent<PlayerManager>();
         //LockCursor();
         if (rotateGesture != null)
         {
@@ -39,17 +41,21 @@ public class PlayerLookLeftRight : MonoBehaviour
     private void Update()
     {
         if (rotateGesture == null)
-        {
             return;
-        }
         gestureRate = rotateGesture.GetComponent<GestureState>().gestureRate;
         CameraRotation();
     }
 
     private void CameraRotation()
     {
-        //transform.Rotate(Vector3.left * mouseY);
-        playerBody.transform.Rotate(Vector3.up * gestureRate * rotationSpeed);
-        //playerBody.Rotate(Vector3.up * gestureRate * rotationSpeed);
+        if (gestureRate != 0)
+        {
+            transform.Rotate(Vector3.up * gestureRate * rotationSpeed);
+            playerManager.rotatingY = true;
+        }
+        else
+        {
+            playerManager.rotatingY = false;
+        }
     }
 }

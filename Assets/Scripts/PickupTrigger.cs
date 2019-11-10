@@ -13,18 +13,17 @@ public class PickupTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (ReferenceEquals(pickupObject.pickupPlayer.player, other.gameObject))
-        {
-            pickupObject.playerInTrigger = true;
-        }
+
+        if (pickupObject.pickupPlayer)
+            if (ReferenceEquals(pickupObject.pickupPlayer.player, other.gameObject))
+                pickupObject.playerInTrigger = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (ReferenceEquals(pickupObject.pickupPlayer.player, other.gameObject))
-        {
-            pickupObject.playerInTrigger = false;;
-        }
+        if (pickupObject.pickupPlayer)
+            if (ReferenceEquals(pickupObject.pickupPlayer.player, other.gameObject))
+                pickupObject.playerInTrigger = false;
     }
 
 }

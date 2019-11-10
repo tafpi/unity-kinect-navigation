@@ -55,10 +55,6 @@ public class LogSystem : MonoBehaviour
             runLogger.finishReached = true;
             StopLogging();
             player.GetComponent<PlayerManager>().canMove = false;
-            //if (playerMoveByKeyboard)
-            //    playerMoveByKeyboard.canMove = false;
-            //if (playerMove)
-            //    playerMove.canMove = false;
         }
     }
 

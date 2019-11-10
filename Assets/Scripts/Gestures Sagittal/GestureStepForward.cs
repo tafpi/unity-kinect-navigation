@@ -62,7 +62,7 @@ public class GestureStepForward : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("step forward tracked");
+        //Debug.Log("step forward tracked");
         if (_bodySourceManager == null)
         {
             return;

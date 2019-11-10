@@ -13,35 +13,40 @@ public class PlayerMove : MonoBehaviour
     [Range(10, 30)] public int interval = 20;
 
     private CharacterController characterController;
+    private GestureState gestureState;
     private float vertInput;
     private Vector3 forwardMovement;
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        gestureState = travelGesture.GetComponent<GestureState>();
         if (travelGesture != null)
         {
-            travelGesture.GetComponent<GestureState>().gestureTracked = true;
+            gestureState.gestureTracked = true;
         }
     }
 
     private void Update()
     {
         if (travelGesture == null)
+            return;
+        gestureRate = gestureState.gestureRate;
+        if (gestureRate != 0)
+        {
+            forwardMovement = transform.forward * gestureRate * movementSpeed;
+            characterController.SimpleMove(forwardMovement);
+            playerManager.travelling = true;
+            //if (!playerManager.travellingStopwtach.IsRunning)
+            //    playerManager.travellingStopwtach.Start();
+        }
+        else
         {
             playerManager.travelling = false;
-            return;
+            //if (playerManager.travellingStopwtach.IsRunning)
+            //    playerManager.travellingStopwtach.Stop();
         }
-        playerManager.travelling = true;
-        gestureRate = travelGesture.GetComponent<GestureState>().gestureRate;
-        forwardMovement = transform.forward * gestureRate * movementSpeed;
-        characterController.SimpleMove(forwardMovement);
-        //PlayerMovement();
     }
-
-    //private void PlayerMovement()
-    //{
-    //}
 
     public void SetToCannotMove()
     {

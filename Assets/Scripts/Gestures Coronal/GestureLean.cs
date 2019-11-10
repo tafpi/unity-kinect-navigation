@@ -41,7 +41,7 @@ public class GestureLean : MonoBehaviour
         if (trackGesture)
         {
 
-            Debug.Log("bend forward tracked");
+            //Debug.Log("bend forward tracked");
             if (_bodySourceManager == null)
             {
                 return;

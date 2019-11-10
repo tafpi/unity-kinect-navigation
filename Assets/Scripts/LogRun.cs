@@ -105,11 +105,6 @@ public class LogRun : MonoBehaviour
 
             if (logSystem)
             {
-                //if (logSystem.player.)
-                //{
-
-                //}
-                //travelDuration += 
 
             }
 
@@ -165,6 +160,8 @@ public class LogRun : MonoBehaviour
     public void StartLogging(string directory)
     {
         logSystem = GetComponent<LogSystem>();
+        logSystem.player.GetComponent<PlayerManager>().logRun = this;
+
         path = directory + "/" + filename;
 
         if (!File.Exists(path))
@@ -201,7 +198,7 @@ public class LogRun : MonoBehaviour
 
             pickupPlayer = logSystem.player.GetComponentInChildren<PickupPlayer>();
             if (pickupPlayer)
-                totalPickups = pickupPlayer.pickups.Length;
+                totalPickups = pickupPlayer.pickupGroups.Length;
 
         }
 

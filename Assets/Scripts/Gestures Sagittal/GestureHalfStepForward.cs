@@ -59,7 +59,7 @@ public class GestureHalfStepForward : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("half step forward tracked");
+        //Debug.Log("half step forward tracked");
 
         bodyManager = bodySourceManager.GetComponent<BodySourceManager>();
         if (bodyManager == null)

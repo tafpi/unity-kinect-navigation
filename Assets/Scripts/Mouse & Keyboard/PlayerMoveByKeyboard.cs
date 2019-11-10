@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class PlayerMoveByKeyboard : MonoBehaviour
 {
-    public PlayerManager playerManager;
     public string horizontalInputName = null;
     public string verticalInputName = null;
     public float movementSpeed = 10;
     
+    private PlayerManager playerManager;
     private CharacterController charController;
     private Vector3 forwardMovement;
     private Vector3 rightMovement;
@@ -18,6 +18,7 @@ public class PlayerMoveByKeyboard : MonoBehaviour
     private void Awake()
     {
         charController = GetComponent<CharacterController>();
+        playerManager = GetComponent<PlayerManager>();
     }
 
     private void Update()
