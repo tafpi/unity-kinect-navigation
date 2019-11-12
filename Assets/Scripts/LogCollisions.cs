@@ -16,12 +16,22 @@ public class LogCollisions : MonoBehaviour
     private string delimiter = ", ";
     private int fileCount;
     private int collisionIndex = 0;
+    private string filename;
 
     private ObstacleTrigger lastTrigger;
     public LogSystem logSystem;
-
+    
     private void Start()
     {
+        
+    }
+
+    public void StartLogging(string path, string suffixFormat)
+    {
+        // get log system
+        logSystem = GetComponent<LogSystem>();
+
+        // set each obstacle's trigger and player object
         foreach (var wallGroup in wallGroups)
         {
             if (wallGroup)
@@ -44,12 +54,8 @@ public class LogCollisions : MonoBehaviour
             }
 
         }
-    }
 
-    public void StartLogging(string path, string suffixFormat)
-    {
         // create a file incrementing the filename's indexing
-        string filename;
         fileCount = 0;
         do
         {
@@ -60,25 +66,42 @@ public class LogCollisions : MonoBehaviour
         logFile = File.AppendText(filename);
         string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
         logFile.WriteLine(headers);
-
     }
 
     public void StopLogging()
     {
+        Debug.Log("Stop Logging Collisions");
         // close the file if there is one
         if (logFile != null)
         {
             if (logFile.BaseStream != null)
             {
+                CollisionEndHandler(lastTrigger);
                 logFile.Close();
             }
         }
+    }
+
+    public void DeleteLastLog()
+    {
+        File.Delete(filename);
     }
 
     public void CollisionBegin(ObstacleTrigger obstacleTrigger)
     {
         //Debug.Log("collision begin");
         obstacleTrigger.collisionEnterTime = Time.realtimeSinceStartup;
+
+        Obstacle obstacle = obstacleTrigger.GetComponentInParent<Obstacle>();
+        Debug.Log(logSystem.runLogger.totalCollisions);
+        logSystem.runLogger.totalCollisions = logSystem.runLogger.totalCollisions + 1;
+        Debug.Log(logSystem.runLogger.totalCollisions);
+        if (obstacle.obstacleType == Obstacle.ObstacleType.Wall)
+            logSystem.runLogger.wallCollisions++;
+        if (obstacle.obstacleType == Obstacle.ObstacleType.Fence)
+            logSystem.runLogger.fenceCollisions++;
+        if (obstacle.obstacleType == Obstacle.ObstacleType.Prop)
+            logSystem.runLogger.propCollisions++;
     }
 
     public void CollisionUpdate(ObstacleTrigger obstacleTrigger)
@@ -90,38 +113,35 @@ public class LogCollisions : MonoBehaviour
 
     public void CollisionEnd(ObstacleTrigger obstacleTrigger)
     {
-        //Debug.Log("collision end");
         CollisionEndHandler(obstacleTrigger);
-    }
-
-    private void OnApplicationQuit()
-    {
-        CollisionEndHandler(lastTrigger);
     }
 
     public void CollisionEndHandler(ObstacleTrigger obstacleTrigger)
     {
         if (obstacleTrigger)
         {
-            Obstacle obstacle = obstacleTrigger.GetComponentInParent<Obstacle>();
-            string collisionLine = "";
-            collisionLine += collisionIndex;
-            collisionLine += delimiter;
-            collisionLine += obstacle.obstacleType;
-            collisionLine += delimiter;
-            collisionLine += obstacle.name;
-            collisionLine += delimiter;
-            collisionLine += obstacle.location;
-            collisionLine += delimiter;
-            collisionLine += TimeFormat(obstacleTrigger.collisionEnterTime);
-            collisionLine += delimiter;
-            collisionLine += TimeFormat(obstacleTrigger.collisionDuration);
-            if (logFile != null)
+            if (obstacleTrigger.collisionEnterTime > 0)
             {
-                logFile.WriteLine(collisionLine);
+                Obstacle obstacle = obstacleTrigger.GetComponentInParent<Obstacle>();
+                string collisionLine = "";
+                collisionLine += collisionIndex;
+                collisionLine += delimiter;
+                collisionLine += obstacle.obstacleType;
+                collisionLine += delimiter;
+                collisionLine += obstacle.name;
+                collisionLine += delimiter;
+                collisionLine += obstacle.location;
+                collisionLine += delimiter;
+                collisionLine += TimeFormat(obstacleTrigger.collisionEnterTime);
+                collisionLine += delimiter;
+                collisionLine += TimeFormat(obstacleTrigger.collisionDuration);
+                if (logFile != null)
+                {
+                    logFile.WriteLine(collisionLine);
+                }
+                collisionIndex++;
+                obstacleTrigger.ResetWall();
             }
-            collisionIndex++;
-            obstacleTrigger.ResetWall();
         }
     }
 

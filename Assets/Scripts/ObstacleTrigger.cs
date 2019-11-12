@@ -7,7 +7,7 @@ public class ObstacleTrigger : MonoBehaviour
 
     [HideInInspector] public float collisionDuration;
     [HideInInspector] public float collisionEnterTime;
-    private GameObject player;
+    public GameObject player;
     private LogCollisions collisionLogger;
     
     void Start()

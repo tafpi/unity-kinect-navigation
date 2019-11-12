@@ -30,7 +30,7 @@ public class LogRun : MonoBehaviour
     public float idleUserDuration;
     public int timesStopped;
     public float distanceTraveled;
-    public int pathProximity;
+    public int pathProximityPercentage;
     public int totalCollisions;
     public int wallCollisions;
     public int fenceCollisions;
@@ -78,12 +78,14 @@ public class LogRun : MonoBehaviour
         "pickup search";
 
     // logging
+    public bool logging;
     private int interval = 0;
     [Range(10, 30)] public int intervalDelay = 20;
 
     // other
     private LogSystem logSystem;
     private PickupPlayer pickupPlayer;
+    private PathProximity pathProximity;
 
 
     private void Start()
@@ -151,6 +153,10 @@ public class LogRun : MonoBehaviour
 
 
     // methods used externally
+    public void UpdatePathProximity()
+    {
+        pathProximityPercentage = pathProximity.proximityPercentage;
+    }
 
     public void UpdateDistanceTraveled(float step)
     {
@@ -161,6 +167,7 @@ public class LogRun : MonoBehaviour
     {
         logSystem = GetComponent<LogSystem>();
         logSystem.player.GetComponent<PlayerManager>().logRun = this;
+        pathProximity = logSystem.player.GetComponent<PathProximity>();
 
         path = directory + "/" + filename;
 
@@ -170,7 +177,8 @@ public class LogRun : MonoBehaviour
             {
                 if (writer is null)
                     return;
-                canLog = true;
+                //canLog = true;
+                logging = true;
                 writer.WriteLine(header);
             }
         }
@@ -179,7 +187,7 @@ public class LogRun : MonoBehaviour
         {
             if (reader is null)
                 return;
-            canLog = true;
+            //canLog = true;
 
             // logs on start
             runId = RunId(reader);
@@ -206,6 +214,7 @@ public class LogRun : MonoBehaviour
 
     public void StopLogging()
     {
+        Debug.Log("Stop Logging Run");
         using (StreamWriter writer = WriteStream(path))
         {
             if (writer is null)
@@ -231,7 +240,7 @@ public class LogRun : MonoBehaviour
                 idleUserDuration + delimiter +
                 timesStopped + delimiter +
                 distanceTraveled + delimiter +
-                pathProximity + delimiter +
+                pathProximityPercentage + delimiter +
                 totalCollisions + delimiter +
                 wallCollisions + delimiter +
                 fenceCollisions + delimiter +
@@ -242,11 +251,12 @@ public class LogRun : MonoBehaviour
 
             writer.WriteLine(line);
             writer.Close();
+            logging = false;
         }
         
     }
 
-    static StreamWriter WriteStream(string path)
+    private StreamWriter WriteStream(string path)
     {
         if (path is null)
         {
@@ -275,7 +285,7 @@ public class LogRun : MonoBehaviour
         return null;
     }
 
-    static StreamReader ReadStream(string path)
+    private StreamReader ReadStream(string path)
     {
         if (path is null)
         {
@@ -297,6 +307,10 @@ public class LogRun : MonoBehaviour
             if (UnityEditor.EditorApplication.isPlaying)
             {
                 Debug.Log("SETUP ERROR: RunsFile.csv is open. Close file and rerun.");
+                //logSystem.pathLogger.StopLogging();
+                //logSystem.pathLogger.DeleteLastLog();
+                logSystem.collisionsLogger.StopLogging();
+                logSystem.collisionsLogger.DeleteLastLog();
                 UnityEditor.EditorApplication.isPlaying = false;
             }
         }

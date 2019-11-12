@@ -14,9 +14,9 @@ public class LogSystem : MonoBehaviour
     private PlayerMove playerMove;
 
     // file management
-    private LogCollisions collisionsLogger;
-    private LogPath pathLogger;
-    private LogRun runLogger;
+    public LogCollisions collisionsLogger;
+    public LogPath pathLogger;
+    public LogRun runLogger;
     public string directory = "UserTesting";
     private string filenameSuffixFormat = "0000.##";
     private string delimiter = ", ";
@@ -52,9 +52,11 @@ public class LogSystem : MonoBehaviour
         if (ReferenceEquals(collider.gameObject, player))
         {
             // player reached finish
-            runLogger.finishReached = true;
-            StopLogging();
-            player.GetComponent<PlayerManager>().canMove = false;
+            PlayerManager playerManager = player.GetComponent<PlayerManager>();
+            playerManager.canMove = false;
+            playerManager.travelling = false;
+            if (runLogger.logging)
+                StopLogging();
         }
     }
 
@@ -65,18 +67,24 @@ public class LogSystem : MonoBehaviour
         if (collisionsLogger)
             collisionsLogger.StartLogging(directory, filenameSuffixFormat);
         if (pathLogger)
-            pathLogger.StartLogging(directory, filenameSuffixFormat);
+            pathLogger.StartLogging(directory);
+            //pathLogger.StartLogging(directory, filenameSuffixFormat);
         if (runLogger)
             runLogger.StartLogging(directory);
     }
 
     private void StopLogging()
     {
+        Debug.Log("System Stop Logging");
+        if (runLogger)
+        {
+            runLogger.finishReached = true;
+            runLogger.UpdatePathProximity();
+            runLogger.StopLogging();
+        }
         if (collisionsLogger)
             collisionsLogger.StopLogging();
         if (pathLogger)
             pathLogger.StopLogging();
-        if (runLogger)
-            runLogger.StopLogging();
     }
 }

@@ -10,11 +10,13 @@ public class PlayerManager : MonoBehaviour
     public bool rotatingY;
     public bool rotatingX;
     public bool rotatingWhileTravelling;
+    public bool idle;
 
     private Stopwatch travelStopwatch;
     private Stopwatch rotateYStopwatch;
     private Stopwatch rotateXStopwatch;
     private Stopwatch rotateWhileTravellingStopwtach;
+    private Stopwatch idleStopwatch;
 
     public LogRun logRun;
 
@@ -24,6 +26,7 @@ public class PlayerManager : MonoBehaviour
         rotateYStopwatch = new Stopwatch();
         rotateXStopwatch = new Stopwatch();
         rotateWhileTravellingStopwtach = new Stopwatch();
+        idleStopwatch = new Stopwatch();
     }
 
     void Start()
@@ -35,7 +38,10 @@ public class PlayerManager : MonoBehaviour
     {
         if (travelling)
         {
-            if (!travelStopwatch.IsRunning) travelStopwatch.Start();
+            if (!travelStopwatch.IsRunning)
+            {
+                travelStopwatch.Start();
+            }
 
             if (rotatingX || rotatingY)
             {
@@ -58,6 +64,7 @@ public class PlayerManager : MonoBehaviour
             {
                 travelStopwatch.Stop();
                 logRun.travelDuration = travelStopwatch.ElapsedMilliseconds;
+                logRun.timesStopped++;
             }
         }
 
@@ -84,6 +91,20 @@ public class PlayerManager : MonoBehaviour
             {
                 rotateXStopwatch.Stop();
                 logRun.rotateXDuration = rotateXStopwatch.ElapsedMilliseconds;
+            }
+        }
+
+        if (!travelling && !rotatingX && !rotatingY)
+        {
+            idle = true;
+            if (!idleStopwatch.IsRunning) idleStopwatch.Start();
+        }
+        else
+        {
+            if (idleStopwatch.IsRunning)
+            {
+                idleStopwatch.Stop();
+                logRun.idleControllerDuration = idleStopwatch.ElapsedMilliseconds;
             }
         }
     }

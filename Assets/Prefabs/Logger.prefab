@@ -9,9 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 199358854406177709}
+  - component: {fileID: 6911237909450987287}
+  - component: {fileID: 9038551643073784078}
   - component: {fileID: 3370292660008600906}
   - component: {fileID: 4357758217332649399}
   - component: {fileID: 820954615935954472}
+  - component: {fileID: 5879216207905652328}
   m_Layer: 0
   m_Name: Logger
   m_TagString: Untagged
@@ -33,6 +36,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &6911237909450987287
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6074604479138963054}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &9038551643073784078
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6074604479138963054}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3370292660008600906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,3 +104,43 @@ MonoBehaviour:
   wallGroups:
   - {fileID: 0}
   triggerPadding: 1
+  logSystem: {fileID: 0}
+--- !u!114 &5879216207905652328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6074604479138963054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c1166117c3f2e4186731d48034c376, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFirstRun: 0
+  runId: 0
+  gestureTravel: {fileID: 0}
+  gestureRotateY: {fileID: 0}
+  gestureRotateX: {fileID: 0}
+  totalPickups: 0
+  totalDuration: 0
+  travelDuration: 0
+  rotateYDuration: 0
+  rotateXDuration: 0
+  rotateWhileTravelDuration: 0
+  finishReached: 0
+  idleControllerDuration: 0
+  idleUserDuration: 0
+  timesStopped: 0
+  distanceTraveled: 0
+  pathProximityPercentage: 0
+  totalCollisions: 0
+  wallCollisions: 0
+  fenceCollisions: 0
+  propCollisions: 0
+  pickups: 0
+  pickupSearch: 0
+  canLog: 0
+  filename: RunsFile.csv
+  logging: 0
+  intervalDelay: 20
