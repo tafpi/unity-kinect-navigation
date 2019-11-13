@@ -122,33 +122,23 @@ public class LogRun : MonoBehaviour
         {
             string lastLine = "";
             int linesCount = 0;
-            int runIndex;
-            while (true)
+            string line;
+            while ((line = reader.ReadLine()) != null)
             {
-                string line = reader.ReadLine();
-                if (line == null)
-                {
-                    break;
-                }
-                else
-                {
-                    lastLine = line;
-                    linesCount++;
-                }
+                lastLine = line;
+                linesCount++;
             }
-            if (linesCount != 1)
+            
+            int runIndex = 1;
+            if (linesCount != 1 && int.TryParse(lastLine.Split(',')[0].Split('R')[1], out int i))
+                runIndex = i+1;
+
+            if (linesCount != runIndex)
             {
-                int i;
-                if (!int.TryParse(lastLine.Split(',')[0], out i))
-                {
-                    i = -1;
-                }
-                runIndex = i + 1;
+                logSystem.AbortLog("LOGGING ERROR: " + filename + " rows are mucked up.");
+                return "";
             }
-            else
-            {
-                runIndex = 1;
-            }
+
             return runPrefix + runIndex.ToString(countFormat);
         }
     }
@@ -205,7 +195,6 @@ public class LogRun : MonoBehaviour
 
     public void StopLogging(LogSystem logSystem)
     {
-        Debug.Log("Stop Logging Run");
         string path = logSystem.directory + "/" + filename;
         if (canLog)
         {
@@ -310,7 +299,7 @@ public class LogRun : MonoBehaviour
         {
             //canLog = false;
             Debug.Log("There is a sharing violation.");
-            logSystem.AbortLog(filename);
+            logSystem.AbortLog("SETUP ERROR: " + filename + " is open. Close file and rerun.");
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 80)
         {

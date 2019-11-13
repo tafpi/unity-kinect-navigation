@@ -95,16 +95,15 @@ public class LogSystem : MonoBehaviour
         if (pathLogger)
             pathLogger.StartLogging(this);
 
-        //playerMoveByKeyboard = player.GetComponent<PlayerMoveByKeyboard>();
-        //playerMove = player.GetComponent<PlayerMove>();
-        //pathProximity = player.GetComponent<PathProximity>();
-        //playerManager = player.GetComponent<PlayerManager>();
-        //playerManager.logRun = runLogger;
+        playerMoveByKeyboard = player.GetComponent<PlayerMoveByKeyboard>();
+        playerMove = player.GetComponent<PlayerMove>();
+        pathProximity = player.GetComponent<PathProximity>();
+        playerManager = player.GetComponent<PlayerManager>();
+        playerManager.logRun = runLogger;
     }
 
     private void StopLogging()
     {
-        Debug.Log("System Stop Logging");
         if (runLogger)
         {
             runLogger.StopLogging(this);
@@ -118,11 +117,11 @@ public class LogSystem : MonoBehaviour
         }
     }
 
-    public void AbortLog(string filename)
+    public void AbortLog(string error)
     {
         if (UnityEditor.EditorApplication.isPlaying)
         {
-            Debug.Log("SETUP ERROR: " + filename + " is open. Close file and rerun.");
+            Debug.Log(error);
             pathLogger.canLog = false;
             runLogger.canLog = false;
             collisionsLogger.StopLogging();

@@ -8,7 +8,7 @@ public class LogCollisions : MonoBehaviour
     // Attach as component to player.
     
     // input
-    public string filenamePrefix = "CollisionsLog";
+    public string filenamePrefix = "CollisionsFile";
     public GameObject[] wallGroups;
     public float triggerPadding = 1;
 
@@ -56,17 +56,26 @@ public class LogCollisions : MonoBehaviour
         }
 
         // create a file incrementing the filename's indexing
-        fileCount = 0;
-        do
+
+        string[] files = System.IO.Directory.GetFiles(logSystem.directory, filenamePrefix + "*.csv", System.IO.SearchOption.TopDirectoryOnly);
+        if(int.TryParse(logSystem.runId.Split('R')[1], out int i) && i-1 != files.Length)
         {
-            fileCount++;
-            filename = logSystem.directory + "/" + filenamePrefix + (fileCount > 0 ? "-"
-                + logSystem.runId + "-"
-                + logSystem.userId + "-"
-                + logSystem.gestureSet + "-"
-                + logSystem.round
-                : "") + ".csv";
-        } while (File.Exists(filename));
+            logSystem.AbortLog("LOGGING ERROR: " + filename + " files and rows are mucked up.");
+            return;
+        }
+
+        filename = logSystem.directory + "/"
+            + filenamePrefix + "-"
+            + logSystem.runId + "-"
+            + logSystem.userId + "-"
+            + logSystem.gestureSet + "-"
+            + logSystem.round
+            + ".csv";
+        //fileCount = 0;
+        //do
+        //{
+        //    fileCount++;
+        //} while (File.Exists(filename));
 
         logFile = File.AppendText(filename);
         string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";
@@ -75,7 +84,6 @@ public class LogCollisions : MonoBehaviour
 
     public void StopLogging()
     {
-        Debug.Log("Stop Logging Collisions");
         // close the file if there is one
         if (logFile != null)
         {
@@ -89,7 +97,8 @@ public class LogCollisions : MonoBehaviour
 
     public void DeleteLastLog()
     {
-        File.Delete(filename);
+        if (filename != null)
+            File.Delete(filename);
     }
 
     public void CollisionBegin(ObstacleTrigger obstacleTrigger, LogSystem logSystem)

@@ -118,7 +118,6 @@ public class LogPath : MonoBehaviour
     public void StopLogging(LogSystem logSystem)
     {
         string path = logSystem.directory + "/" + filename;
-        Debug.Log("Stop Logging Path");
         if (canLog)
         {
             // close the file if there is one
@@ -133,7 +132,7 @@ public class LogPath : MonoBehaviour
                     + logSystem.userId + "-" 
                     + logSystem.gestureSet + "-" 
                     + logSystem.round 
-                    + "' points='" + polylineCoordinates + "' fill='none' stroke='#" + ColorUtility.ToHtmlStringRGB(gradient.Evaluate(logSystem.pathProximity.proximityPercentage / 100)) + "' stroke-width='1' />");
+                    + "' points='" + polylineCoordinates + "' fill='none' stroke='#" + ColorUtility.ToHtmlStringRGB(gradient.Evaluate((float)logSystem.pathProximity.proximityPercentage / 100)) + "' stroke-width='1' />");
                 writer.WriteLine("</svg>");
                 writer.Close();
             }
@@ -145,26 +144,21 @@ public class LogPath : MonoBehaviour
         if (path is null)
         {
             Debug.Log("You did not supply a file path.");
-            //canLog = false;
             return null;
         }
 
         try
         {
             var fs = new FileStream(path, FileMode.Append);
-            //canLog = true;
             return new StreamWriter(fs);
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 32)
         {
-            //canLog = false;
             Debug.Log("There is a sharing violation.");
         }
         catch (IOException e)
         {
-            Debug.Log($"An exception occurred:\nError code: " +
-                              $"{e.HResult & 0x0000FFFF}\nMessage: {e.Message}");
-
+            Debug.Log($"An exception occurred:\nError code: " + $"{e.HResult & 0x0000FFFF}\nMessage: {e.Message}");
         }
         return null;
     }
@@ -174,32 +168,26 @@ public class LogPath : MonoBehaviour
         if (path is null)
         {
             Debug.Log("You did not supply a file path.");
-            //canLog = false;
             return null;
         }
 
         try
         {
             var fs = new FileStream(path, FileMode.Open);
-            //canLog = true;
             return new StreamReader(fs);
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 32)
         {
-            //canLog = false;
             Debug.Log("There is a sharing violation.");
-            logSystem.AbortLog(filename);
+            logSystem.AbortLog("SETUP ERROR: " + filename + " is open. Close file and rerun.");
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 80)
         {
-            //canLog = true;
             Debug.Log("The file already exists.");
         }
         catch (IOException e)
         {
-            Debug.Log($"An exception occurred:\nError code: " +
-                              $"{e.HResult & 0x0000FFFF}\nMessage: {e.Message}");
-
+            Debug.Log($"An exception occurred:\nError code: " + $"{e.HResult & 0x0000FFFF}\nMessage: {e.Message}");
         }
         return null;
     }
