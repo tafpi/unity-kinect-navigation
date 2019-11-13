@@ -1,3 +1,4 @@
 run id, is first run, gesture travel, gesture rotate y, gesture rotate x, start time, close time, finish reached, total duration, travel duration, rotate y duration, rotate x duration, rotate while travel duration, idle controller duration, idle user duration, times stopped, distance traveled, path proximity %, total collisions, wall collisions, fence collisions, prop collisions, pickups, total pickups, pickup search
-1, False, null, null, null, 11/12/2019 2:21:26 AM, 11/12/2019 2:21:36 AM, True, 11.45914, 6959, 0, 0, 0, 2034, 0, 1, 298.5503, 49, 0, 0, 0, 0, 0, 0, 0
-2, False, null, null, null, 11/12/2019 2:21:57 AM, 11/12/2019 2:22:08 AM, True, 13.91175, 9344, 0, 0, 0, 1538, 0, 1, 354.7314, 98, 0, 0, 0, 0, 0, 0, 0
+R001, False, null, null, null, 11/13/2019 1:01:34 AM, 11/13/2019 1:01:43 AM, False, 10.92191, 0, 0, 0, 0, 0, 0, 0, 168.6592, 100, 0, 0, 0, 0, 0, 0, 0
+R000, False, null, null, null, 11/13/2019 1:10:26 AM, 11/13/2019 1:10:31 AM, False, 7.309926, 1100, 0, 0, 0, 3676, 0, 1, 181.8068, 100, 0, 0, 0, 0, 0, 0, 0
+R000, False, null, null, null, 11/13/2019 1:20:30 AM, 11/13/2019 1:20:31 AM, False, 3.769999, 0, 0, 0, 0, 0, 0, 0, 168.6592, 100, 0, 0, 0, 0, 0, 0, 0

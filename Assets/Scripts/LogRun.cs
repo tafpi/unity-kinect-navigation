@@ -12,7 +12,7 @@ public class LogRun : MonoBehaviour
     public bool isFirstRun;
 
     // computed at start
-    public int runId;
+    //public int runId;
     public GameObject gestureTravel;
     public GameObject gestureRotateY;
     public GameObject gestureRotateX;
@@ -42,13 +42,13 @@ public class LogRun : MonoBehaviour
     public System.DateTime closeTime;
 
     // file management
-    public bool canLog;
-    public string filename = "RunsFile.csv";
+    public string filename = "RunsLog.csv";
+    public string runPrefix = "R";
     private string delimiter = ", ";
     private int fileCount;
     private string fileContent;
     private StreamWriter logFile;
-    private string path;
+    //private string path;
     private string line;
     private string header =
         "run id, " +
@@ -78,14 +78,15 @@ public class LogRun : MonoBehaviour
         "pickup search";
 
     // logging
+    public bool canLog;
     public bool logging;
     private int interval = 0;
     [Range(10, 30)] public int intervalDelay = 20;
 
     // other
-    private LogSystem logSystem;
+    //private LogSystem logSystem;
     private PickupPlayer pickupPlayer;
-    private PathProximity pathProximity;
+    //private PathProximity pathProximity;
 
 
     private void Start()
@@ -105,11 +106,6 @@ public class LogRun : MonoBehaviour
                 pickupSearch = pickupPlayer.totalTimeSearching;
             }
 
-            if (logSystem)
-            {
-
-            }
-
             interval = 0;
         }
         else
@@ -119,57 +115,63 @@ public class LogRun : MonoBehaviour
 
     }
 
-    private int RunId(StreamReader r)
+    public string RunId(LogSystem logSystem, string countFormat)
     {
-        string lastLine = "";
-        int linesCount = 0;
-        while (true)
+        string path = logSystem.directory + "/" + filename;
+        using (StreamReader reader = ReadStream(path, logSystem))
         {
-            string line = r.ReadLine();
-            if (line == null)
+            string lastLine = "";
+            int linesCount = 0;
+            int runIndex;
+            while (true)
             {
-                break;
+                string line = reader.ReadLine();
+                if (line == null)
+                {
+                    break;
+                }
+                else
+                {
+                    lastLine = line;
+                    linesCount++;
+                }
+            }
+            if (linesCount != 1)
+            {
+                int i;
+                if (!int.TryParse(lastLine.Split(',')[0], out i))
+                {
+                    i = -1;
+                }
+                runIndex = i + 1;
             }
             else
             {
-                lastLine = line;
-                linesCount++;
+                runIndex = 1;
             }
-        }
-        if (linesCount != 1)
-        {
-            int i;
-            if (!int.TryParse(lastLine.Split(',')[0], out i))
-            {
-                i = -1;
-            }
-            return i + 1;
-        }
-        else
-        {
-            return 1;
+            return runPrefix + runIndex.ToString(countFormat);
         }
     }
 
 
     // methods used externally
-    public void UpdatePathProximity()
-    {
-        pathProximityPercentage = pathProximity.proximityPercentage;
-    }
+    //public void UpdatePathProximity(LogSystem logSystem)
+    //{
+    //    pathProximityPercentage = logSystem.pathProximity.proximityPercentage;
+    //}
 
     public void UpdateDistanceTraveled(float step)
     {
         distanceTraveled += step;        
     }
 
-    public void StartLogging(string directory)
+    public void StartLogging(LogSystem logSystem)
     {
-        logSystem = GetComponent<LogSystem>();
-        logSystem.player.GetComponent<PlayerManager>().logRun = this;
-        pathProximity = logSystem.player.GetComponent<PathProximity>();
+        //logSystem = GetComponent<LogSystem>();
+        //logSystem.playerManager.logRun = this;
+        //pathProximity = logSystem.pathProximity;
 
-        path = directory + "/" + filename;
+        string path = logSystem.directory + "/" + filename;
 
         if (!File.Exists(path))
         {
@@ -177,30 +179,19 @@ public class LogRun : MonoBehaviour
             {
                 if (writer is null)
                     return;
-                //canLog = true;
                 logging = true;
                 writer.WriteLine(header);
             }
         }
 
-        using (StreamReader reader = ReadStream(path))
+        using (StreamReader reader = ReadStream(path, logSystem))
         {
             if (reader is null)
                 return;
-            //canLog = true;
+            canLog = true;
 
             // logs on start
-            runId = RunId(reader);
-
-            PlayerMove playerMove = logSystem.player.GetComponent<PlayerMove>();
-            if (playerMove)
-                gestureTravel = playerMove.travelGesture;
-            PlayerLookLeftRight playerLookY = logSystem.GetComponent<PlayerLookLeftRight>();
-            if (playerLookY)
-                gestureRotateY = playerLookY.rotateGesture;
-            PlayerLookUpDown playerLookX = logSystem.GetComponentInChildren<PlayerLookUpDown>();
-            if (playerLookX)
-                gestureRotateX = playerLookX.rotateGesture;
+            //runId = RunId();
 
             startTime = System.DateTime.Now;
 
@@ -212,48 +203,63 @@ public class LogRun : MonoBehaviour
 
     }
 
-    public void StopLogging()
+    public void StopLogging(LogSystem logSystem)
     {
         Debug.Log("Stop Logging Run");
-        using (StreamWriter writer = WriteStream(path))
+        string path = logSystem.directory + "/" + filename;
+        if (canLog)
         {
-            if (writer is null)
-                return;
+            using (StreamWriter writer = WriteStream(path))
+            {
+                if (writer is null)
+                    return;
             
-            closeTime = System.DateTime.Now;
+                closeTime = System.DateTime.Now;
 
-            line =
-                runId + delimiter +
-                isFirstRun + delimiter +
-                gestureTravel + delimiter +
-                gestureRotateY + delimiter +
-                gestureRotateX + delimiter +
-                startTime + delimiter +
-                closeTime + delimiter +
-                finishReached + delimiter +
-                totalDuration + delimiter +
-                travelDuration + delimiter +
-                rotateYDuration + delimiter +
-                rotateXDuration + delimiter +
-                rotateWhileTravelDuration + delimiter +
-                idleControllerDuration + delimiter +
-                idleUserDuration + delimiter +
-                timesStopped + delimiter +
-                distanceTraveled + delimiter +
-                pathProximityPercentage + delimiter +
-                totalCollisions + delimiter +
-                wallCollisions + delimiter +
-                fenceCollisions + delimiter +
-                propCollisions + delimiter +
-                pickups + delimiter +
-                totalPickups + delimiter +
-                pickupSearch;
+                PlayerMove playerMove = logSystem.playerMove;
+                if (playerMove)
+                    gestureTravel = playerMove.travelGesture;
+                PlayerLookLeftRight playerLookY = logSystem.GetComponent<PlayerLookLeftRight>();
+                if (playerLookY)
+                    gestureRotateY = playerLookY.rotateGesture;
+                PlayerLookUpDown playerLookX = logSystem.GetComponentInChildren<PlayerLookUpDown>();
+                if (playerLookX)
+                    gestureRotateX = playerLookX.rotateGesture;
 
-            writer.WriteLine(line);
-            writer.Close();
-            logging = false;
-        }
-        
+                pathProximityPercentage = logSystem.pathProximity.proximityPercentage;
+
+                line =
+                    logSystem.runId + delimiter +
+                    isFirstRun + delimiter +
+                    gestureTravel + delimiter +
+                    gestureRotateY + delimiter +
+                    gestureRotateX + delimiter +
+                    startTime + delimiter +
+                    closeTime + delimiter +
+                    finishReached + delimiter +
+                    totalDuration + delimiter +
+                    travelDuration + delimiter +
+                    rotateYDuration + delimiter +
+                    rotateXDuration + delimiter +
+                    rotateWhileTravelDuration + delimiter +
+                    idleControllerDuration + delimiter +
+                    idleUserDuration + delimiter +
+                    timesStopped + delimiter +
+                    distanceTraveled + delimiter +
+                    pathProximityPercentage + delimiter +
+                    totalCollisions + delimiter +
+                    wallCollisions + delimiter +
+                    fenceCollisions + delimiter +
+                    propCollisions + delimiter +
+                    pickups + delimiter +
+                    totalPickups + delimiter +
+                    pickupSearch;
+
+                writer.WriteLine(line);
+                writer.Close();
+                logging = false;
+            }
+        }        
     }
 
     private StreamWriter WriteStream(string path)
@@ -285,7 +291,7 @@ public class LogRun : MonoBehaviour
         return null;
     }
 
-    private StreamReader ReadStream(string path)
+    private StreamReader ReadStream(string path, LogSystem logSystem)
     {
         if (path is null)
         {
@@ -304,15 +310,7 @@ public class LogRun : MonoBehaviour
         {
             //canLog = false;
             Debug.Log("There is a sharing violation.");
-            if (UnityEditor.EditorApplication.isPlaying)
-            {
-                Debug.Log("SETUP ERROR: RunsFile.csv is open. Close file and rerun.");
-                //logSystem.pathLogger.StopLogging();
-                //logSystem.pathLogger.DeleteLastLog();
-                logSystem.collisionsLogger.StopLogging();
-                logSystem.collisionsLogger.DeleteLastLog();
-                UnityEditor.EditorApplication.isPlaying = false;
-            }
+            logSystem.AbortLog(filename);
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 80)
         {

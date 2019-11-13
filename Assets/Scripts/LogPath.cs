@@ -9,10 +9,9 @@ public class LogPath : MonoBehaviour
 {
     // input
     public GameObject groundPlane;
-    public string filenamePrefix = "PathFile";
+    public string filenamePrefix = "PathsLog";
     
-    private int interval = 0;
-    private int intervalDelay = 20;
+    
     private float x;
     private float z;
     private string polylineCoordinates = "";
@@ -22,11 +21,12 @@ public class LogPath : MonoBehaviour
     // step distance
     private Vector3 posPrev;
     private Vector3 pos;
-    private LogRun runLogger;
+    //private LogRun runLogger;
 
     // init vars
-    private LogSystem logSystem;
-    private string path;
+    public bool canLog;
+    //private LogSystem logSystem;
+    //private string path;
     private string filename = "PathsFile.svg";
     private string content;
     private float groundWidth;
@@ -38,43 +38,31 @@ public class LogPath : MonoBehaviour
     private Gradient gradient;
     private GradientColorKey[] colorKey;
     private GradientAlphaKey[] alphaKey;
-    private PathProximity pathProximity;
-    private float proximityPercentage;
+    //private PathProximity pathProximity;
+    //private float proximityPercentage;
 
-    public void OnUpdate(GameObject player)
+    private void Start()
     {
-        if (interval > intervalDelay)
-        {
-            posPrev = pos;
-            pos = player.transform.position;
-            runLogger.UpdateDistanceTraveled(Vector3.Distance(pos, posPrev));
+        
+    }
 
-            x = groundWidth / 2 + player.transform.position.x * groundScaleX;
-            z = groundHeight / 2 - player.transform.position.z * groundScaleZ;
-            polylineCoordinates += "" + x + ", " + z + " ";
+    public void OnUpdate(LogSystem logSystem)
+    {
+        posPrev = pos;
+        pos = logSystem.player.transform.position;
+        //logSystem.runLogger.UpdateDistanceTraveled(Vector3.Distance(pos, posPrev));
 
-            proximityPercentage = pathProximity.proximityPercentage;
-
-            interval = 0;
-        }
-        else
-        {
-            interval++;
-        }
+        x = groundWidth / 2 + logSystem.player.transform.position.x * groundScaleX;
+        z = groundHeight / 2 - logSystem.player.transform.position.z * groundScaleZ;
+        polylineCoordinates += "" + x + ", " + z + " ";
     }
     
-    //public void DeleteLastLog()
-    //{
-    //    File.Delete(filename);
-    //}
-
-
-    public void StartLogging(string directory)
+    public void StartLogging(LogSystem logSystem)
     {
         // Get components
-        logSystem = GetComponent<LogSystem>();
-        runLogger = GetComponent<LogRun>();
-        pathProximity = logSystem.player.GetComponent<PathProximity>();
+        //logSystem = GetComponent<LogSystem>();
+        //runLogger = GetComponent<LogRun>();
+        //pathProximity = logSystem.player.GetComponent<PathProximity>();
 
         // Create gradient
         gradient = new Gradient();
@@ -95,7 +83,7 @@ public class LogPath : MonoBehaviour
         gradient.SetKeys(colorKey, alphaKey);
 
         // Set variables
-        path = directory + "/" + filename;
+        string path = logSystem.directory + "/" + filename;
         pos = Vector3.zero;
         groundWidth = groundPlane.GetComponent<Renderer>().bounds.size.x;
         groundHeight = groundPlane.GetComponent<Renderer>().bounds.size.z;
@@ -117,28 +105,38 @@ public class LogPath : MonoBehaviour
             }
         }
 
-        using (StreamReader reader = ReadStream(path))
+        using (StreamReader reader = ReadStream(path, logSystem))
         {
             if (reader is null)
                 return;
+            canLog = true;
             content = reader.ReadToEnd().Split(new string[] { "</svg>" }, StringSplitOptions.None)[0];
         }
 
     }
 
-    public void StopLogging()
+    public void StopLogging(LogSystem logSystem)
     {
+        string path = logSystem.directory + "/" + filename;
         Debug.Log("Stop Logging Path");
-        // close the file if there is one
-        using (FileStream stream = new FileStream(@""+path, FileMode.Create))
-        using (TextWriter writer = new StreamWriter(stream))
+        if (canLog)
         {
-            if (writer is null)
-                return;
-            writer.Write(content);
-            writer.WriteLine("<polyline id='user"+logSystem.userId+"-run"+logSystem.runLogger.runId+"' points='" + polylineCoordinates + "' fill='none' stroke='#" +  ColorUtility.ToHtmlStringRGB(gradient.Evaluate(proximityPercentage/100)) + "' stroke-width='1' />");
-            writer.WriteLine("</svg>");
-            writer.Close();
+            // close the file if there is one
+            using (FileStream stream = new FileStream(@""+path, FileMode.Create))
+            using (TextWriter writer = new StreamWriter(stream))
+            {
+                if (writer is null)
+                    return;
+                writer.Write(content);
+                writer.WriteLine("<polyline id='" 
+                    + logSystem.runId + "-" 
+                    + logSystem.userId + "-" 
+                    + logSystem.gestureSet + "-" 
+                    + logSystem.round 
+                    + "' points='" + polylineCoordinates + "' fill='none' stroke='#" + ColorUtility.ToHtmlStringRGB(gradient.Evaluate(logSystem.pathProximity.proximityPercentage / 100)) + "' stroke-width='1' />");
+                writer.WriteLine("</svg>");
+                writer.Close();
+            }
         }
     }
     
@@ -171,7 +169,7 @@ public class LogPath : MonoBehaviour
         return null;
     }
 
-    private StreamReader ReadStream(string path)
+    private StreamReader ReadStream(string path, LogSystem logSystem)
     {
         if (path is null)
         {
@@ -190,15 +188,7 @@ public class LogPath : MonoBehaviour
         {
             //canLog = false;
             Debug.Log("There is a sharing violation.");
-            if (UnityEditor.EditorApplication.isPlaying)
-            {
-                Debug.Log("SETUP ERROR: RunsFile.csv is open. Close file and rerun.");
-                //logSystem.pathLogger.StopLogging();
-                //logSystem.pathLogger.DeleteLastLog();
-                //logSystem.collisionsLogger.StopLogging();
-                //logSystem.collisionsLogger.DeleteLastLog();
-                UnityEditor.EditorApplication.isPlaying = false;
-            }
+            logSystem.AbortLog(filename);
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 80)
         {

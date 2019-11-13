@@ -8,7 +8,7 @@ public class LogCollisions : MonoBehaviour
     // Attach as component to player.
     
     // input
-    public string filenamePrefix = "CollisionsFile";
+    public string filenamePrefix = "CollisionsLog";
     public GameObject[] wallGroups;
     public float triggerPadding = 1;
 
@@ -19,17 +19,17 @@ public class LogCollisions : MonoBehaviour
     private string filename;
 
     private ObstacleTrigger lastTrigger;
-    public LogSystem logSystem;
+    //public LogSystem logSystem;
     
     private void Start()
     {
         
     }
 
-    public void StartLogging(string path, string suffixFormat)
+    public void StartLogging(LogSystem logSystem)
     {
         // get log system
-        logSystem = GetComponent<LogSystem>();
+        //logSystem = GetComponent<LogSystem>();
 
         // set each obstacle's trigger and player object
         foreach (var wallGroup in wallGroups)
@@ -41,7 +41,7 @@ public class LogCollisions : MonoBehaviour
                     ObstacleTrigger trigger = wall.gameObject.GetComponentInChildren<ObstacleTrigger>();
 
                     // assign each limit wall the player property
-                    trigger.AssignPlayer(logSystem.player, this);
+                    trigger.AssignProperties(logSystem.player, this, logSystem);
 
                     // set trigger size by padding
                     Vector3 wallScale = wall.localScale;
@@ -60,7 +60,12 @@ public class LogCollisions : MonoBehaviour
         do
         {
             fileCount++;
-            filename = path + "/" + filenamePrefix + (fileCount > 0 ? "_" + fileCount.ToString(suffixFormat) : "") + ".csv";
+            filename = logSystem.directory + "/" + filenamePrefix + (fileCount > 0 ? "-"
+                + logSystem.runId + "-"
+                + logSystem.userId + "-"
+                + logSystem.gestureSet + "-"
+                + logSystem.round
+                : "") + ".csv";
         } while (File.Exists(filename));
 
         logFile = File.AppendText(filename);
@@ -87,15 +92,13 @@ public class LogCollisions : MonoBehaviour
         File.Delete(filename);
     }
 
-    public void CollisionBegin(ObstacleTrigger obstacleTrigger)
+    public void CollisionBegin(ObstacleTrigger obstacleTrigger, LogSystem logSystem)
     {
         //Debug.Log("collision begin");
         obstacleTrigger.collisionEnterTime = Time.realtimeSinceStartup;
 
         Obstacle obstacle = obstacleTrigger.GetComponentInParent<Obstacle>();
-        Debug.Log(logSystem.runLogger.totalCollisions);
-        logSystem.runLogger.totalCollisions = logSystem.runLogger.totalCollisions + 1;
-        Debug.Log(logSystem.runLogger.totalCollisions);
+        logSystem.runLogger.totalCollisions++;
         if (obstacle.obstacleType == Obstacle.ObstacleType.Wall)
             logSystem.runLogger.wallCollisions++;
         if (obstacle.obstacleType == Obstacle.ObstacleType.Fence)

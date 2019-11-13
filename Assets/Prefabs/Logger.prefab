@@ -69,9 +69,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98d5ca36b47d3c14ca3fb5f6e14426eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userId: 0
   player: {fileID: 0}
+  userIdIndex: 0
+  gestureSet: 0
+  round: 0
+  playerMove: {fileID: 0}
+  playerManager: {fileID: 0}
+  pathProximity: {fileID: 0}
+  collisionsLogger: {fileID: 820954615935954472}
+  pathLogger: {fileID: 4357758217332649399}
+  runLogger: {fileID: 5879216207905652328}
   directory: UserTesting
+  runId: 
+  userId: 
   colFilename: 
   pathFilename: 
 --- !u!114 &4357758217332649399
@@ -88,6 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundPlane: {fileID: 0}
   filenamePrefix: PathFile
+  canLog: 0
 --- !u!114 &820954615935954472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,7 +115,6 @@ MonoBehaviour:
   wallGroups:
   - {fileID: 0}
   triggerPadding: 1
-  logSystem: {fileID: 0}
 --- !u!114 &5879216207905652328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,7 +128,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFirstRun: 0
-  runId: 0
   gestureTravel: {fileID: 0}
   gestureRotateY: {fileID: 0}
   gestureRotateX: {fileID: 0}
@@ -140,7 +149,8 @@ MonoBehaviour:
   propCollisions: 0
   pickups: 0
   pickupSearch: 0
-  canLog: 0
   filename: RunsFile.csv
+  runPrefix: R
+  canLog: 0
   logging: 0
   intervalDelay: 20

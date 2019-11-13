@@ -8,6 +8,7 @@ public class ObstacleTrigger : MonoBehaviour
     [HideInInspector] public float collisionDuration;
     [HideInInspector] public float collisionEnterTime;
     public GameObject player;
+    private LogSystem logSystem;
     private LogCollisions collisionLogger;
     
     void Start()
@@ -19,7 +20,7 @@ public class ObstacleTrigger : MonoBehaviour
     {
         if (ReferenceEquals(collider.gameObject, player))
         {
-            collisionLogger.CollisionBegin(this);
+            collisionLogger.CollisionBegin(this, logSystem);
         }
     }
 
@@ -39,10 +40,11 @@ public class ObstacleTrigger : MonoBehaviour
         }
     }
 
-    public void AssignPlayer(GameObject playerObject, LogCollisions collisionLoggerComponent)
+    public void AssignProperties(GameObject playerObject, LogCollisions collisionLoggerComponent, LogSystem logSystemComponent)
     {
         player = playerObject;
         collisionLogger = collisionLoggerComponent;
+        logSystem = logSystemComponent;
     }
 
     public void ResetWall()
