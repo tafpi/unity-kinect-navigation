@@ -56,7 +56,6 @@ public class LogCollisions : MonoBehaviour
         }
 
         // create a file incrementing the filename's indexing
-
         string[] files = System.IO.Directory.GetFiles(logSystem.directory, filenamePrefix + "*.csv", System.IO.SearchOption.TopDirectoryOnly);
         if(int.TryParse(logSystem.runId.Split('R')[1], out int i) && i-1 != files.Length)
         {
@@ -64,18 +63,7 @@ public class LogCollisions : MonoBehaviour
             return;
         }
 
-        filename = logSystem.directory + "/"
-            + filenamePrefix + "-"
-            + logSystem.runId + "-"
-            + logSystem.userId + "-"
-            + logSystem.gestureSet + "-"
-            + logSystem.round
-            + ".csv";
-        //fileCount = 0;
-        //do
-        //{
-        //    fileCount++;
-        //} while (File.Exists(filename));
+        filename = logSystem.directory + "/" + filenamePrefix + "-" + logSystem.filenameLabel + ".csv";
 
         logFile = File.AppendText(filename);
         string headers = "Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)";

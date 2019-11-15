@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerLookByMouse : MonoBehaviour
 {
     [SerializeField] private string mouseXInputName = null;
@@ -59,4 +60,5 @@ public class PlayerLookByMouse : MonoBehaviour
         eulerRotation.x = value;
         transform.eulerAngles = eulerRotation;
     }
+    
 }

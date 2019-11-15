@@ -130,8 +130,8 @@ public class LogPath : MonoBehaviour
                 writer.WriteLine("<polyline id='" 
                     + logSystem.runId + "-" 
                     + logSystem.userId + "-" 
-                    + logSystem.gestureSet + "-" 
-                    + logSystem.round 
+                    + logSystem.gestureSetId + "-" 
+                    + logSystem.roundId 
                     + "' points='" + polylineCoordinates + "' fill='none' stroke='#" + ColorUtility.ToHtmlStringRGB(gradient.Evaluate((float)logSystem.pathProximity.proximityPercentage / 100)) + "' stroke-width='1' />");
                 writer.WriteLine("</svg>");
                 writer.Close();

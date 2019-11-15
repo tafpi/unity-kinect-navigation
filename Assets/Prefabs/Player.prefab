@@ -70,6 +70,8 @@ MonoBehaviour:
   rotatingY: 0
   rotatingX: 0
   rotatingWhileTravelling: 0
+  idle: 0
+  logRun: {fileID: 0}
 --- !u!114 &8762014662185553102
 MonoBehaviour:
   m_ObjectHideFlags: 0

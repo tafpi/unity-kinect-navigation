@@ -1,23 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public class PickupPlayer : MonoBehaviour
 {
-    public GameObject[] pickupGroups;
+    //public GameObject[] pickupGroups;
+    public GameObject logger;
+    private LogSystem logSystem;
     public int interactionTimeNeeded = 2;
     [Range(0f, 1f)] public float viewportFactor = 0.35f;
     public GameObject player;
     public Camera cam;
+    public bool drawTarget;
+    public Color targetColor;
     [HideInInspector] public int picked;
     [HideInInspector] public float totalTimeSearching;
 
     private void Awake()
     {
+        logSystem = logger.GetComponent<LogSystem>();
         cam = GetComponentInParent<Camera>();
-        player = cam.transform.parent.gameObject;        
-        foreach (var pickupGroup in pickupGroups)
+        player = cam.transform.parent.gameObject;
+        foreach (var pickupGroup in logSystem.pickupGroups)
         {
             foreach (Transform pickup in pickupGroup.transform)
             {
@@ -32,19 +36,36 @@ public class PickupPlayer : MonoBehaviour
 
     }
 
-    public bool PickupInTarget(Vector3 pickupPos)
+    private void Update()
+    {
+        logSystem.runLogger.pickups = picked;
+        logSystem.runLogger.pickupSearch = totalTimeSearching;
+    }
+
+    public bool PickupInTarget(Vector3 pickupPos, Renderer renderer)
     {
         // check if pickup object's position relative to camera viewport is in bounds of camera's target
-        Vector3 viewPos = cam.WorldToViewportPoint(pickupPos);
-        return (viewPos.x > (1 - viewportFactor) / 2 && viewPos.x < (1 + viewportFactor) / 2 && viewPos.y > (1 - viewportFactor) / 2 && viewPos.y < (1 + viewportFactor) / 2);
+        if (renderer.isVisible)
+        {
+            Vector3 viewPos = cam.WorldToViewportPoint(pickupPos);
+            return (viewPos.x > (1 - viewportFactor) / 2 && viewPos.x < (1 + viewportFactor) / 2 && viewPos.y > (1 - viewportFactor) / 2 && viewPos.y < (1 + viewportFactor) / 2);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private void OnDrawGizmos()
     {
-        // draw a target: part of the viewport with same aspect ratio and dimensions defined by factoring. ie: factor 1 means same dimensions as viewport
         Camera c = GetComponentInParent<Camera>();
-        Gizmos.color = Color.red;
-        Gizmos.matrix = Matrix4x4.TRS(c.transform.position, transform.rotation, Vector3.one);
-        Gizmos.DrawFrustum(Vector3.zero, c.fieldOfView * viewportFactor, 10f, 10.5f, c.aspect);
+        if (drawTarget)
+        {
+            // draw a target: part of the viewport with same aspect ratio and dimensions defined by factoring. ie: factor 1 means same dimensions as viewport
+            Gizmos.color = targetColor;
+            Gizmos.matrix = Matrix4x4.TRS(c.transform.position, transform.rotation, Vector3.one);
+            Gizmos.DrawFrustum(Vector3.zero, c.fieldOfView * viewportFactor, 10f, 10.5f, c.aspect);
+        }
+        
     }
 }

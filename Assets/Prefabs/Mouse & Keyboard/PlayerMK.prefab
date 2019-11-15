@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7316256403337591659}
   - component: {fileID: 2804756463880484063}
   - component: {fileID: 7316256403337591657}
-  - component: {fileID: 1010757182248415040}
   m_Layer: 0
   m_Name: PlayerMK
   m_TagString: Untagged
@@ -70,6 +69,8 @@ MonoBehaviour:
   rotatingY: 0
   rotatingX: 0
   rotatingWhileTravelling: 0
+  idle: 0
+  logRun: {fileID: 0}
 --- !u!114 &7316256403337591657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,28 +83,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a33d4e54924cc74aad5a0c90dcddcfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerManager: {fileID: 2804756463880484063}
   horizontalInputName: Horizontal
   verticalInputName: Vertical
   movementSpeed: 10
---- !u!114 &1010757182248415040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7316256403337591660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d4f0991ae7013c498420241066b4db5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  path: {fileID: 0}
-  pathDistMin: 5
-  pathDistMax: 15
-  pathCheckpoints: 27
-  proximityCheckpoints: []
-  proximityPercentage: 0
 --- !u!1001 &4079354443226622232
 PrefabInstance:
   m_ObjectHideFlags: 0

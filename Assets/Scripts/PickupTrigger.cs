@@ -17,6 +17,7 @@ public class PickupTrigger : MonoBehaviour
         if (pickupObject.pickupPlayer)
             if (ReferenceEquals(pickupObject.pickupPlayer.player, other.gameObject))
                 pickupObject.playerInTrigger = true;
+                
     }
 
     private void OnTriggerExit(Collider other)

@@ -8,27 +8,31 @@ public class LogSystem : MonoBehaviour
     // input
     public GameObject player;
     public int userIdIndex;
-    public enum GestureSet { GS1, GS2 };
-    public GestureSet gestureSet;
+    //public enum GestureSet { GS1, GS2 };
+    [HideInInspector] public string gestureSetId;
     public enum Round { RND1, RND2 };
-    public Round round;
+    public Round roundId;
+    public GameObject[] pickupGroups;
+    public BezierSolution.BezierSpline path;
 
     // player management
     private PlayerMoveByKeyboard playerMoveByKeyboard;
     [HideInInspector] public PlayerMove playerMove;
     [HideInInspector] public PlayerManager playerManager;
-    [HideInInspector] public PathProximity pathProximity;
 
     // file management
     public LogCollisions collisionsLogger;
     public LogPath pathLogger;
     public LogRun runLogger;
+    public PathProximity pathProximity;
     public string directory = "UserTesting";
     public string runId;
     private string userIdPrefix = "U";
     public string userId;
     private string countSuffixFormat = "000.##";
+    public string filenameLabel;
     //private string delimiter = ", ";
+    private bool logging;
 
     // init vars
     [HideInInspector] public string colFilename;
@@ -37,6 +41,13 @@ public class LogSystem : MonoBehaviour
     // other
     private int interval = 0;
     private int intervalDelay = 20;
+
+    private void Awake()
+    {
+        gestureSetId = "MK"; // mouse - keyboard
+        if (player.name.Split('-').Length > 1)
+            gestureSetId = player.name.Split('-')[1];
+    }
 
     void Start()
     {
@@ -50,10 +61,7 @@ public class LogSystem : MonoBehaviour
         {
             if (pathLogger)
                 pathLogger.OnUpdate(this);
-            
-
             //proximityPercentage = logSystem.pathProximity.proximityPercentage;
-
             interval = 0;
         }
         else
@@ -64,7 +72,8 @@ public class LogSystem : MonoBehaviour
 
     void OnDestroy()
     {
-        StopLogging();
+        if (logging)
+            StopLogging();
     }
 
     void OnTriggerEnter(Collider collider)
@@ -76,7 +85,7 @@ public class LogSystem : MonoBehaviour
             //PlayerManager playerManager = player.GetComponent<PlayerManager>();
             playerManager.canMove = false;
             playerManager.travelling = false;
-            if (runLogger.logging)
+            if (logging)
                 StopLogging();
         }
     }
@@ -89,6 +98,7 @@ public class LogSystem : MonoBehaviour
         {
             runLogger.StartLogging(this);
             runId = runLogger.RunId(this, countSuffixFormat);
+            filenameLabel = runId + "-" + userId + "-" + gestureSetId + "-" + roundId;
         }
         if (collisionsLogger)
             collisionsLogger.StartLogging(this);
@@ -97,24 +107,21 @@ public class LogSystem : MonoBehaviour
 
         playerMoveByKeyboard = player.GetComponent<PlayerMoveByKeyboard>();
         playerMove = player.GetComponent<PlayerMove>();
-        pathProximity = player.GetComponent<PathProximity>();
         playerManager = player.GetComponent<PlayerManager>();
         playerManager.logRun = runLogger;
+
+        logging = true;
     }
 
     private void StopLogging()
     {
         if (runLogger)
-        {
             runLogger.StopLogging(this);
-        }
         if (collisionsLogger)
             collisionsLogger.StopLogging();
         if (pathLogger)
-        {
-
             pathLogger.StopLogging(this);
-        }
+        logging = false;
     }
 
     public void AbortLog(string error)

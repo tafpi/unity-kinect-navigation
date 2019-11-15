@@ -6,13 +6,15 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public bool canMove = true;
-    public bool travelling;    
+    public bool travelling;
+    public bool travellingBackwards;
     public bool rotatingY;
     public bool rotatingX;
     public bool rotatingWhileTravelling;
     public bool idle;
 
-    private Stopwatch travelStopwatch;
+    private Stopwatch totalTravelStopwatch;
+    private Stopwatch backwardsTravelStopwatch;
     private Stopwatch rotateYStopwatch;
     private Stopwatch rotateXStopwatch;
     private Stopwatch rotateWhileTravellingStopwtach;
@@ -22,7 +24,8 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
-        travelStopwatch = new Stopwatch();
+        totalTravelStopwatch = new Stopwatch();
+        backwardsTravelStopwatch = new Stopwatch();
         rotateYStopwatch = new Stopwatch();
         rotateXStopwatch = new Stopwatch();
         rotateWhileTravellingStopwtach = new Stopwatch();
@@ -38,10 +41,10 @@ public class PlayerManager : MonoBehaviour
     {
         if (travelling)
         {
-            if (!travelStopwatch.IsRunning)
-            {
-                travelStopwatch.Start();
-            }
+            if (!totalTravelStopwatch.IsRunning)
+                totalTravelStopwatch.Start();
+            if (!backwardsTravelStopwatch.IsRunning && travellingBackwards)
+                backwardsTravelStopwatch.Start();
 
             if (rotatingX || rotatingY)
             {
@@ -60,11 +63,16 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            if (travelStopwatch.IsRunning)
+            if (totalTravelStopwatch.IsRunning)
             {
-                travelStopwatch.Stop();
-                logRun.travelDuration = travelStopwatch.ElapsedMilliseconds;
+                totalTravelStopwatch.Stop();
+                logRun.totalTravelDuration = totalTravelStopwatch.ElapsedMilliseconds;
                 logRun.timesStopped++;
+            }
+            if (backwardsTravelStopwatch.IsRunning)
+            {
+                backwardsTravelStopwatch.Stop();
+                logRun.backwardsTravelDuration = backwardsTravelStopwatch.ElapsedMilliseconds;
             }
         }
 

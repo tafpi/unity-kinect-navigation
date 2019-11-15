@@ -34,6 +34,8 @@ public class PlayerMoveByKeyboard : MonoBehaviour
                 return;
             }
             playerManager.travelling = true;
+            if (vertInput < 0)
+                playerManager.travellingBackwards = true;
             forwardMovement = transform.forward * vertInput;
             rightMovement = transform.right * horizInput;
             charController.SimpleMove(forwardMovement + rightMovement);

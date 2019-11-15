@@ -9,7 +9,6 @@ public class LogRun : MonoBehaviour
     // Attach as component to finish object
 
     // input
-    public bool isFirstRun;
 
     // computed at start
     //public int runId;
@@ -21,13 +20,13 @@ public class LogRun : MonoBehaviour
 
     // computed on update
     public float totalDuration;
-    public float travelDuration;
+    public float totalTravelDuration;
+    public float backwardsTravelDuration;
     public float rotateYDuration;
     public float rotateXDuration;
     public float rotateWhileTravelDuration;
     public bool finishReached;
     public float idleControllerDuration;
-    public float idleUserDuration;
     public int timesStopped;
     public float distanceTraveled;
     public int pathProximityPercentage;
@@ -52,7 +51,9 @@ public class LogRun : MonoBehaviour
     private string line;
     private string header =
         "run id, " +
-        "is first run, " +
+        "user id, " +
+        "gesture set, " +
+        "round, " +
         "gesture travel, " +
         "gesture rotate y, " +
         "gesture rotate x, " +
@@ -60,12 +61,12 @@ public class LogRun : MonoBehaviour
         "close time, " +
         "finish reached, " +
         "total duration, " +
-        "travel duration, " +
+        "total travel duration, " +
+        "backwards travel duration, " +
         "rotate y duration, " +
         "rotate x duration, " +
         "rotate while travel duration, " +  // controller rotating (Y or X) while travelling
         "idle controller duration, " +      // controller not travelling and not rotating
-        "idle user duration, " +
         "times stopped, " +
         "distance traveled, " +
         "path proximity %, " +
@@ -85,7 +86,7 @@ public class LogRun : MonoBehaviour
 
     // other
     //private LogSystem logSystem;
-    private PickupPlayer pickupPlayer;
+    //private PickupPlayer pickupPlayer;
     //private PathProximity pathProximity;
 
 
@@ -98,20 +99,20 @@ public class LogRun : MonoBehaviour
     {
         totalDuration = Time.realtimeSinceStartup;
 
-        if (interval > intervalDelay)
-        {
-            if (pickupPlayer)
-            {
-                pickups = pickupPlayer.picked;
-                pickupSearch = pickupPlayer.totalTimeSearching;
-            }
+        //if (interval > intervalDelay)
+        //{
+        //    if (pickupPlayer)
+        //    {
+        //        pickups = pickupPlayer.picked;
+        //        pickupSearch = pickupPlayer.totalTimeSearching;
+        //    }
 
-            interval = 0;
-        }
-        else
-        {
-            interval++;
-        }
+        //    interval = 0;
+        //}
+        //else
+        //{
+        //    interval++;
+        //}
 
     }
 
@@ -185,9 +186,9 @@ public class LogRun : MonoBehaviour
 
             startTime = System.DateTime.Now;
 
-            pickupPlayer = logSystem.player.GetComponentInChildren<PickupPlayer>();
-            if (pickupPlayer)
-                totalPickups = pickupPlayer.pickupGroups.Length;
+            //pickupPlayer = logSystem.player.GetComponentInChildren<PickupPlayer>();
+            if (logSystem.pickupGroups.Length > 0)
+                totalPickups = logSystem.pickupGroups.Length;
 
         }
 
@@ -219,7 +220,9 @@ public class LogRun : MonoBehaviour
 
                 line =
                     logSystem.runId + delimiter +
-                    isFirstRun + delimiter +
+                    logSystem.userId + delimiter +
+                    logSystem.gestureSetId + delimiter +
+                    logSystem.roundId + delimiter +
                     gestureTravel + delimiter +
                     gestureRotateY + delimiter +
                     gestureRotateX + delimiter +
@@ -227,12 +230,12 @@ public class LogRun : MonoBehaviour
                     closeTime + delimiter +
                     finishReached + delimiter +
                     totalDuration + delimiter +
-                    travelDuration + delimiter +
-                    rotateYDuration + delimiter +
-                    rotateXDuration + delimiter +
-                    rotateWhileTravelDuration + delimiter +
-                    idleControllerDuration + delimiter +
-                    idleUserDuration + delimiter +
+                    totalTravelDuration/1000 + delimiter +
+                    backwardsTravelDuration / 1000 + delimiter +
+                    rotateYDuration /1000 + delimiter +
+                    rotateXDuration/1000 + delimiter +
+                    rotateWhileTravelDuration/1000 + delimiter +
+                    idleControllerDuration/1000 + delimiter +
                     timesStopped + delimiter +
                     distanceTraveled + delimiter +
                     pathProximityPercentage + delimiter +

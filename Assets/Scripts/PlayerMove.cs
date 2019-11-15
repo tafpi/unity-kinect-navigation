@@ -37,14 +37,12 @@ public class PlayerMove : MonoBehaviour
             forwardMovement = transform.forward * gestureRate * movementSpeed;
             characterController.SimpleMove(forwardMovement);
             playerManager.travelling = true;
-            //if (!playerManager.travellingStopwtach.IsRunning)
-            //    playerManager.travellingStopwtach.Start();
+            if (gestureRate < 0)
+                playerManager.travellingBackwards = true;
         }
         else
         {
             playerManager.travelling = false;
-            //if (playerManager.travellingStopwtach.IsRunning)
-            //    playerManager.travellingStopwtach.Stop();
         }
     }
 

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4357758217332649399}
   - component: {fileID: 820954615935954472}
   - component: {fileID: 5879216207905652328}
+  - component: {fileID: 3072870751742952898}
   m_Layer: 0
   m_Name: Logger
   m_TagString: Untagged
@@ -75,13 +76,14 @@ MonoBehaviour:
   round: 0
   playerMove: {fileID: 0}
   playerManager: {fileID: 0}
-  pathProximity: {fileID: 0}
   collisionsLogger: {fileID: 820954615935954472}
   pathLogger: {fileID: 4357758217332649399}
   runLogger: {fileID: 5879216207905652328}
+  pathProximity: {fileID: 3072870751742952898}
   directory: UserTesting
   runId: 
   userId: 
+  filenameLabel: 
   colFilename: 
   pathFilename: 
 --- !u!114 &4357758217332649399
@@ -154,3 +156,22 @@ MonoBehaviour:
   canLog: 0
   logging: 0
   intervalDelay: 20
+--- !u!114 &3072870751742952898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6074604479138963054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d4f0991ae7013c498420241066b4db5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: {fileID: 0}
+  logSystem: {fileID: 3370292660008600906}
+  pathDistMin: 0
+  pathDistMax: 0
+  pathCheckpoints: 0
+  proximityCheckpoints: []
+  proximityPercentage: 0
