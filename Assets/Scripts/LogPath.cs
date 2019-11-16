@@ -59,10 +59,6 @@ public class LogPath : MonoBehaviour
     
     public void StartLogging(LogSystem logSystem)
     {
-        // Get components
-        //logSystem = GetComponent<LogSystem>();
-        //runLogger = GetComponent<LogRun>();
-        //pathProximity = logSystem.player.GetComponent<PathProximity>();
 
         // Create gradient
         gradient = new Gradient();

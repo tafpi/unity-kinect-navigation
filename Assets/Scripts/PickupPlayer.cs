@@ -6,7 +6,7 @@ public class PickupPlayer : MonoBehaviour
 {
     //public GameObject[] pickupGroups;
     public GameObject logger;
-    private LogSystem logSystem;
+    public LogSystem logSystem;
     public int interactionTimeNeeded = 2;
     [Range(0f, 1f)] public float viewportFactor = 0.35f;
     public GameObject player;
@@ -38,8 +38,8 @@ public class PickupPlayer : MonoBehaviour
 
     private void Update()
     {
-        logSystem.runLogger.pickups = picked;
-        logSystem.runLogger.pickupSearch = totalTimeSearching;
+        //logSystem.runLogger.pickups = picked;
+        //logSystem.runLogger.pickupSearch = totalTimeSearching;
     }
 
     public bool PickupInTarget(Vector3 pickupPos, Renderer renderer)
@@ -54,6 +54,21 @@ public class PickupPlayer : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void TotalSearchTime()
+    {
+        float total = 0;
+        foreach (var pickupGroup in logSystem.pickupGroups)
+        {
+            foreach (Transform pickup in pickupGroup.transform)
+            {
+                PickupObject pickupObject = pickup.GetComponent<PickupObject>();
+                //logSystem.runLogger.pickupSearch  += pickupObject.searchDuration;
+                total += pickupObject.searchDuration;
+            }
+        }
+        logSystem.runLogger.pickupSearch = total;
     }
 
     private void OnDrawGizmos()

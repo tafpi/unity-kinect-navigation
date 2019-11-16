@@ -12,9 +12,9 @@ public class LogRun : MonoBehaviour
 
     // computed at start
     //public int runId;
-    public GameObject gestureTravel;
-    public GameObject gestureRotateY;
-    public GameObject gestureRotateX;
+    //public GameObject gestureTravel;
+    //public GameObject gestureRotateY;
+    //public GameObject gestureRotateX;
     public System.DateTime startTime;
     public int totalPickups;
 
@@ -54,9 +54,9 @@ public class LogRun : MonoBehaviour
         "user id, " +
         "gesture set, " +
         "round, " +
-        "gesture travel, " +
-        "gesture rotate y, " +
-        "gesture rotate x, " +
+        //"gesture travel, " +
+        //"gesture rotate y, " +
+        //"gesture rotate x, " +
         "start time, " +
         "close time, " +
         "finish reached, " +
@@ -98,22 +98,6 @@ public class LogRun : MonoBehaviour
     private void Update()
     {
         totalDuration = Time.realtimeSinceStartup;
-
-        //if (interval > intervalDelay)
-        //{
-        //    if (pickupPlayer)
-        //    {
-        //        pickups = pickupPlayer.picked;
-        //        pickupSearch = pickupPlayer.totalTimeSearching;
-        //    }
-
-        //    interval = 0;
-        //}
-        //else
-        //{
-        //    interval++;
-        //}
-
     }
 
     public string RunId(LogSystem logSystem, string countFormat)
@@ -201,20 +185,21 @@ public class LogRun : MonoBehaviour
         {
             using (StreamWriter writer = WriteStream(path))
             {
+                Debug.Log(logSystem);
                 if (writer is null)
                     return;
             
                 closeTime = System.DateTime.Now;
 
-                PlayerMove playerMove = logSystem.playerMove;
-                if (playerMove)
-                    gestureTravel = playerMove.travelGesture;
-                PlayerLookLeftRight playerLookY = logSystem.GetComponent<PlayerLookLeftRight>();
-                if (playerLookY)
-                    gestureRotateY = playerLookY.rotateGesture;
-                PlayerLookUpDown playerLookX = logSystem.GetComponentInChildren<PlayerLookUpDown>();
-                if (playerLookX)
-                    gestureRotateX = playerLookX.rotateGesture;
+                //PlayerMove playerMove = logSystem.playerMove;
+                //if (playerMove)
+                //    gestureTravel = playerMove.travelGesture;
+                //PlayerLookLeftRight playerLookY = logSystem.GetComponent<PlayerLookLeftRight>();
+                //if (playerLookY)
+                //    gestureRotateY = playerLookY.rotateGesture;
+                //PlayerLookUpDown playerLookX = logSystem.GetComponentInChildren<PlayerLookUpDown>();
+                //if (playerLookX)
+                //    gestureRotateX = playerLookX.rotateGesture;
 
                 pathProximityPercentage = logSystem.pathProximity.proximityPercentage;
 
@@ -223,19 +208,16 @@ public class LogRun : MonoBehaviour
                     logSystem.userId + delimiter +
                     logSystem.gestureSetId + delimiter +
                     logSystem.roundId + delimiter +
-                    gestureTravel + delimiter +
-                    gestureRotateY + delimiter +
-                    gestureRotateX + delimiter +
                     startTime + delimiter +
                     closeTime + delimiter +
                     finishReached + delimiter +
                     totalDuration + delimiter +
-                    totalTravelDuration/1000 + delimiter +
+                    totalTravelDuration / 1000 + delimiter +
                     backwardsTravelDuration / 1000 + delimiter +
-                    rotateYDuration /1000 + delimiter +
-                    rotateXDuration/1000 + delimiter +
-                    rotateWhileTravelDuration/1000 + delimiter +
-                    idleControllerDuration/1000 + delimiter +
+                    rotateYDuration / 1000 + delimiter +
+                    rotateXDuration / 1000 + delimiter +
+                    rotateWhileTravelDuration / 1000 + delimiter +
+                    idleControllerDuration / 1000 + delimiter +
                     timesStopped + delimiter +
                     distanceTraveled + delimiter +
                     pathProximityPercentage + delimiter +

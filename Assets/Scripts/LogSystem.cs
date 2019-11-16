@@ -19,6 +19,7 @@ public class LogSystem : MonoBehaviour
     private PlayerMoveByKeyboard playerMoveByKeyboard;
     [HideInInspector] public PlayerMove playerMove;
     [HideInInspector] public PlayerManager playerManager;
+    [HideInInspector] public PickupPlayer pickupPlayer;
 
     // file management
     public LogCollisions collisionsLogger;
@@ -44,9 +45,14 @@ public class LogSystem : MonoBehaviour
 
     private void Awake()
     {
+        player.SetActive(true);
         gestureSetId = "MK"; // mouse - keyboard
         if (player.name.Split('-').Length > 1)
             gestureSetId = player.name.Split('-')[1];
+        playerMoveByKeyboard = player.GetComponent<PlayerMoveByKeyboard>();
+        playerMove = player.GetComponent<PlayerMove>();
+        playerManager = player.GetComponent<PlayerManager>();
+        pickupPlayer = player.GetComponent<PickupPlayer>();
     }
 
     void Start()
@@ -105,9 +111,6 @@ public class LogSystem : MonoBehaviour
         if (pathLogger)
             pathLogger.StartLogging(this);
 
-        playerMoveByKeyboard = player.GetComponent<PlayerMoveByKeyboard>();
-        playerMove = player.GetComponent<PlayerMove>();
-        playerManager = player.GetComponent<PlayerManager>();
         playerManager.logRun = runLogger;
 
         logging = true;

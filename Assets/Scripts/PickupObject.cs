@@ -13,7 +13,7 @@ public class PickupObject : MonoBehaviour
     private bool picked = false;
     [HideInInspector] public float interactionInitTime;
     [HideInInspector] public float interactingDuration;
-    [HideInInspector] public float searchDuration;
+    public float searchDuration;
     [HideInInspector] public float timeInTrigger;
     
     private void Start()
@@ -30,7 +30,7 @@ public class PickupObject : MonoBehaviour
             if (searchDuration == 0)
                 timeInTrigger = Time.realtimeSinceStartup;
             searchDuration = Time.realtimeSinceStartup - timeInTrigger;
-
+            
             Vector3 viewPos = pickupPlayer.cam.WorldToViewportPoint(transform.position);
             if (pickupPlayer.PickupInTarget(pickupTarget.transform.position, pickupTarget.transform.GetChild(0).GetComponent<Renderer>()))
             {
@@ -49,10 +49,11 @@ public class PickupObject : MonoBehaviour
                 interactionInitTime = Time.realtimeSinceStartup;
             }
 
+            pickupPlayer.TotalSearchTime();
         }
         else
         {
-            interactionInitTime = Time.realtimeSinceStartup;
+            interactionInitTime = 0;
             pickupPlayer.drawTarget = false;
         }
     }
@@ -68,7 +69,8 @@ public class PickupObject : MonoBehaviour
         if (pickupPlayer)
         {
             pickupPlayer.picked++;
-            pickupPlayer.totalTimeSearching += searchDuration;
+            pickupPlayer.logSystem.runLogger.pickups++;
+            //pickupPlayer.totalTimeSearching += searchDuration;
         }
     }
 
