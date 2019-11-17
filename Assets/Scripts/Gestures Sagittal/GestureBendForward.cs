@@ -29,6 +29,7 @@ public class GestureBendForward : MonoBehaviour
     public float currentAngle;
     public float distance;
     public float rate;
+    private float rateNorm;
 
     private GestureState state;
 
@@ -75,22 +76,20 @@ public class GestureBendForward : MonoBehaviour
                 {
 
                     spineBase = Functions.unityVector3(body.Joints[JointType.SpineBase].Position);
-                    spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
-                    distance = spineBase.z - spineShoulder.z;
-                    spine = spineShoulder - spineBase;
-                    rate = distance / spine.magnitude;
+                    spineShoulder = Functions.unityVector3(body.Joints[JointType.Head].Position);
+                    rate = Vector3.Angle(Vector3.forward, (spineShoulder - spineBase))/180;
                     gestureRate = 0;
                     if (rate > minimumRate)
                     {
                         //bending forwards
-                        rate = Functions.limitValue(minimumRate, maximumRate, rate);
-                        gestureRate = Mathf.Pow((rate - minimumRate) / (maximumRate - minimumRate), slope);
+                        rateNorm = Functions.limitValue(minimumRate, maximumRate, rate);
+                        gestureRate = Mathf.Pow((rateNorm - minimumRate) / (maximumRate - minimumRate), slope);
                     }
-                    if (rate < -minimumRateBack)
+                    if (rate < maximumRateBack)
                     {
                         //bending backwards
-                        rate = Functions.limitValue(minimumRateBack, maximumRateBack, Mathf.Abs(rate));
-                        gestureRate = -Mathf.Pow((rate - minimumRateBack) / (maximumRateBack - minimumRateBack), slope);
+                        rateNorm = Functions.limitValue(minimumRateBack, maximumRateBack, Mathf.Abs(rate));
+                        gestureRate = -(1 - Mathf.Pow((rateNorm - minimumRateBack) / (maximumRateBack - minimumRateBack), slope));
                     }
 
                     if (state != null) state.gestureRate = gestureRate;

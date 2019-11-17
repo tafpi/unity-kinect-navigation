@@ -67,6 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMove: 1
   travelling: 0
+  travellingBackwards: 0
   rotatingY: 0
   rotatingX: 0
   rotatingWhileTravelling: 0
@@ -84,7 +85,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43f33f525475474098bbc0b77827090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerManager: {fileID: 8474222050743391403}
   travelGesture: {fileID: 0}
   gestureRate: 0
   movementSpeed: 10
@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 928aee4f680d5a048bf021c50d262ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultRotationSpeed: 2
   rotateGesture: {fileID: 0}
   gestureRate: 0
 --- !u!1001 &7688514363798891771

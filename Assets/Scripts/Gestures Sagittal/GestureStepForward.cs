@@ -117,6 +117,8 @@ public class GestureStepForward : MonoBehaviour
                         // apart first frame
                         feetApart = true;
 
+                        gestureRate = 0;
+
                         // left ankle is -1, right is 1
                         ankleMovingAway = Mathf.Abs(ankleLeftTravel) > Mathf.Abs(ankleRightTravel) ? -1 : 1;
                     }

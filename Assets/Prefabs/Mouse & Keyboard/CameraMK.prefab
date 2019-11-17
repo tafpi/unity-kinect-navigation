@@ -160,7 +160,7 @@ MonoBehaviour:
   picked: 0
   totalTimeSearching: 0
   activePickupObject: {fileID: 0}
-  canvas: {fileID: 0}
+  canvas: {fileID: 8488108656520594888}
 --- !u!1 &3571993096654608161
 GameObject:
   m_ObjectHideFlags: 0

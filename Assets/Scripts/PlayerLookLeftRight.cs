@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerLookLeftRight : MonoBehaviour
 {
-    private float defaultRotationSpeed = 1;
+    public float defaultRotationSpeed = 2;
     private float rotationSpeed = 1;
     //public GameObject playerBody;
 
@@ -14,6 +14,7 @@ public class PlayerLookLeftRight : MonoBehaviour
 
     private CharacterController characterController;
     private PlayerManager playerManager;
+    private GestureState gestureState;
 
     private void Awake()
     {
@@ -21,15 +22,20 @@ public class PlayerLookLeftRight : MonoBehaviour
         //LockCursor();
         if (rotateGesture != null)
         {
-            rotateGesture.GetComponent<GestureState>().gestureTracked = true;
-            if (rotateGesture.GetComponent<GestureState>().rotationSpeed != 0)
-            {
-                rotationSpeed = rotateGesture.GetComponent<GestureState>().rotationSpeed;
-            }
-            else
-            {
-                rotationSpeed = defaultRotationSpeed;
-            }
+            //rotateGesture.GetComponent<GestureState>().gestureTracked = true;
+            //if (rotateGesture.GetComponent<GestureState>().rotationSpeed != 0)
+            //{
+            //    rotationSpeed = rotateGesture.GetComponent<GestureState>().rotationSpeed;
+            //}
+            //else
+            //{
+            //    rotationSpeed = defaultRotationSpeed;
+            //}
+            gestureState = rotateGesture.GetComponent<GestureState>();
+            gestureState.gestureTracked = true;
+            rotationSpeed = defaultRotationSpeed;
+            if (gestureState.rotationSpeed != 0)
+                rotationSpeed = gestureState.rotationSpeed;
         }
     }
 

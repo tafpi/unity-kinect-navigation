@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de05576553f2f3340bbaee65e97cbd60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultRotationSpeed: 60
+  defaultRotationSpeed: 100
   rotateGesture: {fileID: 0}
   rotate: 0
   gestureRate: 0
@@ -159,7 +159,7 @@ MonoBehaviour:
   picked: 0
   totalTimeSearching: 0
   activePickupObject: {fileID: 0}
-  canvas: {fileID: 0}
+  canvas: {fileID: 6363511484675053809}
 --- !u!1 &2677285223354350156
 GameObject:
   m_ObjectHideFlags: 0

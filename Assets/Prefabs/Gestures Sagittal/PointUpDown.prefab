@@ -63,9 +63,9 @@ MonoBehaviour:
   gestureRate: 0
   slope: 1.2
   minimumAngle: 12
-  maximumAngle: 50
-  angle: 0
+  maximumAngle: 45
   zeroAngleDiff: 10
+  angle: 0
   armSpeed: 0
   armSpeedMax: 0.02
   previousHandPosition: {x: 0, y: 0, z: 0}

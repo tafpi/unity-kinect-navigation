@@ -46,6 +46,7 @@ public class LogSystem : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 70;
         //player.SetActive(true);
         gestureSetId = "MK"; // mouse - keyboard
         if (player.name.Split('-').Length > 1)

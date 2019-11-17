@@ -1,0 +1,4 @@
+run id, user id, gesture set, round, start time, close time, finish reached, total duration, total travel duration, backwards travel duration, rotate y duration, rotate x duration, rotate while travel duration, idle controller duration, times stopped, distance traveled, path proximity %, total collisions, wall collisions, fence collisions, prop collisions, roadblock collisions, invisible collisions, pickups, total pickups, pickup search
+R001, U001, GS1, RND1, 11/17/2019 11:45:12 PM, 11/17/2019 11:45:29 PM, False, 19.57873, 2.602, 0, 5.649, 0, 0, 7.97, 1, 24.24924, 100, 0, 0, 0, 0, 0, 0, 0, 4, 0
+R002, U001, GS1, RND1, 11/17/2019 11:45:41 PM, 11/17/2019 11:45:56 PM, False, 17.32862, 1.656, 0.117, 0, 0, 0, 12.169, 6, 5.849849, 100, 0, 0, 0, 0, 0, 0, 0, 4, 0
+R003, U001, GS1, RND1, 11/17/2019 11:46:06 PM, 11/17/2019 11:47:06 PM, False, 61.92187, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 4, 0

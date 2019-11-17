@@ -62,10 +62,10 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 0}
   gestureRate: 0
   slope: 1.2
-  minimumRate: 0.25
-  maximumRate: 0.4
-  minimumRateBack: 0.01
-  maximumRateBack: 0.05
+  minimumRate: 0.66
+  maximumRate: 0.72
+  minimumRateBack: 0.46
+  maximumRateBack: 0.52
   currentAngle: 0
   distance: 0
   rate: 0
