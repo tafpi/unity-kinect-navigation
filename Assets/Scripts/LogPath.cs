@@ -50,7 +50,7 @@ public class LogPath : MonoBehaviour
     {
         posPrev = pos;
         pos = logSystem.player.transform.position;
-        //logSystem.runLogger.UpdateDistanceTraveled(Vector3.Distance(pos, posPrev));
+        logSystem.runLogger.distanceTraveled += Vector3.Distance(pos, posPrev);
 
         x = groundWidth / 2 + logSystem.player.transform.position.x * groundScaleX;
         z = groundHeight / 2 - logSystem.player.transform.position.z * groundScaleZ;
@@ -80,7 +80,7 @@ public class LogPath : MonoBehaviour
 
         // Set variables
         string path = logSystem.directory + "/" + filename;
-        pos = Vector3.zero;
+        pos = logSystem.player.transform.position;
         groundWidth = groundPlane.GetComponent<Renderer>().bounds.size.x;
         groundHeight = groundPlane.GetComponent<Renderer>().bounds.size.z;
         groundScaleX = groundPlane.transform.localScale.x;

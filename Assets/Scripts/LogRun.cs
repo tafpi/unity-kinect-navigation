@@ -7,38 +7,34 @@ using UnityEngine;
 public class LogRun : MonoBehaviour
 {
     // Attach as component to finish object
-
-    // input
-
+    
     // computed at start
-    //public int runId;
-    //public GameObject gestureTravel;
-    //public GameObject gestureRotateY;
-    //public GameObject gestureRotateX;
     public System.DateTime startTime;
-    public int totalPickups;
+    [HideInInspector] public int totalPickups;
 
     // computed on update
-    public float totalDuration;
-    public float totalTravelDuration;
-    public float backwardsTravelDuration;
-    public float rotateYDuration;
-    public float rotateXDuration;
-    public float rotateWhileTravelDuration;
-    public bool finishReached;
-    public float idleControllerDuration;
-    public int timesStopped;
-    public float distanceTraveled;
-    public int pathProximityPercentage;
-    public int totalCollisions;
-    public int wallCollisions;
-    public int fenceCollisions;
-    public int propCollisions;
-    public int pickups;
-    public float pickupSearch;
+    [HideInInspector] public float totalDuration;
+    [HideInInspector] public float totalTravelDuration;
+    [HideInInspector] public float backwardsTravelDuration;
+    [HideInInspector] public float rotateYDuration;
+    [HideInInspector] public float rotateXDuration;
+    [HideInInspector] public float rotateWhileTravelDuration;
+    [HideInInspector] public bool finishReached;
+    [HideInInspector] public float idleControllerDuration;
+    [HideInInspector] public int timesStopped;
+    [HideInInspector] public float distanceTraveled;
+    [HideInInspector] public int pathProximityPercentage;
+    [HideInInspector] public int totalCollisions;
+    [HideInInspector] public int wallCollisions;
+    [HideInInspector] public int fenceCollisions;
+    [HideInInspector] public int propCollisions;
+    [HideInInspector] public int roadblockCollisions;
+    [HideInInspector] public int invisibleCollisions;
+    [HideInInspector] public int pickups;
+    [HideInInspector] public float pickupSearch;
 
     // computed on end
-    public System.DateTime closeTime;
+    [HideInInspector] public System.DateTime closeTime;
 
     // file management
     public string filename = "RunsLog.csv";
@@ -47,16 +43,12 @@ public class LogRun : MonoBehaviour
     private int fileCount;
     private string fileContent;
     private StreamWriter logFile;
-    //private string path;
     private string line;
     private string header =
         "run id, " +
         "user id, " +
         "gesture set, " +
         "round, " +
-        //"gesture travel, " +
-        //"gesture rotate y, " +
-        //"gesture rotate x, " +
         "start time, " +
         "close time, " +
         "finish reached, " +
@@ -74,21 +66,17 @@ public class LogRun : MonoBehaviour
         "wall collisions, " +
         "fence collisions, " +
         "prop collisions, " +
+        "roadblock collisions, " +
+        "invisible collisions, " +
         "pickups, " +
         "total pickups, " +
         "pickup search";
 
     // logging
-    public bool canLog;
-    public bool logging;
+    [HideInInspector] public bool canLog;
+    [HideInInspector] public bool logging;
     private int interval = 0;
     [Range(10, 30)] public int intervalDelay = 20;
-
-    // other
-    //private LogSystem logSystem;
-    //private PickupPlayer pickupPlayer;
-    //private PathProximity pathProximity;
-
 
     private void Start()
     {        
@@ -128,23 +116,13 @@ public class LogRun : MonoBehaviour
         }
     }
 
-
-    // methods used externally
-    //public void UpdatePathProximity(LogSystem logSystem)
+    //public void UpdateDistanceTraveled(float step)
     //{
-    //    pathProximityPercentage = logSystem.pathProximity.proximityPercentage;
+    //    distanceTraveled += step;
     //}
-
-    public void UpdateDistanceTraveled(float step)
-    {
-        distanceTraveled += step;        
-    }
 
     public void StartLogging(LogSystem logSystem)
     {
-        //logSystem = GetComponent<LogSystem>();
-        //logSystem.playerManager.logRun = this;
-        //pathProximity = logSystem.pathProximity;
 
         string path = logSystem.directory + "/" + filename;
 
@@ -164,15 +142,11 @@ public class LogRun : MonoBehaviour
             if (reader is null)
                 return;
             canLog = true;
-
-            // logs on start
-            //runId = RunId();
-
+            
             startTime = System.DateTime.Now;
-
-            //pickupPlayer = logSystem.player.GetComponentInChildren<PickupPlayer>();
-            if (logSystem.pickupGroups.Length > 0)
-                totalPickups = logSystem.pickupGroups.Length;
+            
+            //if (logSystem.pickupGroup.Length > 0)
+            //    totalPickups = logSystem.pickupGroup.Length;
 
         }
 
@@ -185,21 +159,10 @@ public class LogRun : MonoBehaviour
         {
             using (StreamWriter writer = WriteStream(path))
             {
-                Debug.Log(logSystem);
                 if (writer is null)
                     return;
             
                 closeTime = System.DateTime.Now;
-
-                //PlayerMove playerMove = logSystem.playerMove;
-                //if (playerMove)
-                //    gestureTravel = playerMove.travelGesture;
-                //PlayerLookLeftRight playerLookY = logSystem.GetComponent<PlayerLookLeftRight>();
-                //if (playerLookY)
-                //    gestureRotateY = playerLookY.rotateGesture;
-                //PlayerLookUpDown playerLookX = logSystem.GetComponentInChildren<PlayerLookUpDown>();
-                //if (playerLookX)
-                //    gestureRotateX = playerLookX.rotateGesture;
 
                 pathProximityPercentage = logSystem.pathProximity.proximityPercentage;
 
@@ -225,6 +188,8 @@ public class LogRun : MonoBehaviour
                     wallCollisions + delimiter +
                     fenceCollisions + delimiter +
                     propCollisions + delimiter +
+                    roadblockCollisions + delimiter +
+                    invisibleCollisions + delimiter +
                     pickups + delimiter +
                     totalPickups + delimiter +
                     pickupSearch;

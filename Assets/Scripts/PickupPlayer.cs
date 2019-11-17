@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class PickupPlayer : MonoBehaviour
 {
-    //public GameObject[] pickupGroups;
     public GameObject logger;
-    public LogSystem logSystem;
+    [HideInInspector] public LogSystem logSystem;
     public int interactionTimeNeeded = 2;
     [Range(0f, 1f)] public float viewportFactor = 0.35f;
-    public GameObject player;
-    public Camera cam;
-    public bool drawTarget;
-    public Color targetColor;
+    [HideInInspector] public GameObject player;
+    [HideInInspector] public Camera cam;
+    [HideInInspector] public bool drawTarget;
+    [HideInInspector] public Color targetColor;
     [HideInInspector] public int picked;
     [HideInInspector] public float totalTimeSearching;
 
@@ -21,14 +20,14 @@ public class PickupPlayer : MonoBehaviour
         logSystem = logger.GetComponent<LogSystem>();
         cam = GetComponentInParent<Camera>();
         player = cam.transform.parent.gameObject;
-        foreach (var pickupGroup in logSystem.pickupGroups)
+        //foreach (var pickupGroup in logSystem.pickupGroup)
+        //{
+        foreach (Transform pickup in logSystem.pickupGroup.transform)
         {
-            foreach (Transform pickup in pickupGroup.transform)
-            {
-                PickupObject pickupObject = pickup.GetComponent<PickupObject>();
-                pickupObject.pickupPlayer = this;
-            }
+            pickup.GetComponent<PickupObject>().pickupPlayer = this;
+            logSystem.runLogger.totalPickups++;
         }
+        //}
     }
 
     void Start()
@@ -38,8 +37,7 @@ public class PickupPlayer : MonoBehaviour
 
     private void Update()
     {
-        //logSystem.runLogger.pickups = picked;
-        //logSystem.runLogger.pickupSearch = totalTimeSearching;
+
     }
 
     public bool PickupInTarget(Vector3 pickupPos, Renderer renderer)
@@ -59,15 +57,13 @@ public class PickupPlayer : MonoBehaviour
     public void TotalSearchTime()
     {
         float total = 0;
-        foreach (var pickupGroup in logSystem.pickupGroups)
+        //foreach (var pickupGroup in logSystem.pickupGroup.transform)
+        //{
+        foreach (Transform pickup in logSystem.pickupGroup.transform)
         {
-            foreach (Transform pickup in pickupGroup.transform)
-            {
-                PickupObject pickupObject = pickup.GetComponent<PickupObject>();
-                //logSystem.runLogger.pickupSearch  += pickupObject.searchDuration;
-                total += pickupObject.searchDuration;
-            }
+            total += pickup.GetComponent<PickupObject>().searchDuration;
         }
+        //}
         logSystem.runLogger.pickupSearch = total;
     }
 

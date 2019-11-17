@@ -36,4 +36,7 @@ sysinfo.txt
 *.unitypackage
 
 # path log files
-/*.svg
+# UserTesting/
+
+# project backup zip files in root
+/*.zip

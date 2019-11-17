@@ -5,7 +5,8 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     // ObstacleType is for collision logging reasons only.
-    public enum ObstacleType { Wall, Fence, Prop };
+    public enum ObstacleType { Wall, Fence, Prop, RoadBlock, Invisible };
     public ObstacleType obstacleType;
-    public string location;
+    public enum ObstacleLocation { RightSide, LeftSide, Other };
+    public ObstacleLocation location;
 }

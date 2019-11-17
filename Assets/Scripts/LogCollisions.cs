@@ -102,6 +102,10 @@ public class LogCollisions : MonoBehaviour
             logSystem.runLogger.fenceCollisions++;
         if (obstacle.obstacleType == Obstacle.ObstacleType.Prop)
             logSystem.runLogger.propCollisions++;
+        if (obstacle.obstacleType == Obstacle.ObstacleType.RoadBlock)
+            logSystem.runLogger.roadblockCollisions++;
+        if (obstacle.obstacleType == Obstacle.ObstacleType.Invisible)
+            logSystem.runLogger.invisibleCollisions++;
     }
 
     public void CollisionUpdate(ObstacleTrigger obstacleTrigger)

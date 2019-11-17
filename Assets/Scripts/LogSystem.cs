@@ -12,7 +12,8 @@ public class LogSystem : MonoBehaviour
     [HideInInspector] public string gestureSetId;
     public enum Round { RND1, RND2 };
     public Round roundId;
-    public GameObject[] pickupGroups;
+    public GameObject pickupGroup;
+    public GameObject deadEnds;
     public BezierSolution.BezierSpline path;
 
     // player management
@@ -45,7 +46,7 @@ public class LogSystem : MonoBehaviour
 
     private void Awake()
     {
-        player.SetActive(true);
+        //player.SetActive(true);
         gestureSetId = "MK"; // mouse - keyboard
         if (player.name.Split('-').Length > 1)
             gestureSetId = player.name.Split('-')[1];
@@ -53,6 +54,14 @@ public class LogSystem : MonoBehaviour
         playerMove = player.GetComponent<PlayerMove>();
         playerManager = player.GetComponent<PlayerManager>();
         pickupPlayer = player.GetComponent<PickupPlayer>();
+
+        foreach (Transform deadEndTransform in deadEnds.transform)
+        {
+            deadEndTransform.GetComponent<DeadEnd>().player = player;
+        }
+
+        // hide finish text
+        transform.GetChild(1).gameObject.SetActive(false);
     }
 
     void Start()
@@ -88,9 +97,12 @@ public class LogSystem : MonoBehaviour
         {
             // player reached finish
             runLogger.finishReached = true;
-            //PlayerManager playerManager = player.GetComponent<PlayerManager>();
             playerManager.canMove = false;
             playerManager.travelling = false;
+
+            // show finish text
+            transform.GetChild(1).gameObject.SetActive(true);
+
             if (logging)
                 StopLogging();
         }

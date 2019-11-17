@@ -7,15 +7,16 @@ public class PickupObject : MonoBehaviour
 {
     //[HideInInspector]
     public Material successMaterial;
-    public PickupPlayer pickupPlayer;
-    public GameObject pickupTarget;
-    public bool playerInTrigger = false;
-    private bool picked = false;
+    [HideInInspector] public PickupPlayer pickupPlayer;
+    [HideInInspector] public GameObject pickupTarget;
+    [HideInInspector] public bool playerInTrigger = false;
     [HideInInspector] public float interactionInitTime;
     [HideInInspector] public float interactingDuration;
-    public float searchDuration;
+    [HideInInspector] public float searchDuration;
     [HideInInspector] public float timeInTrigger;
     
+    private bool picked = false;
+
     private void Start()
     {
         interactionInitTime = 0;
@@ -70,7 +71,7 @@ public class PickupObject : MonoBehaviour
         {
             pickupPlayer.picked++;
             pickupPlayer.logSystem.runLogger.pickups++;
-            //pickupPlayer.totalTimeSearching += searchDuration;
+            transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 
