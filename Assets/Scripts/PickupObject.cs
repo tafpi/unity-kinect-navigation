@@ -14,8 +14,14 @@ public class PickupObject : MonoBehaviour
     [HideInInspector] public float interactingDuration;
     [HideInInspector] public float searchDuration;
     [HideInInspector] public float timeInTrigger;
-    
+
+    private GUIStyle centeredStyle;
     private bool picked = false;
+
+    //private void Awake()
+    //{
+        
+    //}
 
     private void Start()
     {
@@ -26,14 +32,13 @@ public class PickupObject : MonoBehaviour
     {
         if (playerInTrigger && !picked)
         {
-            pickupPlayer.drawTarget = true;
             pickupPlayer.targetColor = Color.red;
             if (searchDuration == 0)
                 timeInTrigger = Time.realtimeSinceStartup;
             searchDuration = Time.realtimeSinceStartup - timeInTrigger;
             
             Vector3 viewPos = pickupPlayer.cam.WorldToViewportPoint(transform.position);
-            if (pickupPlayer.PickupInTarget(pickupTarget.transform.position, pickupTarget.transform.GetChild(0).GetComponent<Renderer>()))
+            if (pickupPlayer.PickupInTarget(pickupTarget.transform.position, pickupPlayer.activePickupObject.transform.GetChild(1).transform.GetChild(0).GetComponent<Renderer>()))
             {
                 pickupPlayer.targetColor = Color.green;
                 if (interactionInitTime == 0)
@@ -55,13 +60,14 @@ public class PickupObject : MonoBehaviour
         else
         {
             interactionInitTime = 0;
-            pickupPlayer.drawTarget = false;
+            
         }
     }
 
     public void Pick()
     {
         picked = true;
+        pickupPlayer.canvas.gameObject.SetActive(false);
         Renderer[] renderers = pickupTarget.GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
         {
@@ -77,14 +83,29 @@ public class PickupObject : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+    }
+
+    private void OnGUI()
+    {
         if (pickupPlayer)
         {
-            if (pickupPlayer.drawTarget)
+            if (ReferenceEquals(pickupPlayer.activePickupObject, this))
             {
-                string message = pickupPlayer.targetColor == Color.green ? ""+(pickupPlayer.interactionTimeNeeded - interactingDuration) : "look at object for 2 seconds";
-                Handles.Label(transform.position, message);
+                //if (pickupPlayer.drawTarget)
+                if (pickupPlayer.canvas.isActiveAndEnabled)
+                {
+                    centeredStyle = GUI.skin.GetStyle("Label");
+                    centeredStyle.alignment = TextAnchor.UpperCenter;
+                    centeredStyle.fontSize = 18;
+                    string message = "look at object for 2 seconds";
+                    centeredStyle.normal.textColor = pickupPlayer.targetColor;
+                    if (pickupPlayer.targetColor == Color.green)
+                        message = ""+(Mathf.Round((pickupPlayer.interactionTimeNeeded - interactingDuration)*10)/10).ToString("0.0#");
+
+                    GUI.Label(new Rect(0, Screen.height/4, Screen.width, Screen.height), message, centeredStyle);
+                }
             }
-        }
+        }        
     }
 
 }

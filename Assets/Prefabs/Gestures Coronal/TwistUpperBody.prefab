@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
-  rotationSpeed: 1.5
+  rotationSpeed: 2
   gestureTracked: 0
 --- !u!114 &6519268171994460587
 MonoBehaviour:
@@ -62,6 +62,6 @@ MonoBehaviour:
   _bodySourceManager: {fileID: 0}
   gestureRate: 0
   slope: 1.2
-  minimumRate: 0.5
-  maximumRate: 0.7
+  minimumRate: 0.3
+  maximumRate: 0.6
   rate: 0

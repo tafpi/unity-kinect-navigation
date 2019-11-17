@@ -15,7 +15,7 @@ public class GesturePointUpDown : MonoBehaviour
 
     [Range(1f, 2f)] public float slope = 1.2f;
     [Range(0f, 90f)] public float minimumAngle = 12;
-    [Range(0f, 90f)] public float maximumAngle = 50;
+    [Range(0f, 90f)] public float maximumAngle = 30;
 
     private Vector3 wristLeft;
     private Vector3 wristRight;
@@ -28,13 +28,18 @@ public class GesturePointUpDown : MonoBehaviour
     public float zeroAngleDiff = 10;    // angle diff to align perceived and actual horizontal arm position (perceived is lower)
 
     public float armSpeed;
-    public float armSpeedMax = 0.2f;
+    public float armSpeedMax = 0.9f;
     public Vector3 previousHandPosition;
 
     public float rate;
 
     private GestureState state;
-    
+
+    private Vector3 spineShoulder;
+    private Hand hand;
+    private Vector3 wrist;
+    private Vector3 elbow;
+
     void Start()
     {
         state = gameObject.GetComponent<GestureState>();
@@ -46,7 +51,7 @@ public class GesturePointUpDown : MonoBehaviour
 
         if (trackGesture)
         {
-            Debug.Log("point forward tracked");
+            //Debug.Log("point forward tracked");
             if (bodySourceManager == null)
             {
                 return;
@@ -74,10 +79,12 @@ public class GesturePointUpDown : MonoBehaviour
 
                 if (body.IsTracked)
                 {
-                    Vector3 spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
-                    Hand hand = ActiveHand(body, spineShoulder);
-                    Vector3 wrist = hand.WristPoint;
-                    Vector3 elbow = hand.ElbowPoint;
+                    spineShoulder = Functions.unityVector3(body.Joints[JointType.SpineShoulder].Position);
+                    hand = ActiveHand(body, spineShoulder);
+
+
+                    wrist = hand.WristPoint;
+                    elbow = hand.ElbowPoint;
                     
                     armTension = (spineShoulder - wrist).magnitude / ((spineShoulder - elbow).magnitude + (elbow - wrist).magnitude);
                     arm = wrist - spineShoulder;
@@ -97,6 +104,7 @@ public class GesturePointUpDown : MonoBehaviour
                         rate = angle * armTension;
                         rate = Mathf.Sign(angle) * Functions.limitValue(minimumAngle, maximumAngle, Mathf.Abs(rate));
                         gestureRate = armSpeed < armSpeedMax ? -Mathf.Sign(angle) * Mathf.Pow((Mathf.Abs(rate) - minimumAngle) / (maximumAngle - minimumAngle), slope) : 0;
+                        //gestureRate = -Mathf.Sign(angle) * Mathf.Pow((Mathf.Abs(rate) - minimumAngle) / (maximumAngle - minimumAngle), slope);
                     }
 
                     if (state != null) state.gestureRate = gestureRate;
@@ -112,27 +120,34 @@ public class GesturePointUpDown : MonoBehaviour
 
     private Hand ActiveHand(Body body, Vector3 spineShoulder)
     {
-        CameraSpacePoint wristLeftPoint = body.Joints[JointType.WristLeft].Position;
-        CameraSpacePoint wristRightPoint = body.Joints[JointType.WristRight].Position;
+        //CameraSpacePoint wristLeftPoint = body.Joints[JointType.WristLeft].Position;
+        //CameraSpacePoint wristRightPoint = body.Joints[JointType.WristRight].Position;
 
-        wristLeft = Functions.unityVector3(wristLeftPoint);
-        wristRight = Functions.unityVector3(wristRightPoint);
+        wristLeft = Functions.unityVector3(body.Joints[JointType.WristLeft].Position);
+        wristRight = Functions.unityVector3(body.Joints[JointType.WristRight].Position);
 
         // which wrist is further from the body
-        Hand hand = new Hand(   wristRightPoint,
-                                body.Joints[JointType.ElbowRight].Position,
-                                Vector3.zero,
-                                Vector3.zero,
-                                body.HandRightState);
 
         if (Mathf.Abs(wristLeft.z - spineShoulder.z) > Mathf.Abs(wristRight.z - spineShoulder.z))
         {
-            hand.Wrist = wristLeftPoint;
-            hand.Elbow = body.Joints[JointType.ElbowLeft].Position;
-            hand.Fist = body.HandLeftState;
+            hand = new Hand(
+                body.Joints[JointType.WristLeft].Position,
+                body.Joints[JointType.ElbowLeft].Position,
+                wristLeft,
+                Functions.unityVector3(body.Joints[JointType.ElbowLeft].Position)
+                );
+        }
+        else
+        {
+            hand = new Hand(
+                body.Joints[JointType.WristRight].Position,
+                body.Joints[JointType.ElbowRight].Position,
+                wristRight,
+                Functions.unityVector3(body.Joints[JointType.ElbowRight].Position)
+                );
         }
 
-        return hand.SetHandPoints();
+        return hand;
     }
 
     private void OnValidate()

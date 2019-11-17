@@ -126,14 +126,14 @@ public class GesturePointUpDownTest3 : MonoBehaviour
         Hand hand = new Hand(   wristRightPoint,
                                 body.Joints[JointType.ElbowRight].Position,
                                 Vector3.zero,
-                                Vector3.zero,
-                                body.HandRightState);
+                                Vector3.zero
+                                /*body.HandRightState*/);
 
         if (Mathf.Abs(wristLeft.z - spineShoulder.z) > Mathf.Abs(wristRight.z - spineShoulder.z))
         {
             hand.Wrist = wristLeftPoint;
             hand.Elbow = body.Joints[JointType.ElbowLeft].Position;
-            hand.Fist = body.HandLeftState;
+            //hand.Fist = body.HandLeftState;
         }
 
         return hand.SetHandPoints();

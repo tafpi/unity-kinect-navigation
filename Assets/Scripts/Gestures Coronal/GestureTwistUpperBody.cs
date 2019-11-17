@@ -12,8 +12,8 @@ public class GestureTwistUpperBody : MonoBehaviour
     public float gestureRate;
 
     [Range(1f, 2f)] public float slope;
-    [Range(0f, 1f)] public float minimumRate;
-    [Range(0f, 1f)] public float maximumRate;
+    [Range(0f, 1f)] public float minimumRate = 0.3f;
+    [Range(0f, 1f)] public float maximumRate = 0.6f;
 
     private Vector3 shoulderLeft;
     private Vector3 shoulderRight;
@@ -37,7 +37,7 @@ public class GestureTwistUpperBody : MonoBehaviour
     {
         if (trackGesture)
         {
-            Debug.Log("point sideways tracked");
+            //Debug.Log("point sideways tracked");
             if (_bodySourceManager == null)
             {
                 return;

@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public PlayerManager playerManager;
     public GameObject travelGesture;
     public float gestureRate;
     public float movementSpeed = 10;
     [Range(10, 30)] public int interval = 20;
 
+    private PlayerManager playerManager;
     private CharacterController characterController;
     private GestureState gestureState;
     private float vertInput;
@@ -20,6 +20,7 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        playerManager = GetComponent<PlayerManager>();
         gestureState = travelGesture.GetComponent<GestureState>();
         if (travelGesture != null)
         {
@@ -29,20 +30,24 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        if (travelGesture == null)
-            return;
-        gestureRate = gestureState.gestureRate;
-        if (gestureRate != 0)
+        if (playerManager.canMove)
         {
-            forwardMovement = transform.forward * gestureRate * movementSpeed;
-            characterController.SimpleMove(forwardMovement);
-            playerManager.travelling = true;
-            if (gestureRate < 0)
-                playerManager.travellingBackwards = true;
-        }
-        else
-        {
-            playerManager.travelling = false;
+            if (travelGesture == null)
+                return;
+            gestureRate = gestureState.gestureRate;
+            if (gestureRate != 0)
+            {
+                forwardMovement = transform.forward * gestureRate * movementSpeed;
+                characterController.SimpleMove(forwardMovement);
+                playerManager.travelling = true;
+                playerManager.travellingBackwards = false;
+                if (gestureRate < 0)
+                    playerManager.travellingBackwards = true;
+            }
+            else
+            {
+                playerManager.travelling = false;
+            }
         }
     }
 

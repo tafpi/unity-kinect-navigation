@@ -36,14 +36,9 @@ public class PlayerLookUpDown : MonoBehaviour
         {
             gestureState = rotateGesture.GetComponent<GestureState>();
             gestureState.gestureTracked = true;
+            rotationSpeed = defaultRotationSpeed;
             if (gestureState.rotationSpeed != 0)
-            {
                 rotationSpeed = gestureState.rotationSpeed;
-            }
-            else
-            {
-                rotationSpeed = defaultRotationSpeed;
-            }
         }
     }
 

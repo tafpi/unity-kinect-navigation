@@ -34,6 +34,7 @@ public class PlayerMoveByKeyboard : MonoBehaviour
                 return;
             }
             playerManager.travelling = true;
+            playerManager.travellingBackwards = false;
             if (vertInput < 0)
                 playerManager.travellingBackwards = true;
             forwardMovement = transform.forward * vertInput;

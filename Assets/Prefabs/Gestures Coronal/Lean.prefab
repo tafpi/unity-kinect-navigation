@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gestureRate: 0
-  rotationSpeed: 1
+  rotationSpeed: 2
   gestureTracked: 0
 --- !u!114 &951968344085588838
 MonoBehaviour:
