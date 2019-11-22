@@ -1,0 +1,18 @@
+Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)
+0, Invisible, ObstacleBox (1), Other, 00:00:05:182, 00:00:04:053
+1, Wall, ObstacleBox (31), RightSide, 00:01:54:416, 00:00:01:305
+2, Wall, ObstacleBox (31), RightSide, 00:02:18:358, 00:00:07:373
+3, Wall, ObstacleBox (12), RightSide, 00:02:04:554, 00:00:21:244
+4, Wall, ObstacleBox (12), RightSide, 00:02:30:949, 00:00:07:708
+5, Wall, ObstacleBox (31), RightSide, 00:02:31:554, 00:00:08:141
+6, Wall, ObstacleBox (12), RightSide, 00:02:55:236, 00:00:03:251
+7, Wall, ObstacleBox (31), RightSide, 00:03:10:211, 00:00:00:401
+8, Fence, Fence (13), LeftSide, 00:03:48:831, 00:00:03:888
+9, Wall, ObstacleBox (15), RightSide, 00:03:56:937, 00:00:00:200
+10, Wall, ObstacleBox (17), RightSide, 00:03:59:818, 00:00:00:335
+11, Fence, Fence (5), RightSide, 00:04:00:153, 00:00:01:072
+12, Wall, ObstacleBox (18), RightSide, 00:04:00:554, 00:00:01:676
+13, Wall, ObstacleBox (48), LeftSide, 00:05:54:560, 00:00:00:100
+14, Invisible, ObstacleBox (7), Other, 00:06:00:355, 00:00:00:804
+15, Wall, ObstacleBox (45), LeftSide, 00:06:01:293, 00:00:02:379
+16, Wall, ObstacleBox (44), LeftSide, 00:06:10:934, 00:00:00:100

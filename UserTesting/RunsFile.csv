@@ -1,3 +1,5 @@
 run id, user id, gesture set, round, start time, close time, finish reached, total duration, total travel duration, backwards travel duration, rotate y duration, rotate x duration, rotate while travel duration, idle controller duration, times stopped, distance traveled, path proximity %, total collisions, wall collisions, fence collisions, prop collisions, roadblock collisions, invisible collisions, pickups, total pickups, pickup search
-R001, U013, GS1, RND1, 11/18/2019 9:58:15 PM, 11/18/2019 10:00:21 PM, True, 127.965, 53.533, 0, 56.839, 7.494, 31.787, 32.593, 8, 594.7792, 97, 3, 2, 1, 0, 0, 0, 4, 4, 21.39585
-R002, U013, GS2, RND1, 11/18/2019 10:00:57 PM, 11/18/2019 10:03:01 PM, True, 126.7905, 55.585, 0, 42.273, 6.367, 37.924, 36.074, 6, 572.9518, 98, 4, 4, 0, 0, 0, 0, 4, 4, 19.92322
+R001, U001, GS1, RND1, 11/20/2019 10:52:38 PM, 11/20/2019 10:59:50 PM, True, 434.88, 233.381, 31.694, 118.097, 17.93, 118.926, 142.663, 93, 989.754, 90, 17, 13, 2, 0, 0, 2, 4, 4, 76.06271
+R002, U001, GS1, RND2, 11/20/2019 11:00:15 PM, 11/20/2019 11:03:07 PM, True, 175.0874, 107.857, 7.829, 61.121, 13.029, 51.875, 39.884, 16, 694.0231, 97, 9, 7, 0, 0, 0, 2, 4, 4, 24.34869
+R003, U001, GS2, RND1, 11/20/2019 11:04:38 PM, 11/20/2019 11:08:30 PM, True, 234.7206, 136.633, 3.785, 65.254, 7.732, 53.794, 70.231, 11, 690.5652, 92, 12, 9, 0, 0, 0, 3, 4, 4, 25.21576
+R004, U001, GS2, RND2, 11/20/2019 11:08:41 PM, 11/20/2019 11:13:03 PM, True, 263.7048, 106.807, 7.464, 69.794, 8.869, 65.713, 122.378, 21, 715.8123, 84, 17, 15, 0, 0, 0, 2, 4, 4, 64.14128

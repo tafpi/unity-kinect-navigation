@@ -39,80 +39,83 @@ public class PlayerManager : MonoBehaviour
     
     void Update()
     {
-        if (travelling)
+        if (logRun)
         {
-            if (!totalTravelStopwatch.IsRunning)
-                totalTravelStopwatch.Start();
-            if (!backwardsTravelStopwatch.IsRunning && travellingBackwards)
-                backwardsTravelStopwatch.Start();
-
-            if (rotatingX || rotatingY)
+            if (travelling)
             {
-                rotatingWhileTravelling = true;
-                if (!rotateWhileTravellingStopwtach.IsRunning) rotateWhileTravellingStopwtach.Start();
+                if (!totalTravelStopwatch.IsRunning)
+                    totalTravelStopwatch.Start();
+                if (!backwardsTravelStopwatch.IsRunning && travellingBackwards)
+                    backwardsTravelStopwatch.Start();
+
+                if (rotatingX || rotatingY)
+                {
+                    rotatingWhileTravelling = true;
+                    if (!rotateWhileTravellingStopwtach.IsRunning) rotateWhileTravellingStopwtach.Start();
+                }
+                else
+                {
+                    rotatingWhileTravelling = false;
+                    if (rotateWhileTravellingStopwtach.IsRunning)
+                    {
+                        rotateWhileTravellingStopwtach.Stop();
+                        logRun.rotateWhileTravelDuration = rotateWhileTravellingStopwtach.ElapsedMilliseconds;
+                    }
+                }
             }
             else
             {
-                rotatingWhileTravelling = false;
-                if (rotateWhileTravellingStopwtach.IsRunning)
+                if (totalTravelStopwatch.IsRunning)
                 {
-                    rotateWhileTravellingStopwtach.Stop();
-                    logRun.rotateWhileTravelDuration = rotateWhileTravellingStopwtach.ElapsedMilliseconds;
+                    totalTravelStopwatch.Stop();
+                    logRun.totalTravelDuration = totalTravelStopwatch.ElapsedMilliseconds;
+                    logRun.timesStopped++;
+                }
+                if (backwardsTravelStopwatch.IsRunning)
+                {
+                    backwardsTravelStopwatch.Stop();
+                    logRun.backwardsTravelDuration = backwardsTravelStopwatch.ElapsedMilliseconds;
                 }
             }
-        }
-        else
-        {
-            if (totalTravelStopwatch.IsRunning)
-            {
-                totalTravelStopwatch.Stop();
-                logRun.totalTravelDuration = totalTravelStopwatch.ElapsedMilliseconds;
-                logRun.timesStopped++;
-            }
-            if (backwardsTravelStopwatch.IsRunning)
-            {
-                backwardsTravelStopwatch.Stop();
-                logRun.backwardsTravelDuration = backwardsTravelStopwatch.ElapsedMilliseconds;
-            }
-        }
 
-        if (rotatingY)
-        {
-            if (!rotateYStopwatch.IsRunning) rotateYStopwatch.Start();
-        }
-        else
-        {
-            if (rotateYStopwatch.IsRunning)
+            if (rotatingY)
             {
-                rotateYStopwatch.Stop();
-                logRun.rotateYDuration = rotateYStopwatch.ElapsedMilliseconds;
+                if (!rotateYStopwatch.IsRunning) rotateYStopwatch.Start();
             }
-        }
-
-        if (rotatingX)
-        {
-            if (!rotateXStopwatch.IsRunning) rotateXStopwatch.Start();
-        }
-        else
-        {
-            if (rotateXStopwatch.IsRunning)
+            else
             {
-                rotateXStopwatch.Stop();
-                logRun.rotateXDuration = rotateXStopwatch.ElapsedMilliseconds;
+                if (rotateYStopwatch.IsRunning)
+                {
+                    rotateYStopwatch.Stop();
+                    logRun.rotateYDuration = rotateYStopwatch.ElapsedMilliseconds;
+                }
             }
-        }
 
-        if (!travelling && !rotatingX && !rotatingY)
-        {
-            idle = true;
-            if (!idleStopwatch.IsRunning) idleStopwatch.Start();
-        }
-        else
-        {
-            if (idleStopwatch.IsRunning)
+            if (rotatingX)
             {
-                idleStopwatch.Stop();
-                logRun.idleControllerDuration = idleStopwatch.ElapsedMilliseconds;
+                if (!rotateXStopwatch.IsRunning) rotateXStopwatch.Start();
+            }
+            else
+            {
+                if (rotateXStopwatch.IsRunning)
+                {
+                    rotateXStopwatch.Stop();
+                    logRun.rotateXDuration = rotateXStopwatch.ElapsedMilliseconds;
+                }
+            }
+
+            if (!travelling && !rotatingX && !rotatingY)
+            {
+                idle = true;
+                if (!idleStopwatch.IsRunning) idleStopwatch.Start();
+            }
+            else
+            {
+                if (idleStopwatch.IsRunning)
+                {
+                    idleStopwatch.Stop();
+                    logRun.idleControllerDuration = idleStopwatch.ElapsedMilliseconds;
+                }
             }
         }
     }
