@@ -1,0 +1,6 @@
+Index, Type, Name, Location, Start Time (hh:mm:ss:fff), Duration (hh:mm:ss:fff)
+0, Prop, Box Prop (3), Other, 00:00:53:408, 00:00:02:446
+1, Wall, ObstacleBox (41), LeftSide, 00:01:21:634, 00:00:00:067
+2, Wall, ObstacleBox (48), LeftSide, 00:02:12:075, 00:00:00:133
+3, Wall, ObstacleBox (20), RightSide, 00:02:22:127, 00:00:04:352
+4, Invisible, ObstacleBox (4), Other, 00:03:15:849, 00:00:09:813
