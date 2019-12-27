@@ -9,8 +9,7 @@ public class LogPath : MonoBehaviour
 {
     // input
     public GameObject groundPlane;
-    public string filenamePrefix = "PathsLog";
-    
+    public string filenamePrefix = "PathsLog";    
     
     private float x;
     private float z;
@@ -21,12 +20,9 @@ public class LogPath : MonoBehaviour
     // step distance
     private Vector3 posPrev;
     private Vector3 pos;
-    //private LogRun runLogger;
 
     // init vars
     public bool canLog;
-    //private LogSystem logSystem;
-    //private string path;
     private string filename = "PathsFile.svg";
     private string content;
     private float groundWidth;
@@ -38,8 +34,6 @@ public class LogPath : MonoBehaviour
     private Gradient gradient;
     private GradientColorKey[] colorKey;
     private GradientAlphaKey[] alphaKey;
-    //private PathProximity pathProximity;
-    //private float proximityPercentage;
 
     private void Start()
     {

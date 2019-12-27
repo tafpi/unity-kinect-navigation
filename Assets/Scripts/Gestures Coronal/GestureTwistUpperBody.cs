@@ -37,7 +37,6 @@ public class GestureTwistUpperBody : MonoBehaviour
     {
         if (trackGesture)
         {
-            //Debug.Log("point sideways tracked");
             if (_bodySourceManager == null)
             {
                 return;
@@ -92,7 +91,6 @@ public class GestureTwistUpperBody : MonoBehaviour
     private void OnValidate()
     {
         if (minimumRate > maximumRate) maximumRate = minimumRate;
-        //slope = Mathf.Floor(slope * 100) / 100;
     }
 
 }

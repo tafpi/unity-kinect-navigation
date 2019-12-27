@@ -13,16 +13,13 @@ public class PickupTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (pickupObject.pickupPlayer)
             if (ReferenceEquals(pickupObject.pickupPlayer.player, other.gameObject))
             {
                 pickupObject.playerInTrigger = true;
-                //pickupObject.pickupPlayer.drawTarget = true;
                 pickupObject.pickupPlayer.canvas.gameObject.SetActive(true);
                 pickupObject.pickupPlayer.activePickupObject = pickupObject;
-            }
-                
+            }                
     }
 
     private void OnTriggerExit(Collider other)
@@ -31,7 +28,6 @@ public class PickupTrigger : MonoBehaviour
             if (ReferenceEquals(pickupObject.pickupPlayer.player, other.gameObject))
             {
                 pickupObject.playerInTrigger = false;
-                //pickupObject.pickupPlayer.drawTarget = false;
                 pickupObject.pickupPlayer.canvas.gameObject.SetActive(false);
                 pickupObject.pickupPlayer.activePickupObject = null;
             }

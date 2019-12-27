@@ -18,11 +18,6 @@ public class PickupObject : MonoBehaviour
     private GUIStyle centeredStyle;
     private bool picked = false;
 
-    //private void Awake()
-    //{
-        
-    //}
-
     private void Start()
     {
         interactionInitTime = 0;
@@ -59,8 +54,7 @@ public class PickupObject : MonoBehaviour
         }
         else
         {
-            interactionInitTime = 0;
-            
+            interactionInitTime = 0;            
         }
     }
 

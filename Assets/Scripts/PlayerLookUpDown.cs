@@ -26,7 +26,6 @@ public class PlayerLookUpDown : MonoBehaviour
 
     private void Awake()
     {
-        //LockCursor();
         xAxisClamp = 0.0f;
         eulerRotation = Vector3.zero;
         player = transform.parent.gameObject;

@@ -51,7 +51,6 @@ public class GesturePointUpDown : MonoBehaviour
 
         if (trackGesture)
         {
-            //Debug.Log("point forward tracked");
             if (bodySourceManager == null)
             {
                 return;
@@ -102,25 +101,12 @@ public class GesturePointUpDown : MonoBehaviour
                     armTension = (spineShoulderV - wristV).magnitude / ((spineShoulderV - elbowV).magnitude + (elbowV - wristV).magnitude);
                     arm = wristV - spineShoulderV;
                     arm.x = 0;
-
-                    //angle = Vector3.Angle(arm, Vector3.forward);
+                    
                     angle = Vector3.Angle(arm, Vector3.down) - 90 + zeroAngleDiff;
 
                     armSpeed = Vector3.Distance(wristV, previousHandPosition) / Time.deltaTime;
                     previousHandPosition = wristV;
 
-                    //if (angle < -maximumAngle)
-                    //{
-                    //    gestureRate = 0;
-                    //}
-                    //else
-                    //{
-                    //    rate = angle * armTension;
-                    //    rate = Mathf.Sign(angle) * Functions.limitValue(minimumAngle, maximumAngle, Mathf.Abs(rate));
-                    //    gestureRate = armSpeed < armSpeedMax ? -Mathf.Sign(angle) * Mathf.Pow((Mathf.Abs(rate) - minimumAngle) / (maximumAngle - minimumAngle), slope) : 0;
-                    //}
-
-                    //rate = angle * armTension;
                     rate = Functions.limitValue(minimumAngle, maximumAngle, Mathf.Abs(angle * armTension));
                     gestureRate = armSpeed < armSpeedMax ? -Mathf.Sign(angle) * Mathf.Pow((Mathf.Abs(rate) - minimumAngle) / (maximumAngle - minimumAngle), slope) : 0;
                     if (angle < -maximumAngle)
@@ -136,38 +122,6 @@ public class GesturePointUpDown : MonoBehaviour
         }
 
     }
-
-    //private Hand ActiveHand(Body body, Vector3 spineShoulder)
-    //{
-    //    //CameraSpacePoint wristLeftPoint = body.Joints[JointType.WristLeft].Position;
-    //    //CameraSpacePoint wristRightPoint = body.Joints[JointType.WristRight].Position;
-
-    //    wristLeft = Functions.unityVector3(body.Joints[JointType.WristLeft].Position);
-    //    wristRight = Functions.unityVector3(body.Joints[JointType.WristRight].Position);
-
-    //    // which wrist is further from the body
-
-    //    if (Mathf.Abs(wristLeft.z - spineShoulder.z) > Mathf.Abs(wristRight.z - spineShoulder.z))
-    //    {
-    //        hand = new Hand(
-    //            body.Joints[JointType.WristLeft].Position,
-    //            body.Joints[JointType.ElbowLeft].Position,
-    //            wristLeft,
-    //            Functions.unityVector3(body.Joints[JointType.ElbowLeft].Position)
-    //            );
-    //    }
-    //    else
-    //    {
-    //        hand = new Hand(
-    //            body.Joints[JointType.WristRight].Position,
-    //            body.Joints[JointType.ElbowRight].Position,
-    //            wristRight,
-    //            Functions.unityVector3(body.Joints[JointType.ElbowRight].Position)
-    //            );
-    //    }
-
-    //    return hand;
-    //}
 
     private void OnValidate()
     {

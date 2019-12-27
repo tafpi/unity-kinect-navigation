@@ -62,7 +62,6 @@ public class GestureStepForward : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("step forward tracked");
         if (_bodySourceManager == null)
         {
             return;
@@ -139,8 +138,7 @@ public class GestureStepForward : MonoBehaviour
                         {
                             // moving opposite last moving foot
                             direction = ankleMovingClose == -1 ? -Mathf.Sign(ankleLeftTravel) : -Mathf.Sign(ankleRightTravel);
-
-                            // if ( (directionPrev != 0) && (direction == -directionPrev) )
+                            
                             if (direction == -directionPrev)
                             {
                                 direction = 0;

@@ -8,7 +8,6 @@ public class LogSystem : MonoBehaviour
     // input
     public GameObject player;
     public int userIdIndex;
-    //public enum GestureSet { GS1, GS2 };
     [HideInInspector] public string gestureSetId;
     public enum Round { RND1, RND2 };
     public Round roundId;
@@ -33,7 +32,6 @@ public class LogSystem : MonoBehaviour
     public string userId;
     private string countSuffixFormat = "000.##";
     public string filenameLabel;
-    //private string delimiter = ", ";
     private bool logging;
 
     // init vars
@@ -47,7 +45,6 @@ public class LogSystem : MonoBehaviour
     private void Awake()
     {
         Application.targetFrameRate = 70;
-        //player.SetActive(true);
         gestureSetId = "MK"; // mouse - keyboard
         if (player.name.Split('-').Length > 1)
             gestureSetId = player.name.Split('-')[1];
@@ -77,7 +74,6 @@ public class LogSystem : MonoBehaviour
         {
             if (pathLogger)
                 pathLogger.OnUpdate(this);
-            //proximityPercentage = logSystem.pathProximity.proximityPercentage;
             interval = 0;
         }
         else

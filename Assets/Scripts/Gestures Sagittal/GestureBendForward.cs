@@ -46,7 +46,6 @@ public class GestureBendForward : MonoBehaviour
 
         if (trackGesture)
         {
-            //Debug.Log("bend forward tracked");
             if (_bodySourceManager == null)
             {
                 return;

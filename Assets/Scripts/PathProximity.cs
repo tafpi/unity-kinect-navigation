@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PathProximity : MonoBehaviour
 {
-
-    // attach script to player
-
     // input
     public LogSystem logSystem;
     private float pathDist;

@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class LogRun : MonoBehaviour
 {
-    // Attach as component to finish object
     
     // computed at start
     public System.DateTime startTime;
@@ -116,11 +115,6 @@ public class LogRun : MonoBehaviour
         }
     }
 
-    //public void UpdateDistanceTraveled(float step)
-    //{
-    //    distanceTraveled += step;
-    //}
-
     public void StartLogging(LogSystem logSystem)
     {
 
@@ -144,9 +138,6 @@ public class LogRun : MonoBehaviour
             canLog = true;
             
             startTime = System.DateTime.Now;
-            
-            //if (logSystem.pickupGroup.Length > 0)
-            //    totalPickups = logSystem.pickupGroup.Length;
 
         }
 
@@ -206,19 +197,16 @@ public class LogRun : MonoBehaviour
         if (path is null)
         {
             Debug.Log("You did not supply a file path.");
-            //canLog = false;
             return null;
         }
 
         try
         {
             var fs = new FileStream(path, FileMode.Append);
-            //canLog = true;
             return new StreamWriter(fs);
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 32)
         {
-            //canLog = false;
             Debug.Log("There is a sharing violation.");
         }
         catch (IOException e)
@@ -235,25 +223,21 @@ public class LogRun : MonoBehaviour
         if (path is null)
         {
             Debug.Log("You did not supply a file path.");
-            //canLog = false;
             return null;
         }
 
         try
         {
             var fs = new FileStream(path, FileMode.Open);
-            //canLog = true;
             return new StreamReader(fs);
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 32)
         {
-            //canLog = false;
             Debug.Log("There is a sharing violation.");
             logSystem.AbortLog("SETUP ERROR: " + filename + " is open. Close file and rerun.");
         }
         catch (IOException e) when ((e.HResult & 0x0000FFFF) == 80)
         {
-            //canLog = true;
             Debug.Log("The file already exists.");
         }
         catch (IOException e)

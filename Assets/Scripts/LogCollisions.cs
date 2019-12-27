@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class LogCollisions : MonoBehaviour
 {
-    // Attach as component to player.
     
     // input
     public string filenamePrefix = "CollisionsFile";
@@ -19,7 +18,6 @@ public class LogCollisions : MonoBehaviour
     private string filename;
 
     private ObstacleTrigger lastTrigger;
-    //public LogSystem logSystem;
     
     private void Start()
     {
@@ -28,9 +26,6 @@ public class LogCollisions : MonoBehaviour
 
     public void StartLogging(LogSystem logSystem)
     {
-        // get log system
-        //logSystem = GetComponent<LogSystem>();
-
         // set each obstacle's trigger and player object
         foreach (var wallGroup in wallGroups)
         {
@@ -91,7 +86,6 @@ public class LogCollisions : MonoBehaviour
 
     public void CollisionBegin(ObstacleTrigger obstacleTrigger, LogSystem logSystem)
     {
-        //Debug.Log("collision begin");
         obstacleTrigger.collisionEnterTime = Time.realtimeSinceStartup;
 
         Obstacle obstacle = obstacleTrigger.GetComponentInParent<Obstacle>();
@@ -110,7 +104,6 @@ public class LogCollisions : MonoBehaviour
 
     public void CollisionUpdate(ObstacleTrigger obstacleTrigger)
     {
-        //Debug.Log("collision update");
         obstacleTrigger.collisionDuration = Time.realtimeSinceStartup - obstacleTrigger.collisionEnterTime;
         lastTrigger = obstacleTrigger;
     }
